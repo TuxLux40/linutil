@@ -198,7 +198,7 @@ task_list = "I"
 [[data.preconditions]]
 matches = false
 data = "command_exists"
-values = [ "dnf" ]
+values = ["dnf"]
 
 [[data]]
 name = "WiFi Manager"
