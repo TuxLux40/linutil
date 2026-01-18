@@ -5,7 +5,7 @@
 
 installDepend() {
     ## Check for dependencies.
-    DEPENDENCIES='tar tree multitail tldr trash-cli unzip cmake make jq'
+    DEPENDENCIES='tar tree multitail trash-cli unzip cmake make jq pkg-config git python3'
     printf "%b\n" "${YELLOW}Installing dependencies...${RC}"
     case "$PACKAGER" in
         pacman)
@@ -19,7 +19,7 @@ installDepend() {
             "$AUR_HELPER" -S --needed --noconfirm $DEPENDENCIES
             ;;
         apt-get|nala)
-            COMPILEDEPS='build-essential'
+            COMPILEDEPS='build-essential python3-pip'
             "$ESCALATION_TOOL" "$PACKAGER" update
             "$ESCALATION_TOOL" dpkg --add-architecture i386
             "$ESCALATION_TOOL" "$PACKAGER" update
@@ -30,7 +30,7 @@ installDepend() {
             if ! "$ESCALATION_TOOL" "$PACKAGER" config-manager --enable powertools 2>/dev/null; then
                 "$ESCALATION_TOOL" "$PACKAGER" config-manager --enable crb 2>/dev/null || true
             fi
-            "$ESCALATION_TOOL" "$PACKAGER" -y install $DEPENDENCIES
+            "$ESCALATION_TOOL" "$PACKAGER" -y install $DEPENDENCIES python3-pip
             if ! "$ESCALATION_TOOL" "$PACKAGER" -y group install "Development Tools" 2>/dev/null; then
                 "$ESCALATION_TOOL" "$PACKAGER" -y group install development-tools
             fi
@@ -40,13 +40,13 @@ installDepend() {
             COMPILEDEPS='patterns-devel-base-devel_basis'
             "$ESCALATION_TOOL" "$PACKAGER" refresh 
             "$ESCALATION_TOOL" "$PACKAGER" --non-interactive install $COMPILEDEPS
-            "$ESCALATION_TOOL" "$PACKAGER" --non-interactive install tar tree multitail unzip cmake make jq libgcc_s1-gcc7-32bit glibc-devel-32bit
+            "$ESCALATION_TOOL" "$PACKAGER" --non-interactive install tar tree multitail unzip cmake make jq pkg-config git python3 python3-pip libgcc_s1-gcc7-32bit glibc-devel-32bit
             ;;
         apk)
-            "$ESCALATION_TOOL" "$PACKAGER" add build-base multitail tar tree trash-cli unzip cmake jq
+            "$ESCALATION_TOOL" "$PACKAGER" add build-base multitail tar tree trash-cli unzip cmake jq pkg-config git python3 py3-pip
             ;;
         xbps-install)
-            COMPILEDEPS='base-devel'
+            COMPILEDEPS='base-devel python3-pip'
             "$ESCALATION_TOOL" "$PACKAGER" -Sy $DEPENDENCIES $COMPILEDEPS
             "$ESCALATION_TOOL" "$PACKAGER" -Sy void-repo-multilib
             "$ESCALATION_TOOL" "$PACKAGER" -Sy glibc-32bit gcc-multilib
@@ -54,7 +54,7 @@ installDepend() {
         eopkg)
             COMPILEDEPS='-c system.devel'
             "$ESCALATION_TOOL" "$PACKAGER" update-repo
-            "$ESCALATION_TOOL" "$PACKAGER" install -y tar tree unzip cmake make jq
+            "$ESCALATION_TOOL" "$PACKAGER" install -y tar tree unzip cmake make jq pkg-config git python3
             "$ESCALATION_TOOL" "$PACKAGER" install -y $COMPILEDEPS
             ;;
         *)

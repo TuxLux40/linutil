@@ -1,7 +1,8 @@
 directories = [
     "applications-setup",
+    "containers",
     "gaming",
     "security",
     "system-setup",
-    "utils"
+    "utils",
 ]

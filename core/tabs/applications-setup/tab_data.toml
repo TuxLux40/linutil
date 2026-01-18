@@ -1,6 +1,14 @@
 name = "Applications Setup"
 
 [[data]]
+name = "AI"
+
+[[data.entries]]
+name = "Claude Code Router"
+script = "AI/claude-code-router.sh"
+task_list = "I"
+
+[[data]]
 name = "Communication Apps"
 
 [[data.entries]]
@@ -49,6 +57,30 @@ task_list = "I"
 name = "Zoom"
 description = "Zoom is a widely-used video conferencing platform that allows users to host virtual meetings, webinars, and online collaboration with features like screen sharing and recording."
 script = "communication-apps/zoom-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Session"
+description = "Session Desktop: privacy-focused, decentralized messaging (Loki/Oxen network). Tries native repos (Arch), snap (Debian/Ubuntu), then Flatpak fallback."
+script = "communication-apps/session-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Keybase"
+description = "Keybase: secure messaging, encrypted file sync (KBFS), and crypto identity. Prefers official repos/packages, falls back to official .deb/.rpm."
+script = "communication-apps/keybase-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Threema"
+description = "Threema Desktop: secure messaging client. Tries native Arch repos/AUR, falls back to Flatpak."
+script = "communication-apps/threema-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Matrix (Element)"
+description = "Matrix client (Element): decentralized messaging. Prefers native repos across distros, falls back to Flatpak."
+script = "communication-apps/matrix-setup.sh"
 task_list = "I"
 
 [[data]]
@@ -265,6 +297,90 @@ name = "PDF Studio Viewer"
 script = "pdf-suites/pdfstudioviewer.sh"
 
 [[data]]
+name = "Proton Apps"
+
+[[data.entries]]
+name = "Proton Mail"
+description = "Offizielle Proton Mail Desktop-App installieren."
+script = "ProtonAG/protonmail.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Proton Pass"
+description = "Proton Pass Passwortmanager installieren."
+script = "ProtonAG/protonpass.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Proton Mail Bridge"
+description = "Proton Mail Bridge zur IMAP/SMTP-Nutzung installieren."
+script = "ProtonAG/protonmail-bridge.sh"
+task_list = "I"
+
+[[data]]
+name = "Snowflake"
+
+[[data.entries]]
+name = "Snowflake Proxy (from source)"
+description = "Build and install Snowflake Proxy from source. Snowflake is an anti-censorship tool that helps people bypass internet censorship by routing connections through volunteer proxies. This installs the proxy as a systemd service."
+script = "snowflake-proxy.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Snowflake WebUI"
+description = "Install Snowflake WebUI for managing the Snowflake proxy through a web interface."
+script = "snowflake-webui.sh"
+task_list = "I"
+
+[[data]]
+name = "Virtualization"
+
+[[data.entries]]
+name = "Bottles"
+description = "Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications."
+script = "virtualization/bottles-setup.sh"
+task_list = "FI"
+
+[[data.entries]]
+name = "Docker"
+description = "Docker is an open platform that uses OS-level virtualization to deliver software in packages called containers."
+script = "virtualization/docker-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Podman"
+description = "Podman is a daemon-less open platform that uses OS-level virtualization to deliver software in packages called containers."
+script = "virtualization/podman-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Podman-compose"
+description = "Podman Compose is a tool for defining and running multi-container applications using Podman."
+script = "virtualization/podman-compose-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Waydroid"
+description = "Waydroid is an emulator that allows you to run Android apps and games on Linux."
+script = "virtualization/waydroid-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Winboat"
+description = "Winboat installieren (AUR unterstützt; andere Distros derzeit mit Hinweis zur manuellen Installation)."
+script = "virtualization/winboat-setup.sh"
+task_list = "I"
+
+[[data]]
+name = "VPN"
+
+[[data.entries]]
+name = "Tailscale"
+description = "Tailscale is a modern VPN built on WireGuard that connects your devices securely and privately to your network resources, with SSH support and subnet routing."
+script = "VPN/tailscale-install.sh"
+task_list = "I SS"
+
+[[data]]
 name = "Web Browsers"
 
 [[data.entries]]
@@ -283,6 +399,12 @@ task_list = "I"
 name = "Google Chrome"
 description = "Google Chrome is a fast, secure, and free web browser, built for the modern web."
 script = "browsers/google-chrome.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Microsoft Edge (bin)"
+description = "Microsoft Edge Stable binary from the official Microsoft repository."
+script = "browsers/microsoft-edge-bin.sh"
 task_list = "I"
 
 [[data.entries]]
@@ -346,114 +468,28 @@ script = "android-debloat.sh"
 task_list = "I"
 
 [[data]]
+name = "Atuin"
+description = "Atuin is a shell history search tool that provides an intelligent, searchable history with encryption and sync capabilities."
+script = "atuin-install.sh"
+task_list = "I FM"
+
+[[data]]
 name = "Auto CPU Frequency"
 description = "Automatic CPU speed & power optimizer.\nhttps://github.com/AdnanHodzic/auto-cpufreq"
 script = "auto-cpufreq.sh"
 task_list = "I SS"
 
 [[data]]
-name = "Bash Prompt"
-description = "The .bashrc file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. This command configures the key sections and functionalities defined in the .bashrc file from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash"
-script = "mybash-setup.sh"
-task_list = "I FM"
-
-[[data]]
-name = "Bottles"
-description = "Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications."
-script = "bottles-setup.sh"
-task_list = "FI"
-
-[[data]]
-name = "Docker"
-description = "Docker is an open platform that uses OS-level virtualization to deliver software in packages called containers."
-script = "docker-setup.sh"
-task_list = "I SS"
-
-[[data]]
-name = "DWM-Titus"
-description = "DWM is a dynamic window manager for X.\nIt manages windows in tiled, monocle and floating layouts.\nAll of the layouts can be applied dynamically, optimising the environment for the application in use and the task performed.\nThis command installs and configures DWM and a desktop manager.\nThe list of patches applied can be found in CTT's DWM repository\nhttps://github.com/ChrisTitusTech/dwm-titus"
-script = "dwmtitus-setup.sh"
-task_list = "I PFM SS"
-
-[[data]]
-name = "Fastfetch"
-description = "Fastfetch is a neofetch-like tool for fetching system information and displaying it prettily. It is written mainly in C, with performance and customizability in mind. This command installs fastfetch and configures from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash"
-script = "fastfetch-setup.sh"
-task_list = "I FM"
-
-[[data]]
-name = "Flatpak / Flathub"
-description = "Flatpak is a universal application sandbox for Linux that uses isolated packages from Flathub to prevent conflicts and system alterations, while alleviating dependency concerns. This command installs Flatpak and adds the Flathub repository"
-script = "setup-flatpak.sh"
+name = "CLI Packages"
+description = "Installs a comprehensive collection of command-line and terminal-based tools from official Arch repositories and AUR."
+script = "cli-packages.sh"
 task_list = "I"
-
-[[data]]
-name = "Ghostty"
-description = "Ghostty is a terminal emulator that has embedded web technologies, allowing for a highly customizable and visually appealing terminal experience."
-script = "ghostty-setup.sh"
-task_list = "I FM"
-
-[[data]]
-name = "Grub Theme"
-description = "Installs ChrisTitusTech's Top 5 Bootloader Themes script to allow for easy customization of GRUB."
-script = "grub-theme.sh"
-task_list = "PFM"
-
-[[data]]
-name = "Kitty"
-description = "kitty is a free and open-source GPU-accelerated terminal emulator for Linux, macOS, and some BSD distributions, focused on performance and features. kitty is written in a mix of C and Python programming languages. This command installs and configures kitty."
-script = "kitty-setup.sh"
-task_list = "I FM"
-
-[[data]]
-name = "Linutil Installer"
-description = "Installs a distro-specific Linutil package locally."
-script = "linutil-installer.sh"
-task_list = "I"
-
-[[data.preconditions]]
-matches = false
-data = "command_exists"
-values = ["linutil"]
-
-[[data]]
-name = "Linutil Updater"
-description = "Updates your local Linutil crate installation."
-script = "linutil-updater.sh"
-task_list = "I"
-
-[[data.preconditions]]
-matches = true
-data = "command_exists"
-values = ["linutil"]
-
-[[data]]
-name = "Podman"
-description = "Podman is a daemon-less open platform that uses OS-level virtualization to deliver software in packages called containers."
-script = "podman-setup.sh"
-task_list = "I SS"
-
-[[data]]
-name = "Podman-compose"
-description = "Podman Compose is a tool for defining and running multi-container applications using Podman."
-script = "podman-compose-setup.sh"
-task_list = "I SS"
 
 [[data]]
 name = "Rofi"
 description = "Rofi is a window switcher, run dialog, ssh-launcher and dmenu replacement that started as a clone of simpleswitcher, written by Sean Pringle and later expanded by Dave Davenport. This command installs and configures rofi with configuration from CTT's DWM repo. https://github.com/ChrisTitusTech/dwm-titus"
 script = "rofi-setup.sh"
 task_list = "I FM"
-
-[[data]]
-name = "Waydroid"
-description = "Waydroid is an emulator that allows you to run Android apps and games on Linux."
-script = "waydroid-setup.sh"
-task_list = "I SS"
-[[data.preconditions]]
-matches = true
-data = { environment = "XDG_SESSION_TYPE" }
-values = ["wayland", "Wayland"]
 
 [[data]]
 name = "ZSH Prompt"

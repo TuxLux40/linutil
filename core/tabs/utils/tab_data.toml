@@ -185,12 +185,12 @@ task_list = "I"
 [[data.preconditions]]
 matches = false
 data = "command_exists"
-values = [ "dnf" ]
+values = ["dnf"]
 
 [[data]]
-name = "US Locale Setup"
-description = "This fixes US UTF-8 Locale and Folder listings"
-script = "locale-us-setup.sh"
+name = "Locale Setup"
+description = "Sets up my preferred locale with english language and german keyboard layout & formats"
+script = "locale-setup.sh"
 task_list = "FM"
 
 [[data]]

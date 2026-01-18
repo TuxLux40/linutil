@@ -1,6 +1,18 @@
 name = "Security"
 
 [[data]]
+name = "Open Sunshine firewall ports"
+description = "Opens required ports (TCP: 47984, 47989, 48010 | UDP: 47998, 47999, 48000, 48002, 48010) for Sunshine streaming"
+script = "sunshine-portfwd.sh"
+task_list = "FM"
+
+[[data]]
+name = "YubiKey PAM Configuration"
+description = "Configure YubiKey U2F authentication for PAM modules. Allows YubiKey-based login for sudo, SSH, desktop managers, and more."
+script = "yk-pam.sh"
+task_list = "I FM"
+
+[[data]]
 name = "FirewallD Firewall Baselines (CTT)"
 description = "Configure FirewallD with CTT's recommended baseline rules for improved system security. For more information visit: https://christitus.com/linux-security-mistakes"
 script = "firewalld-baselines.sh"
@@ -9,7 +21,7 @@ task_list = "I SS"
 [[data.preconditions]]
 matches = true
 data = "command_exists"
-values = [ "firewall-cmd" ]
+values = ["firewall-cmd"]
 [[data]]
 name = "UFW Firewall Baselines (CTT)"
 description = "Developed to ease iptables firewall configuration, UFW provides a user friendly way to create an IPv4 or IPv6 host-based firewall. This command installs UFW and configures UFW based on CTT's recommended rules. For more information visit: https://christitus.com/linux-security-mistakes"
@@ -19,5 +31,4 @@ task_list = "I SS"
 [[data.preconditions]]
 matches = false
 data = "command_exists"
-values = [ "firewall-cmd" ]
-
+values = ["firewall-cmd"]

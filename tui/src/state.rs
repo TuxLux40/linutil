@@ -267,6 +267,34 @@ impl AppState {
             && (terminal_size.height < MIN_HEIGHT || terminal_size.width < MIN_WIDTH)
     }
 
+    fn create_hexagon_background(&self, area: Rect) -> impl Widget {
+        let lines: Vec<Line> = (0..area.height)
+            .map(|y| {
+                let mut spans = vec![];
+                for x in 0..area.width {
+                    // Create a subtle hexagon pattern with opacity
+                    let hex_char = if (x + y) % 3 == 0 && (x % 4 == 0 || (x + 1) % 4 == 0) {
+                        "⬡"
+                    } else if (x + y) % 5 == 0 && x % 6 == 0 {
+                        "◇"
+                    } else {
+                        " "
+                    };
+
+                    // Style hexagons with dim purple/blue tint
+                    let style = Style::new()
+                        .fg(Color::Rgb(50, 30, 80))
+                        .bg(Color::Rgb(10, 10, 20));
+
+                    spans.push(Span::styled(hex_char, style));
+                }
+                Line::from(spans)
+            })
+            .collect();
+
+        Paragraph::new(lines).style(Style::new().bg(Color::Rgb(10, 10, 20)))
+    }
+
     pub fn draw(&mut self, frame: &mut Frame) {
         let area = frame.area();
         self.drawable = !self.is_terminal_drawable(area);
@@ -294,6 +322,12 @@ impl AppState {
             return frame.render_widget(warning, centered_layout[1]);
         }
 
+        // Render hexagon background for Neon theme
+        if self.theme == Theme::Neon {
+            let hexagon_bg = self.create_hexagon_background(area);
+            frame.render_widget(hexagon_bg, area);
+        }
+
         let label_block = Block::bordered().border_set(border::Set {
             top_left: " ",
             top_right: " ",
@@ -305,10 +339,13 @@ impl AppState {
             horizontal_bottom: "*",
         });
 
-        let label = Paragraph::new(Line::from(vec![
-            Span::styled("Linutil ", Style::default().bold()),
-            Span::styled("by Chris Titus", Style::default().italic()),
-        ]))
+        let label = Paragraph::new(vec![
+            Line::from(vec![
+                Span::styled("Linutil ", Style::default().bold()),
+                Span::styled("by Chris Titus", Style::default().italic()),
+            ]),
+            Line::from(Span::styled("riced by TuxLux40 :)", Style::default().italic().dim())),
+        ])
         .block(label_block)
         .centered();
 
@@ -316,7 +353,9 @@ impl AppState {
 
         let keybinds_block = Block::bordered()
             .title(format!(" {keybind_scope} "))
-            .border_set(border::ROUNDED);
+            .border_set(border::ROUNDED)
+            .border_style(self.theme.border_style())
+            .style(Style::new().bg(self.theme.background_color()));
 
         let keybind_render_width = keybinds_block.inner(area).width;
         let keybinds = create_shortcut_list(shortcuts, keybind_render_width);
@@ -335,7 +374,7 @@ impl AppState {
         .split(vertical[0]);
 
         let left_chunks =
-            Layout::vertical([Constraint::Length(3), Constraint::Min(1)]).split(horizontal[0]);
+            Layout::vertical([Constraint::Length(4), Constraint::Min(1)]).split(horizontal[0]);
         frame.render_widget(label, left_chunks[0]);
 
         self.areas = Some(Areas {
@@ -364,7 +403,12 @@ impl AppState {
         };
 
         let tab_list = List::new(tabs)
-            .block(Block::bordered().border_set(border::ROUNDED))
+            .block(
+                Block::bordered()
+                    .border_set(border::ROUNDED)
+                    .border_style(self.theme.border_style())
+                    .style(Style::new().bg(self.theme.background_color())),
+            )
             .highlight_style(tab_hl_style)
             .highlight_symbol(highlight_symbol);
         frame.render_stateful_widget(tab_list, left_chunks[1], &mut self.current_tab);
@@ -449,7 +493,9 @@ impl AppState {
                     .border_set(border::ROUNDED)
                     .title(title)
                     .title(task_list_title)
-                    .title_bottom(bottom_title),
+                    .title_bottom(bottom_title)
+                    .border_style(self.theme.border_style())
+                    .style(Style::new().bg(self.theme.background_color())),
             )
             .scroll_padding(1);
         frame.render_stateful_widget(list, chunks[1], &mut self.selection);
