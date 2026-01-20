@@ -26,7 +26,7 @@ list_dotfiles() {
 }
 
 select_dotfiles() {
-    printf "%b\n" "${YELLOW}Which dotfiles do you want to symlink?${RC}"
+    printf "%b\n" "${YELLOW}Which dotfiles do you want to stow?${RC}"
     printf "%b\n" "${CYAN}Enter package names separated by spaces (or 'all' for all packages):${RC}"
     read -r selection
 
@@ -66,8 +66,8 @@ select_dotfiles() {
         done
     fi
 
-    printf "%b\n" "${GREEN}Dotfiles symlinked successfully!${RC}"
-    printf "%b\n" "${CYAN}Repository configs (source of truth) are now linked to $HOME${RC}"
+    printf "%b\n" "${GREEN}Dotfiles stowed successfully!${RC}"
+    printf "%b\n" "${CYAN}Repository configs (source of truth) are now symlinked into $HOME via stow${RC}"
     printf "%b\n" "${YELLOW}Backup saved to: $BACKUP_DIR${RC}"
 }
 
@@ -108,7 +108,7 @@ unstow_dotfiles() {
 
 main() {
     printf "%b\n" "${CYAN}==================================${RC}"
-    printf "%b\n" "${CYAN}    Dotfiles Management (stow)   ${RC}"
+    printf "%b\n" "${CYAN}    Dotfiles Management (GNU stow)   ${RC}"
     printf "%b\n" "${CYAN}==================================${RC}"
     printf "%b\n" "${YELLOW}Dotfiles location: $DOTFILES_DIR${RC}"
 
