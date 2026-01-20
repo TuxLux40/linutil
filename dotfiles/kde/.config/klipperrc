@@ -1,0 +1,6 @@
+[General]
+IgnoreImages=false
+KeepClipboardContents=false
+MaxClipItems=1
+TimeoutForActionPopups=5
+Version=6.5.3

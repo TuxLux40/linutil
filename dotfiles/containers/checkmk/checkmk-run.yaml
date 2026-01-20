@@ -1,0 +1,10 @@
+# Docker run CheckMK Raw
+# Tested and working
+docker run -d \
+  -P \
+  --name checkmk \
+  --tmpfs /opt/omd/sites/cmk/tmp:uid=1000,gid=1000 \
+  -v /volume1/docker/checkmk:/omd/sites \
+  -v /etc/localtime:/etc/localtime:ro \
+  --restart unless-stopped \
+  checkmk/check-mk-raw:latest

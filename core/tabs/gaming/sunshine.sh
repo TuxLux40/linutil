@@ -46,11 +46,27 @@ enableSunshineService() {
     printf "%b\n" "${YELLOW}Enabling Sunshine service...${RC}"
 
     if command_exists systemctl; then
-        "$ESCALATION_TOOL" systemctl enable sunshine
-        "$ESCALATION_TOOL" systemctl start sunshine
+        # Sunshine runs as a user service, not a system service
+        systemctl --user enable sunshine
+        systemctl --user start sunshine
         printf "%b\n" "${GREEN}Sunshine service enabled and started.${RC}"
+        printf "%b\n" "${YELLOW}Note: Sunshine is running as a user service. Use 'systemctl --user status sunshine' to check status.${RC}"
     else
         printf "%b\n" "${YELLOW}Note: systemctl not found. Please start Sunshine manually.${RC}"
+    fi
+}
+
+configureSunshinePorts() {
+    printf "%b\n" "${YELLOW}Configuring firewall ports for Sunshine...${RC}"
+    
+    SUNSHINE_PORT_SCRIPT="$(dirname "$0")/../../security/sunshine-portfwd.sh"
+    
+    if [ -f "$SUNSHINE_PORT_SCRIPT" ]; then
+        sh "$SUNSHINE_PORT_SCRIPT"
+    else
+        printf "%b\n" "${YELLOW}Warning: Port forwarding script not found. Ports need to be configured manually:${RC}"
+        printf "%b\n" "${YELLOW}TCP: 47984, 47989, 48010${RC}"
+        printf "%b\n" "${YELLOW}UDP: 47998, 47999, 48000, 48002, 48010${RC}"
     fi
 }
 
@@ -58,5 +74,6 @@ checkEnv
 checkEscalationTool
 installSunshine
 enableSunshineService
+configureSunshinePorts
 
 printf "%b\n" "${GREEN}Sunshine installation completed!${RC}"

@@ -205,6 +205,12 @@ script = "compile-setup.sh"
 task_list = "I"
 
 [[data]]
+name = "Dotfiles Management"
+description = "Interactive script to symlink dotfiles using GNU stow. Select which configurations you want to apply to your system."
+script = "dotfiles-setup.sh"
+task_list = "I FM"
+
+[[data]]
 name = "Full System Cleanup"
 description = "This script is designed to remove unnecessary packages, clean old cache files, remove temporary files, and to empty the trash."
 script = "system-cleanup.sh"

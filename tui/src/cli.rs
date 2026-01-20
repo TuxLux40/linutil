@@ -1,9 +1,12 @@
 use crate::theme::Theme;
-use clap::Parser;
+use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
 #[derive(Debug, Parser, Clone)]
 pub struct Args {
+    #[command(subcommand)]
+    pub command: Option<Command>,
+
     /// Path to the configuration file
     #[arg(short, long)]
     pub config: Option<PathBuf>,
@@ -32,4 +35,10 @@ pub struct Args {
     /// Bypass root user check
     #[arg(short = 'r', long)]
     pub bypass_root: bool,
+}
+
+#[derive(Debug, Subcommand, Clone)]
+pub enum Command {
+    /// Update linutil from the source repository
+    Update,
 }

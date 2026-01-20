@@ -191,3 +191,94 @@ checkEnv() {
     checkDistro
     checkAURHelper
 }
+
+checkRust() {
+    ## Check and install Rust if not present
+    if ! command_exists rustc; then
+        printf "%b\n" "${YELLOW}Rust is not installed. Installing Rust...${RC}"
+        
+        # Download and run rustup installer
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --quiet
+        
+        # Source cargo environment
+        export PATH="$HOME/.cargo/bin:$PATH"
+        
+        if ! command_exists rustc; then
+            printf "%b\n" "${RED}Failed to install Rust.${RC}"
+            return 1
+        fi
+        
+        printf "%b\n" "${GREEN}Rust installed successfully.${RC}"
+    fi
+    
+    RUST_VERSION=$(rustc --version | awk '{print $2}')
+    printf "%b\n" "${CYAN}Found Rust version: $RUST_VERSION${RC}"
+}
+
+checkPython() {
+    ## Check and install Python3 if not present
+    if ! command_exists python3; then
+        printf "%b\n" "${YELLOW}Python3 is not installed. Installing Python3...${RC}"
+        
+        case "$PACKAGER" in
+            pacman)
+                "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm python
+                ;;
+            apt-get|nala)
+                "$ESCALATION_TOOL" "$PACKAGER" update
+                "$ESCALATION_TOOL" "$PACKAGER" install -y python3 python3-pip
+                ;;
+            dnf)
+                "$ESCALATION_TOOL" "$PACKAGER" install -y python3 python3-pip
+                ;;
+            zypper)
+                "$ESCALATION_TOOL" "$PACKAGER" --non-interactive install python3 python3-pip
+                ;;
+            apk)
+                "$ESCALATION_TOOL" "$PACKAGER" add python3 py3-pip
+                ;;
+            *)
+                printf "%b\n" "${RED}Python3 installation not supported for this package manager.${RC}"
+                return 1
+                ;;
+        esac
+        
+        if ! command_exists python3; then
+            printf "%b\n" "${RED}Failed to install Python3.${RC}"
+            return 1
+        fi
+    fi
+    
+    PYTHON_VERSION=$(python3 --version | awk '{print $2}')
+    printf "%b\n" "${CYAN}Found Python version: $PYTHON_VERSION${RC}"
+}
+
+checkBuildTools() {
+    ## Check and install C/C++ build tools and kernel headers
+    printf "%b\n" "${YELLOW}Checking build tools...${RC}"
+    
+    case "$PACKAGER" in
+        pacman)
+            "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm base-devel linux-headers
+            ;;
+        apt-get|nala)
+            "$ESCALATION_TOOL" "$PACKAGER" update
+            "$ESCALATION_TOOL" "$PACKAGER" install -y build-essential linux-headers-generic
+            ;;
+        dnf)
+            "$ESCALATION_TOOL" "$PACKAGER" install -y gcc make kernel-devel
+            ;;
+        zypper)
+            "$ESCALATION_TOOL" "$PACKAGER" --non-interactive install gcc make kernel-devel
+            ;;
+        apk)
+            "$ESCALATION_TOOL" "$PACKAGER" add alpine-sdk linux-headers
+            ;;
+        *)
+            printf "%b\n" "${RED}Build tools installation not supported for this package manager.${RC}"
+            return 1
+            ;;
+    esac
+    
+    printf "%b\n" "${GREEN}Build tools installed.${RC}"
+}

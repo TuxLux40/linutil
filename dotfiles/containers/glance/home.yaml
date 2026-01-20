@@ -1,0 +1,560 @@
+columns:
+  - size: large
+    widgets:
+      - type: videos
+        channels:
+          # --- Tech & Hardware ---
+          - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+          - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
+          - UC0vBXGSyV14uvJ4hECDOl0Q # Techquickie
+          - UCdBK94H6oZT2Q7l0-b0xmMg # ShortCircuit
+          - UC4Z8mPYjn6Dhr6n531YDh0Q # UFD Tech
+          - UCkWQ0gDrqOCarmUKmppD7GQ # JayzTwoCents
+          - UCBS1NUWY7oC6FFHaXQy4zAA # Zach's Tech Turf
+          - UCdOEuJQrwehQTywd3iV_pFg # StorageReview
+          - UCbiGcwDWZjz05njNPrJU7jA # ExplainingComputers
+          - UCMiJRAwDNSNzuYeN2uWa0pA # Mrwhosetheboss
+          - UCQh3K0FQtZj4fCC8_Fu33lQ # Frickelfieber
+
+          # --- Linux & Open Source ---
+          - UC5UAwBUum7CPN5buc-_N1Fw # The Linux Experiment
+          - UCxQKHvKbmSzGMvUrVtJYnUA # Learn Linux TV
+          - UCVls1GmFKf6WlTraIb_IaJg # DistroTube
+          - UCld68syR8Wi-GY_n4CaoJGA # Brodie Robertson
+          - UCmyGZ0689ODyReHw3rsKLtQ # Michael Tunnell
+          - UCzJ3fSCYqjO3QyRvr8JZs-g # Planet Linux
+          - UCc3L72F_yWWr1V1ft_CDpAA # 9to5Linux
+          - UClGShptNEuvTWGAAfpa2Etw # Linux Academy
+          - UCylGUf9BvQooEFjgdNudoQg # The Linux Cast
+          - UC76AVf2JkrwjxNKMuPpscHQ # Docker
+          - UCQ74G2gKXdpwZkXEsclzcrA # OpenInfra Foundation
+          - UCW2o8EmjVjWFZFY7NOY5G8g # Synology
+          - UCH9zoXlRn8iiaiSmuazAFZw # GNOME
+
+          # --- Programming & Dev ---
+          - UC8butISFwT-Wl7EV0hUK0BQ # freeCodeCamp.org
+          - UC8ENHE5xdFSwx71u3fDH5Xw # ThePrimeagen
+          - UC1kBxkk2bcG78YBX7LMl9pQ # code_report
+          - UCxVPH8W2ayMey1-b0SY8rBQ # The Coding Sloth
+          - UCk1SpWNzOs4MYmr0uICEntg # XDA
+          - UC_x5XG1OV2P6uZZ5FSM9Ttw # Google for Developers
+          - UCXZCJLdBC09xxGZ6gcdrc6A # OpenAI
+          - UCJQJ4GjTiq5lmn8czf8oo0Q # PowerCert Animated Videos
+          - UCkefXKtInZ9PLsoGRtml2FQ # Professor Messer
+          - UC3kFmMxz3IdLdz4TxA9a4DQ # CompTIA Explore
+          - UCP7WmQ_U4GB3K51Od9QvM0w # David Bombal
+
+          # --- Cybersecurity & InfoSec ---
+          - UC3s0BtrBJpwNDaflRSoiieQ # Hak5
+          - UCgTNupxATBfWmfehv21ym-g # Null Byte
+          - UChbp7r-Lezl1CBNQWBDYGeQ # OSINT Dojo
+          - UCi67lRCd5qpaHwSXNJisuRQ # Hack The Box
+          - UCCsREoj8rSRkEvxWqxr74rQ # Cybernews
+          - UCXfnaN5jl0RPR1dirFTOZ3A # National Security Agency
+          - UC_VgLyJQsChxKfDJcdI-Tcg # Bundesamt für Sicherheit in der Informationstechnik
+          - UC0ZTPkdxlAKf-V33tqXwi3Q # HackerSploit
+          - UCKGe7fZ_S788Jaspxg-_5Sg # PC Security Channel
+          - UCs6KfncB4OV6Vug4o_bzijg # Techlore
+          - UCy1hU4eDUdoPy_ez4oXZD0w # Techlore Clips
+          - UCh5utkM4K_MNZijruxA-Nfg # PrivacyTutor
+          - UCMuAUiKC29C5qM6_ZTY9Xww # CyberCPU Tech
+          - UC9x0AN7BWHpCDHSm9NiJFJQ # NetworkChuck
+          - UCOuGATIAbd2DvzJmUgXn2IQ # NetworkChuck (2)
+
+          # --- Science & Education ---
+          - UC6nSFpj9HTCZ5t-N3Rm3-HA # Vsauce
+          - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+          - UCFhXFikryT4aFcLkLw2LBLA # NileRed
+          - UC7DdEm33SyaTDtWYGO2CwdA # Physics Girl
+          - UCA19mAJURyYHbJzhfpqhpCA # Action Lab Shorts
+          - UC0974nWSIcyJElXUfYDv9_w # phyphox
+          - UC-nPM1_kSZf91ZGkcgy_95Q # How to ADHD
+          - UC0tLWu7ljYVFPiZQfHjTMsA # Russell Barkley, PhD - Dedicated to ADHD Science+
+          - UCFpToiXK6Z72YU7JFBzC-nQ # The Digital Prepper
+          - UCgBg0aacyJnw4qUnb1FlfEQ # Institute of Human Anatomy
+          - UCV5vCi3jPJdURZwAOO_FNfQ # The Thought Emporium
+          - UC095ANqPeSKRNEH1CaCOs2ew # History of Simple Things
+
+          # --- History & Documentaries ---
+          - UCc-N24Y5OA0gqbjBwe1ttfA # Weird History
+          - UCpVm7bg6pXKo1Pr6k5kxG9A # National Geographic
+          - UCWE7rlT-oO5DbnJOtxhX_KA # Kings and Things
+          - UCWoMpx18YeSVuI7ObqEk8eg # MedievalMadness
+          - UCOk2CgtW_euf-9w34fnYQnA # Chronicle - Medieval History Documentaries
+          - UCCbJSm-pLHjna1JW9X31N8g # Mr. Terry History
+          - UCqoGR_EedlhKDVuWNwYWRbg # Voices of the Past
+          - UCs5QhJQF9I1m81bCJy0WO-w # Real History
+          - UCUVwT8zcS5Z_rYXnpomlbfg # Dan Davis History
+
+          # --- Gaming ---
+          - UC7WDD6yHgzdqijHluCi1z-Q # The Act Man
+          - UCdJdEguB1F1CiYe7OEi3SBg # JonTronShow
+          - UCJTTQHKUkxjEKBp-hJYHYcg # Mint Blitz
+          - UC8Q7XEy86Q7T-3kNpNjYgwA # Incognito Mode
+          - UCNovoA9w0KnxyDP5bGrOYzg # Tek Syndicate
+          - UCJ2wc4hCWI8bEki48Zv45fQ # CryoByte33
+          - UCI49gT5yWGP7fLn2ql-DlgA # Steam Deck HQ
+          - UCIbmZD21ptlnFyFPAk3j5CA # Fan The Deck
+          - UCQeRaTukNYft1_6AZPACnog # Asmongold TV
+          - UC1kvvdjChB40wuzcynmgsCw # Asmongold
+          - UCsxS7yzZC9gKYcgL4pvN3rA # Asmongold Gaming
+          - UCS2iGSouOopNHXFBcWtBQiA # Resident Evil
+          - UCVhedZF20g5wbw2NbkoqEGQ # Halo NC
+          - UC7NCg0venpKJg3kuJojKlbQ # HALO
+
+          # --- Brands & Companies ---
+          - UCHQDjDDW8w2RieO-IuqYlyg # AMD
+          - UCFtEEv80fQVKkD4h1PF-Xqw # Microsoft
+          - UCK8sQmJBp8GCxrOtXWBpyEA # Google
+          - UC_x5XG1OV2P6uZZ5FSM9Ttw # Google for Developers
+          - UCEWiIE6Htd8mvlOR6YQez1g # Cisco
+          - UCWwgaK7x0_FR1goeSRazfsQ # Samsung
+          - UCc0_sDkLIPcso-5ySflj6Zw # ASUS Deutschland
+          - UCRT6nPj8BRFlGSRBqLjWhDg # ASUS Republic of Gamers DACH
+          - UCE2jn84EE6PmW03_XxMz7fg # MSI Deutschland
+          - UCSoa21a11FMCUA2VyK4TlTQ # MSI USA
+          - UC9j-aEJL75uRFbLxx0_NsTA # MSI Global
+          - UCEMyzN5qerPhb-epGMeiwFw # Acer
+          - UCqcEzOKaA4nc0gISklN0Ryw # HP
+          - UCpvg0uZH-oxmCagOWJo9p9g # Lenovo
+          - UCpB9bqufOA0OyjA85cvywXg # UGREEN Official
+          - UCqkvjt06Q4hejDEo5PZt6zg # Yubico
+          - UCqhnX4jA0A5paNd1v-zEysw # GoPro
+          - UCp6NUFV9mSEK6RxUiEVymVg # Red Hat
+          - UCW2o8EmjVjWFZFY7NOY5G8g # Synology
+          - UCitcsK5r5n6pC8uJN4O4eUA # Altera
+          - UCUvIsQMxWWJ_1ajxu5plOFw # Spigen
+          - UCe-XOiQy6sAzI0zoxlyI3DA # Tineco
+          - UCg0FSqPeiGD_lIiPaaAehQg # Valve
+          - UCYh4bynh4OegFLiHMvodmQQ # Croteam
+          - UCZ8971nmuwBUtUeG8EM2AbA # Creative Assembly
+          - UCeeGH6XtPlEuCC9IPHvCLFA # frictionalgames
+          - UCpa4L_96ElAgH1hit3aya9w # OtherSide Entertainment
+          - UCoSvlWS5XcwaSzIcbuJ-Ysg # Notion
+          - UCVThyXNYXDC9UhDbI8LtghQ # Proton Guides & Updates
+          - UCcdv38QxPjSMqbt5ffLhJLA # Tailscale
+
+          # --- News & Politics ---
+          - UCGwRMUypKKXIHrjVS52QpBA # China Insider with David Zhang
+          - UCYxRlFDqcWM4y7FfpiAN3KQ # The White House
+          - UCAql2DyGU2un1Ei2nMYsqOA # Donald J Trump
+          - UCPFzA28Hw9tYDxXAeidDk6w # Nick Freitas
+          - UCRUdudcEw4Uenxz-MAG7rGA # Alliance for Responsible Citizenship
+          - UCP8JUBSQ5WYi7o2KnSmj86g # Partei der Vernunft
+          - UCdFcGPb4xQ6X4QOoRU6ROYw # Brett Cooper
+          - UCRCraKP10Q5fSAbCimkizIA # Nerdrotic Daily
+          - UCSJPFQdZwrOutnmSFYtbstA # The Critical Drinker
+
+          # --- Repair, DIY & Maker ---
+          - UCHbx9IUW7eCeJsC4sBCTNBA # iFixit
+          - UCUQo7nzH1sXVpzL92VesANw # DIY Perks
+          - UCp5ShPYJvi2EA4hLUERa86w # Core Electronics
+          - UCNzszbnvQeFzObW0ghk0Ckw # Dave's Garage
+          - UC4gEs2SNPr8GBNcdbQGnLjg # MDrepairs
+          - UCjgpFI5dU-D1-kh9H1muoxQ # Hacksmith Industries
+          - UCwOBG77Tm8cE24FPxHb_abw # Smart Home Solver
+          - UCVS6ejD9NLZvjsvhcbiDzjw # Crosstalk Solutions
+          - UCsojCyeOSuw4Odm6MyBXLmg # HDD Recovery Services
+          - UCvi7NknbfeYAbJX3rEpI1ZQ # PRG Repair Tutorials
+          - UCnp2wP2eA-YghOQr0j0wHrQ # PCBWay
+          - UCOok_Bwr9dqR1mq_BzqKOng # Data Rescue Labs Inc.
+
+          # --- Outdoors & Travel ---
+          - UC72zCOrxkfXxZAnqQoS43Qw # Kyle Hates Hiking
+          - UCOlx478DxwYAwkLnz9ELNIQ # European Walking Tours
+          - UCfpCQ89W9wjkHc8J_6eTbBg # Outdoor Boys
+          - UCI4fHQkguBNW3SwTqmehzjw # DALLMYD
+          - UCUWFkv9uduGjJE7x-zE2m2Q # Punkfish Diving - Punkfish Academy
+          - UCyBDkBfp_tugvOXzq7dyIVA # Zac In The Wild
+          - UCLRrAayzAgDGABnL_FXhCkw # Untraveled Roads
+
+          # --- Humor & Entertainment ---
+          - UCdC0An4ZPNr_YiFiYoVbwaw # Daily Dose of Internet
+          - UCb31gOY6OD8ES0zP8M0GhAw # Max Fosh
+          - UCMn-zv1SE-2y6vyewscfFqw # CrackerMilk
+          - UCtPrkXdtCM5DACLufB9jbsA # MrBallen
+          - UCnM02drQP-dF7WMgtJHR4Xw # Mr. Nightmare
+          - UCnWDUtWt9tolb5ORPMDdv3w # The Meme Dawg
+          - UCCUJrP3Mfl7jGMHnEkflvBA # Space Ice
+          - UCNXvmGafmrtJ7VPSqjRRbwg # Scary Interesting
+          - UCDDw4V0Yh2HHG-ZuXENB3GQ # Dr. Scary
+          - UCwCoxYmozgro8NZzx-Pr-gw # Very Nearly Interesting
+
+          # --- Government & Agencies ---
+          - UCXfnaN5jl0RPR1dirFTOZ3A # National Security Agency
+          - UCYxRlFDqcWM4y7FfpiAN3KQ # The White House
+          - UC_VgLyJQsChxKfDJcdI-Tcg # Bundesamt für Sicherheit in der Informationstechnik
+
+          # --- Music & Soundtracks ---
+          - UCB0JSO6d5ysH2Mmqz5I9rIw # AC/DC
+          - UCRuEUl3ItCGGo-wCSwG3wbw # Audiomachine
+          - UChVG6cg0kwkciN4NVx3Ahfw # Jack Wall
+          - UC4q9vZzyz2JiTU5cjJrhNLw # Paul Lipson - Topic
+          - UCSfoxYTlCPFfglckBLrjpsA # miracleofsound
+          - UCrZb1efgWeZnqn-YPzQTvJw # radiowv
+          - UCrY8Y0rs3BlE3T57TOMM1aw # Venjent
+
+          # --- Miscellaneous / Other ---
+          - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
+          - UCsBjURrPoezykLs9EqgamOA # Fireship
+          #- UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+          - UC-hjuaKoVFrjGyKcfRA4p8Q # Cypress
+          - UC_5fcSfxRQOxu1ESlradcdw # BerryCrepe
+          #- UC-98P1HknuXGxDYNwlxsKwQ # The Great Courses
+          #- UC-9q5WKlpUt9vBFsrxkeNAg # AdikTheOne
+          - UC-AMFiU8J0-itUAnN3bN5iw # ReInstallPaul
+          - UC-EWIqLzm4ttojYUAOSht9A # Nick930
+          - UC0W_BIuwk8D0Bv4THbVZZOQ # Surveillance Report
+          - UC0lf2-Y3nb5AWnZqie268FQ # rainbolt clips
+          - UC0nQo18qoaAFg0ugUzUqfiw # thehistorysquad
+          - UC1D3yD4wlPMico0dss264XA # NileBlue
+          - UC1JTQBa5QxZCpXrFSkMxmPw # Raycevick
+          #- UC1eDueWLlIRlXP0eZI8wGpA # MrBallen Podcast
+          - UC1zTj3xDI7gFJQ0wRPcDyQg # GeoGuessr
+          - UC2WTZ51nl87qXzGmCgDqtKg # GregBroDudeMan
+          - UC2j4ZeDzQRXqIG-Ui8EoLrA # grimmlifecollective
+          - UC3JEJPE0Z5H3PQVOran_1hg # System76
+          - UC3RYNOKIpKE_2P-5ZapWIYg # KingWoolz Games
+          #- UC3Wn3dABlgESm8Bzn8Vamgg # Sideprojects
+          - UC3cpN6gcJQqcCM6mxRUo_dA # Wendigoon
+          - UC3rST8TvG4kLFzuHVYHy7Vw # Roanoke Tales
+          - UC3tRZmTxRX33EnTbZJG4jUw # TREX LABS
+          - UC3yi2tLQc-cmPqRdZJD2bQA # Grokability, Inc.
+          - UC415bOPUcGSamy543abLmRA # Cleo Abram
+          - UC41JYhLFzMKKeBvTAvAYqKg # computeruniverse
+          - UC4AjsA9nnyVxABwQbllNXEA # INIU
+          - UC4a9LfdavRlVMaSSWFdIciA # RobWords
+          #- UC4oo36VSTk5fH6YJSICEDMA # Marz
+          - UC4zQT5vyyeHYHtHivZL3BnA # Haven Tents
+          - UC5970RJMoEcRNZl0MNp8tlQ # Lady Lilia
+          #- UC5N_utOFVOtVdBkVEYj19-A # JACK WOLFSKIN
+          #- UC5PjdOV5YraZB58m-rhtJBg # Science X: Phys.org, Medical Xpress, Tech Xplore
+          - UC5Yo88QF-chdugJbAnB2tUw # Casual Geographic
+          - UC5syThgjktDV-C8_vNn0fvA # CircuitBoredd
+          - UC62NeTy6Ocd5Jmh_963mLFg # MagellanTV
+          - UC63Tq5qh0QCKemBSHnXuF5Q # Kagan Dunlap
+          - UC68zG933W7D9V9H9TLXBPZQ # Ryan HD
+          - UC6DS1pJ0Y9UsjS5jz3cvU1g # Security.org
+          - UC6WZGzWb30NKcU-QK2ldy7w # Planner 5D
+          #- UC6cgrhoSbBBA4xeHG6Vgm-w # Traffic Light Doctor
+          - UC6qrG3W8SMK0jior2olka3g # EarthCam
+          - UC6vopISsINRLQ8seRlI_LtA # Garmin
+          - UC7NCg0venpKJg3kuJojKlbQ # HALO
+          - UC7P8CvjrU1AexV5aliNeLXw # Doctor Disaster
+          - UC7TIkH-0TzhP1EmSD9QN3xw # Fooster
+          - UC7YOGHUfC1Tb6E4pudI9STA # Mental Outlaw
+          - UC7qPftDWPw9XuExpSgfkmJQ # Nostalgia Nerd
+          - UC7vVhkEfw4nOGp8TyDk7RcQ # Boston Dynamics
+          - UC95ANqPeSKRNEH1CaCOs2ew # History of Simple Things
+          - UC9M7-jzdU8CVrQo1JwmIdWA # Android
+          - UC9U2NlmdQiKjm6HrugYQr1g # Windows Insider Program
+          - UC9fWMBGO9HV-gfEy0XOE0Vg # History Colored
+          - UCAEQl0BbYrPyTnsWVBJuIqQ # Oriental Pearl
+          #- UCASNVFmXvxpj31ZKXZ6K7Xg # Adam Rose
+          #- UCAYmlecATSG0wc5IxsFJSbQ # Doug Sharpe
+          - UCAwcolgWYbKI8sCr9-dJQ0g # Suzanne Raider
+          - UCB1Tv9XrY_vRcIVWkGtmKdw # The Vengeful 'Vadam
+          - UCBcw8L7UiRtb2AAOySWVUqw # Map Nerd
+          - UCCNyeUr-yOwdoVzmb_CDITg # Logitech G
+          - UCCOrp7GPgZA8EGrbOcIAsyQ # Phone Repair Guru
+          - UCClfFsWcT3N2I7VTXXyt84A # Salem Techsperts
+          - UCCsvXKLa-DAgMPtVaVo51og # Residence of Evil
+          - UCDSvwvYFxHQrfIWQn4Dr6hQ # Metatron's Academy
+          - UCDiKw3GnFIwyNJBzhCoRI-Q # Framework
+          - UCEFFKGOqb1Mtvj3g3gjc6tQ # Surfshark Academy
+          #- UCE_M8A5yxnLfW0KghEeajjw # Apple
+          - UCEdXA7uliIbBT5aWhuR3dFQ # Caren Magill | ADHD Coach + Multipotentialite
+          - UCEeH57P89hPQ1Sp2TavfICA # Parker Burton
+          - UCEgoThiTZG6wbTVA6B1Ksaw # Gentleman's Gazette
+          - UCEulxZh2dXaSu20Veil7-ZQ # ADHDVision
+          - UCFaSR7gUU39qJe-eDSiGY0A # Geography Geek
+          - UCFg9-S0cfu3UvBYuSNFT9hQ # RagnarRox
+          - UCGAmpBtWveYp0-3v9npnhvQ # Chilling Scares
+          - UCGKEMK3s-ZPbjVOIuAV8clQ # Core Dumped
+          - UCGeIjGngCkErevSNHdZYD5Q # Expleened (Storymode)
+          - UCH18915fTE6yZzKrqdea8RQ # Clint's Reptiles
+          - UCHL9bfHTxCMi-7vfxQ-AYtg # Abroad in Japan
+          - UCIjGKyrdT4Gja0VLO40RlOw # Metatron
+          - UCJN8qUaNK6M6WG-Kz5SjI9A # The Johnson Brothers
+          - UCJXa3_WNNmIpewOtCHf3B0g # LaurieWired
+          - UCK5R1BsMtGd4DtI5uGQRHIg # Best Damn EDC [Taylor Martin]
+          - UCKSSh1WlzQox_fogp4WMLCA # Basel Institute on Governance
+          - UCKX9TMP_sx82SRSV8qjDIcg # 5.11 Tactical
+          - UCKiKGhQlEl6mq0_Cy8PHIIg # Andrew Packer
+          - UCKt-9gnXoV6J_iQXZtJ5PWg # be quiet!
+          - UCKy52kgveKUT-ufcfrSvz3g # KingWoolz VODs
+          - UCLuvoYUKjKfzz6U3a_V9UJA # Tactical Geek
+          - UCMNUB9MLtiYK3226Tjl_yuw # Jared Coker Urbex
+          - UCMX31RavkfUHJvw03RbUZnA # Nick Crowley
+          - UCMYhwUc3MimK39WVULY7dig # Kitsunero
+          - UCMnULQ6F6kLDAHxofDWIbrw # Pirate Software
+          - UCNLrTiB2IlDAPPEz2kYZNXw # Planes Boats and Submarines
+          - UCOKxVnanPohDA6ghnWU52xA # Movies With Miranda
+          - UCOlRxTws_N2pA1qEreIrJUA # MON5TERMATT
+          - UCP4SIVBTEJ9LVflG5i5yXTQ # Kagan Dunlap Games
+          - UCP6MI5pEuqVxR7-56JHoH0A # Wothius
+          - UCP7N_BBUGIUTL8gMXIOrF6w # SageSmokeSurvival
+          - UCPaDL7kh-kDkgIN77BY2a3Q # Bootable USBs
+          - UCPvRdfUooqCf0zPOYvbBzVA # mryeester
+          - UCQAJFOz8yuMTn9dSHkdU-nw # AliceVision
+          - UCQSpnDG3YsFNf5-qHocF-WQ # ThioJoe
+          - UCQWVmYZE-JtI7BimgasRzTg # GrndpaGaming
+          - UCR1D15p_vdP3HkrH8wgjQRw # Internet Historian
+          - UCRKOv7wEWoEaQhsT0adfyQg # Stanimus
+          - UCRPhYF9rd5ov7DNKj99MNIg # Nature Live Camera
+          - UCRmbo7Eqaiikq0-uLydidAA # Skyytea
+          - UCSZISvE-ztCEvBVD7fjnMDg # Metatron's Protectorate
+          - UCSuHzQ3GrHSzoBbwrIq3LLA # Naomi Brockwell TV
+          - UCSy7VGPa8Np8PNjV7Mz-xZg # Tech By Matt
+          - UCT19t6nxP6jVoL3WZ6J6z_w # The American Dream - US GreenCard Service GmbH
+          - UCT6YivUrmX2wJb8s1Bn5zVQ # Steve Downes
+          - UCT6iAerLNE-0J1S_E97UAuQ # YongYea
+          - UCTFcNx8U6VMG-9cKgB_aAXA # Cypress Gaming
+          - UCTNFR9XisKMlurGrPzizOzA # Critical Nobody
+          - UCT_enUFr_ZjlfuA6s55y_Lw # MyHeritage
+          - UCUUTdohVElFLSP4NBnlPEwA # Jim's Garage
+          - UCU_W0oE_ock8bWKjALiGs8Q # Charisma on Command
+          - UCUeZBocfxALSUdOgNJB5ySA # Dr Ben Miles
+          - UCUi2SFPyyDNcsH2ZGpHyQIQ # magnify
+          - UCUuXc8j7Wk6xNeYtnRYvvwg # DevelopAKR
+          - UCUvkPEm38w6pq8w5QYgtPPw # CyberFlow
+          - UCUxc0iEpV8wZV4WLOui0RwQ # Gabriel Iglesias
+          - UCVQGtUcRjHTQLTTu-5s9_4Q # Brew
+          #- UCVqC64G_H0UA7_lUxXKjEcg # Maltego
+          - UCW5OrUZ4SeUYkUg1XqcjFYA # GeoWizard
+          - UCWozl2jWVx_6QcTA7r_ayEg # Lingopie
+          - UCX2Vhc0LIzSS9aMzhGFZ7PA # Techno Dad Life
+          - UCXoCBNsn1uzuGSEddT9a-bQ # MyFreeAcademy
+          - UCYAL7cREYQzzNiEDhp8Z0yw # Auslandszeit
+          - UCYVlQnk4oOldqMoFNKkQNJA # TheDinoFax
+          - UCYZyJn1MbwCfecw436w5Oqg # Arm&Gun
+          - UCYqxnCFtaC4-iC_bwt2bRLg # Perplexity
+          - UCZM9rFTBxgAy2qoOeH6sJ7g # Reimagine
+          - UCZNhwA1B5YqiY1nLzmM0ZRg # Christian Lempa
+          - UCZbWCodPFwH2QQn772QnUxQ # Fire Department Chronicles
+          - UCZnizxYbSe547Dh9sWtjKaw # SUNSHINE TOOLS
+          - UCZuu0TihCYd05VVAa0d1WYQ # Low Mana
+          - UC_0CVCfC_3iuHqmyClu59Uw # ETA PRIME
+          - UC_1awbvccFZOnVRjAIkCG7Q # Sam Beckman
+          - UC_76XFUys5fTO7u_HqrD7aA # Raspberry Pi Cloud
+          - UC_M-iWYpQbgo4rK1YfewI5w # Britec09
+          - UC_n6DdR6FClpCbWnNM7Zp6A # SpaceRex
+          - UC_slDWTPHflhuZqbGc8u4yA # RAINBOLT
+          #- UCasyWKltNuQ3bGn29Iep7TA # MrBallen Podcasts
+          - UCb9sy84UQUOAL5To0IPotpw # DIVE TALK
+          - UCbIeXN2z5OugEUGKnUj3t9Q # Helikon-Tex
+          - UCbQ4fbi0fy3d6Hb7q2FIATw # It'sAGundam
+          - UCcaXhMb95tY4CrnW9Z89npg # CyberPunkEdu
+          - UCe7aGwKsc40TYqDJfjggeKg # ctrl-alt-rees
+          - UCeK0WJYG2MuFoueQBNZnjdg # Odd Danny
+          - UCeZLO2VgbZHeDcongKzzfOw # 8-bit Music Theory
+          - UCes1l5f4ss6eQEl9oM3qRbg # Ask Your Computer Guy
+          - UCezxSW8kVueIU0pr_rukbYA # MSI Gaming
+          - UCfDr1hTriXmiOzi30uUt3FA # Shenzhen JC Innovation Device Co., Ltd.
+          - UCfKVWB_pOfsY-HQ2siMBn6g # Flipper Zero
+          - UCfpjbrgYtnVTkN_c24nURng # The Dadvocate
+          - UCg-AHCDYgR6L47SWQ8J0FMg # BurningIceTech
+          - UCgyqtNWZmIxTx3b6OxTSALw # Android Authority
+          - UCh7Q2A0ZQ1prARmMLvLxMsg # team Arklay ́s
+          - UChD1XAFWIPmC08eSLS1s1-g # FalkenFix
+          - UChVG6cg0kwkciN4NVx3Ahfw # Jack Wall
+          - UChnN9MPURwKV2PbEoT2vhTQ # randomfrankp
+          - UCif9G_84fGN9BEc8ju3nUhg # therealsamalkhatib
+          - UCijtYrxV4rYaglyewje2STQ # Babbel Deutsch
+          - UCiy0zhkYCeQBiSeZXJaA5vA # EvilmonkeyzDesignz
+          - UCj8orMezFWVcoN-4S545Wtw # Max Derrat
+          - UCjP-MiAEn9DPvUHNyGEs7Wg # hochelaga
+          - UCjQrco3qSmVgmLeB71VCaBQ # Installation00
+          - UCjSEJkpGbcZhvo0lr-44X_w # TechHut
+          - UCjr2bPAyPV7t35MvcgT3W8Q # The Hated One
+          - UCk0fGHsCEzGig-rSzkfCjMw # The Engineering Mindset
+          - UCk1F1Z-lvXf0dQ-lnMgZyHQ # The Mirandalorian
+          - UCkQO3QsgTpNTsOw6ujimT5Q # BE AMAZED
+          - UCkmMACUKpQeIxN9D9ARli1Q # Shadiversity
+          - UClUZos7yKYtrmr0-azaD8pw # Kreosan English
+          - UClZbmi9JzfnB2CEb0fG8iew # Primal Space
+          - UCm4NMZNhZwi8tc3886te4pA # Survival Gear
+          - UCmE_Hkr9B0VZ2xuoyRLlv2A # Curious History
+          - UCmdmZp1K_kjXYBKgyqg_5LA # Daily Dose of Gaming
+          - UCn7DCb9ttrcw9h3vh9dfnVw # Let's ask Shogo | Katana, Budo, & Kimono
+          - UCnIQPPwWpO_EFEqLny6TFTw # Google Maps
+          - UCoFF1n89vVu7YorSV3uj_bg # Fire Dept. Coffee
+          - UCoSmZ1m1EuZLRJoSkghRXrQ # Lilia Gets A Clue
+          - UCpFFItkfZz1qz5PpHpqzYBw # Nexpo
+          - UCpFxsy-mzKIIX14aOH-veXg # Memory
+          - UCpUJBVgu6z-VNEDWPeW7w9Q # SuperSus English
+          - UCpVE_i_6OOospMhcbRDrKbw # Don McMillan
+          - UCpvg0uZH-oxmCagOWJo9p9g # Lenovo
+          #- UCqJPPmrNv-IjZ6hQ29Iep7TA # Titus Tech Gaming
+          - UCqcxR9B59H4DT1e6hg1Smiw # zi8gzag
+          - UCqjVP9gAanUGFgTA5BRDvyA # HowToMen
+          - UCqpNHx_gjAV70G-H1jZMpOg # Madison Clysdale
+          - UCqrDJbqwHJEo2oguNZoOSVA # MIL-TEC
+          - UCr0J77urtCQGZ5yoHyPsZRw # Yodeck Digital Signage
+          - UCrJdCKIddUxHExmbMN6gZ9A # Wartime Stories
+          - UCrORpSD2xZCL6uZEo26JSKQ # Tech Ryzen Show
+          - UCrc2iv2-G1FZ3VscM3zu2jg # Lindsay Nikole
+          - UCrhCgfKbpW-mhJVGFYGov-Q # More Parz
+          - UCs26zNVqmmTKF4szy459qMA # Steve Inman Commentary
+          - UCs8lYkna2S6DkcHO9o2008A # Roanoke Gaming
+          - UCsIlJ9eYylZQcyfMOPNUz9w # Bright Insight
+          - UCsVtXa3VN-aQd_HqMYb7uJg # Laura Malvoyante
+          - UCsvtCEteOBppQ4TeqAiV91w # PRG JailBreaks
+          - UCtGPrDwbbSuOWK7Cp96NTBg # Zaffy
+          - UCtYg149E_wUGVmjGz-TgyNA # Chris Titus Technical
+          - UCtn44Ql28bZ6g4AkxwXCA_Q # HiddenXperia
+          - UCuAWs9GxuTDLNyo2-cbrwDA # RAINBOLT TWO
+          - UCuVQmkiETvqmLviDcBtQw4A # Nothing
+          - UCuX9VrqRC3-EUq1eZ0NBbQg # Wendigang
+          - UCvB3solmhqtgDeLpD-yTtfg # hickok45
+          - UCv_xUMidak7IGxelwMOgPwA # thatguycian
+          - UCvwMBm5GsyC0gXYeSYy9vOg # Arms For Thought
+          - UCwFpzG5MK5Shg_ncAhrgr9g # Awesome Open Source
+          - UCwHwDuNd9lCdA7chyyquDXw # Bread on Penguins
+          - UCwOd93UOsr_Qk_S6sQycVBw # That Good News Girl
+          - UCwPuC3eWCpfPsUOx-T3I6dQ # Nikos
+          - UCwWerBj4JXEUljeOSKEpWYQ # JUST TRUST ASH
+          - UCwdEr_DVvYp6Maf-OTw7z_w # Toasty Bros
+          - UCwn0SsGgvvIxrVEwy5jjPbQ # Creature Challenge
+          - UCx85uxlaPjbQAdYEx6YnWiw # Tasmanian Tiger
+          - UCx8hwsbYzCUssA4-A5DJDsA # Lung Tank
+          - UCxZRF3OG7gapQ8kacWUwj2A # Lock Noob
+          - UCxrauf_nmP9L93qiBLSkerA # kilObit
+          - UCxx5Oz3kQJ82rTENqvTcDpA # LastBush Survival
+          - UCy4_a5BnbrKXe8agaHKGEdQ # Camellia_VT
+          - UCy6v91210figZrnMvfnhZhw # Mysteries of Mythology
+          - UCyS3fQ0zsZFK8ArfjbCweHg # OceanReefGroup
+          - UCyV85puZOxIp1wZ5Pma1djw # Jeremy's Tech Channel
+          - UCysVG_DvoO0Wm4Iw-I3KoXA # Richard Sales Official
+          - UCzIO0iX4yKW2P4NkmmKq1PA # 9to5Google
+          - UCzXfwhqZhOrGkjbniCklgKg # MelissaBackwoods Knife & Gear Reviews
+          - UCzY4cXUIfaB4q6V_Wek5Wxg # Tactical Geek
+          - UCzeZcpoKj-FYWpW7HQ8uEiw # AIDA Careers
+          - UCs8lYkna2S6DkcHO9o2008A # Roanoke Gaming
+          - UCsIlJ9eYylZQcyfMOPNUz9w # Bright Insight
+          - UCsVtXa3VN-aQd_HqMYb7uJg # Laura Malvoyante
+          - UCsojCyeOSuw4Odm6MyBXLmg # HDD Recovery Services
+          - UCsvtCEteOBppQ4TeqAiV91w # PRG JailBreaks
+          - UCsxS7yzZC9gKYcgL4pvN3rA # Asmongold Gaming
+          - UCtGPrDwbbSuOWK7Cp96NTBg # Zaffy
+          - UCtPrkXdtCM5DACLufB9jbsA # MrBallen
+          - UCtYg149E_wUGVmjGz-TgyNA # Chris Titus Technical
+          - UCtn44Ql28bZ6g4AkxwXCA_Q # HiddenXperia
+          - UCuAWs9GxuTDLNyo2-cbrwDA # RAINBOLT TWO
+          - UCuVQmkiETvqmLviDcBtQw4A # Nothing
+          - UCuX9VrqRC3-EUq1eZ0NBbQg # Wendigang
+          - UCvB3solmhqtgDeLpD-yTtfg # hickok45
+          - UCv_xUMidak7IGxelwMOgPwA # thatguycian
+          - UCvi7NknbfeYAbJX3rEpI1ZQ # PRG Repair Tutorials
+          - UCvwMBm5GsyC0gXYeSYy9vOg # Arms For Thought
+          - UCvz84_Q0BbvZThy75mbd-Dg # Zack D. Films
+          - UCwCoxYmozgro8NZzx-Pr-gw # Very Nearly Interesting
+          - UCwFpzG5MK5Shg_ncAhrgr9g # Awesome Open Source
+          - UCwHwDuNd9lCdA7chyyquDXw # Bread on Penguins
+          - UCwOBG77Tm8cE24FPxHb_abw # Smart Home Solver
+          - UCwOd93UOsr_Qk_S6sQycVBw # That Good News Girl
+          - UCwPuC3eWCpfPsUOx-T3I6dQ # Nikos
+          - UCwWerBj4JXEUljeOSKEpWYQ # JUST TRUST ASH
+          - UCwdEr_DVvYp6Maf-OTw7z_w # Toasty Bros
+          - UCwn0SsGgvvIxrVEwy5jjPbQ # Creature Challenge
+          - UCx85uxlaPjbQAdYEx6YnWiw # Tasmanian Tiger
+          - UCx8hwsbYzCUssA4-A5DJDsA # Lung Tank
+          - UCxQKHvKbmSzGMvUrVtJYnUA # Learn Linux TV
+          - UCxQRbxqJ_sLfVRWQXePTa8w # Techdemy
+          - UCxVPH8W2ayMey1-b0SY8rBQ # The Coding Sloth
+          - UCxZRF3OG7gapQ8kacWUwj2A # Lock Noob
+          - UCxrauf_nmP9L93qiBLSkerA # kilObit
+          - UCxx5Oz3kQJ82rTENqvTcDpA # LastBush Survival
+          - UCy1hU4eDUdoPy_ez4oXZD0w # Techlore Clips
+          - UCy4_a5BnbrKXe8agaHKGEdQ # Camellia_VT
+          - UCy6v91210figZrnMvfnhZhw # Mysteries of Mythology
+          - UCyBDkBfp_tugvOXzq7dyIVA # Zac In The Wild
+          - UCyS3fQ0zsZFK8ArfjbCweHg # OceanReefGroup
+          - UCyV85puZOxIp1wZ5Pma1djw # Jeremy's Tech Channel
+          - UCylGUf9BvQooEFjgdNudoQg # The Linux Cast
+          - UCysVG_DvoO0Wm4Iw-I3KoXA # Richard Sales Official
+          - UCzIO0iX4yKW2P4NkmmKq1PA # 9to5Google
+          - UCzJ3fSCYqjO3QyRvr8JZs-g # Planet Linux
+          - UCzXfwhqZhOrGkjbniCklgKg # MelissaBackwoods Knife & Gear Reviews
+          - UCzY4cXUIfaB4q6V_Wek5Wxg # Tactical Geek
+          - UCzeZcpoKj-FYWpW7HQ8uEiw # AIDA Careers
+
+      - type: group
+        widgets: []
+
+      - type: group
+        tabs: true
+        widgets:
+          #          - type: reddit
+          #            subreddit: selfhosted
+          #            show-thumbnails: true
+          #            show-videos: true
+          #          - type: reddit
+          #            subreddit: linux
+          #            show-thumbnails: true
+          #            show-videos: true
+          #          - type: reddit
+          #            subreddit: foundsatan
+          #            show-thumbnails: true
+          #            show-videos: true
+          #          - type: reddit
+          #            subreddit: guysbeingdudes
+          #            show-thumbnails: true
+          #            show-videos: true
+          - type: rss
+          - $include: rss.yml
+
+  - size: big
+    widgets:
+      - type: weather
+        location: Essen, Germany
+        units: metric
+        hour-format: 24h
+        # Optionally hide the location from being displayed in the widget
+        # hide-location: true
+
+      - type: markets
+        markets:
+          - symbol: SPY
+            name: S&P 500
+          - symbol: BTC-USD
+            name: Bitcoin
+          - symbol: NVDA
+            name: NVIDIA
+          - symbol: AAPL
+            name: Apple
+          - symbol: MSFT
+            name: Microsoft
+
+      - type: releases
+        cache: 1d
+        token:
+        repositories:
+          - glanceapp/glance
+          - go-gitea/gitea
+          - immich-app/immich
+          - syncthing/syncthing
+          - nextcloud/server
+          - torvalds/linux
+          - spacedriveapp/spacedrive
+          - topjohnwu/Magisk
+          - gedsh/Invinzible
+          - grocy/grocy
+          - Grokability/snipit
+          - grocy/grocy-android
+          - christitustech/linutil
+          - christitustech/winutil
+          - openmediavault/openmediavault
+          - veracrypt/veracrypt
+          - Microsoft/powertoys
+          - marticliment/unigetui
+          - awesome-selfhosted/awesome-selfhosted
+          - cockpit-project/cockpit
+          - webmin/webmin
+          - prathameshkhade/SysAdmin
+          - bellingcat/toolkit
+          - MON5TERMATT/medicat_installer
+          - tailscale/tailscale
+          - tailscale/tailscale-android
+          - tailscale/tailscale-desktop
+          - tailscale/tailscale-linux

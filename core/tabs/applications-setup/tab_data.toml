@@ -198,10 +198,22 @@ script = "developer-tools/cursor.sh"
 task_list = "I"
 
 [[data.entries]]
+name = "Distrobox TUI"
+description = "A minimal Terminal User Interface (TUI) for managing Distrobox containers. Requires Go, Distrobox, and a container engine (podman/docker). Built with Bubbletea framework."
+script = "TUIs/distrobox-tui.sh"
+task_list = "I"
+
+[[data.entries]]
 name = "Github Desktop"
 description = "GitHub Desktop is a user-friendly application that simplifies the process of managing Git repositories and interacting with GitHub, providing a graphical interface for tasks like committing, branching, and syncing changes."
 script = "developer-tools/githubdesktop.sh"
 task_list = "I"
+
+[[data.entries]]
+name = "Go Setup"
+description = "Configures Go (Golang) environment by adding GOPATH/bin to your shell PATH. This allows you to run Go-installed binaries directly. Supports bash, zsh, and fish shells."
+script = "developer-tools/go-setup.sh"
+task_list = "PFM"
 
 [[data.entries]]
 name = "JetBrains Toolbox"
@@ -481,8 +493,14 @@ task_list = "I SS"
 
 [[data]]
 name = "CLI Packages"
-description = "Installs a comprehensive collection of command-line and terminal-based tools from official Arch repositories and AUR."
-script = "cli-packages.sh"
+description = "Installs a comprehensive collection of command-line and terminal-based tools from official repositories and AUR."
+script = "base-packages/cli-packages.sh"
+task_list = "I"
+
+[[data]]
+name = "GUI Packages"
+description = "Installs a comprehensive collection of graphical desktop applications from official repositories and Flathub."
+script = "base-packages/gui-packages.sh"
 task_list = "I"
 
 [[data]]

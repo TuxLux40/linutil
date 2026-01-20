@@ -150,6 +150,12 @@ script = "encrypt_decrypt_tool.sh"
 task_list = "I FM"
 
 [[data]]
+name = "Locale Setup"
+description = "Sets up my preferred locale with english language and german keyboard layout & formats"
+script = "locale-setup.sh"
+task_list = "FM"
+
+[[data]]
 name = "Numlock on Startup"
 description = "This utility is designed to enable Num Lock at boot, rather than within desktop environments like KDE or GNOME"
 script = "numlock.sh"
@@ -186,12 +192,6 @@ task_list = "I"
 matches = false
 data = "command_exists"
 values = ["dnf"]
-
-[[data]]
-name = "Locale Setup"
-description = "Sets up my preferred locale with english language and german keyboard layout & formats"
-script = "locale-setup.sh"
-task_list = "FM"
 
 [[data]]
 name = "WiFi Manager"

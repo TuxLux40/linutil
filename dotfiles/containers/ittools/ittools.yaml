@@ -1,0 +1,1 @@
+docker run -d --name it-tools --restart unless-stopped -p 5230:80 corentinth/it-tools:latest
