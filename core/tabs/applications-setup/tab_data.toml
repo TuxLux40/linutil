@@ -494,7 +494,7 @@ task_list = "I SS"
 [[data]]
 name = "CLI Packages"
 description = "Installs a comprehensive collection of command-line and terminal-based tools from official repositories and AUR."
-script = "applications-setup/base-packages/cli-packages.sh"
+script = "base-packages/cli-packages.sh"
 task_list = "I"
 
 [[data]]
