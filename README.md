@@ -2,9 +2,9 @@
 
 ![Preview](/.github/preview.gif)
 
-> **Note:** This is a personal fork of [ChrisTitusTech/linutil](https://github.com/ChrisTitusTech/linutil). For the official version and upstream development, please visit the original repository.
+This is a personal fork of [ChrisTitusTech/linutil](https://github.com/ChrisTitusTech/linutil). For the official version and upstream development, please visit the original repository.
 
-**Linutil** is a distro-agnostic toolbox designed to simplify everyday Linux tasks. It helps you set up applications and optimize your system for specific use cases. The utility is actively developed in Rust 🦀, providing performance and reliability.
+**Linutil** is a distro-agnostic toolbox designed to simplify everyday Linux tasks. It helps you set up applications and optimize your system for specific use cases. I have updated it with my own dotfiles, programs and scripts I use. It is an awesome framework to adapt for your own usage and build upon.
 
 ## ⬇️ Installation
 
