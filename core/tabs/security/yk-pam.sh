@@ -41,6 +41,7 @@ check_pam_u2f() {
 }
 
 # Get actual user
+# This function makes sure that 'sudo ./yk-pam.sh' puts the config in the right user's home, not root's.
 get_actual_user() {
     if [ -n "$SUDO_USER" ]; then
         echo "$SUDO_USER"
