@@ -4,9 +4,11 @@ mod filter;
 mod float;
 mod floating_text;
 mod hint;
+mod logo;
 mod root;
 mod running_command;
 mod state;
+mod system_info;
 mod theme;
 
 #[cfg(feature = "tips")]
@@ -35,21 +37,12 @@ use std::{
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    // Handle subcommands
-    if let Some(command) = &args.command {
-        match command {
-            cli::Command::Update => {
-                return handle_update();
-            }
-        }
-    }
-
-    let mut state = AppState::new(args.clone());
-
     stdout().execute(EnterAlternateScreen)?;
     if args.mouse {
         stdout().execute(EnableMouseCapture)?;
     }
+
+    let mut state = AppState::new(args.clone());
 
     enable_raw_mode()?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;

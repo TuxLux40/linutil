@@ -17,15 +17,14 @@ pub enum Theme {
 impl Theme {
     pub const fn dir_color(&self) -> Color {
         match self {
-            Theme::Default => Color::Blue,
-            Theme::Compatible => Color::Blue,
-            Theme::Neon => Color::Rgb(0, 255, 255),  // Cyan neon
+            Theme::Default => Color::LightCyan,
+            Theme::Compatible => Color::Cyan,
         }
     }
 
     pub const fn cmd_color(&self) -> Color {
         match self {
-            Theme::Default => Color::Rgb(204, 224, 208),
+            Theme::Default => Color::White,
             Theme::Compatible => Color::LightGreen,
             Theme::Neon => Color::Rgb(0, 255, 136),  // Neon green
         }
@@ -41,39 +40,35 @@ impl Theme {
 
     pub const fn tab_color(&self) -> Color {
         match self {
-            Theme::Default => Color::Rgb(255, 255, 85),
-            Theme::Compatible => Color::Yellow,
-            Theme::Neon => Color::Rgb(255, 0, 255),  // Magenta neon
+            Theme::Default => Color::Yellow,
+            Theme::Compatible => Color::LightYellow,
         }
     }
 
     pub const fn dir_icon(&self) -> &'static str {
         match self {
-            Theme::Default => "  ",
-            Theme::Compatible => "[DIR]",
-            Theme::Neon => "  ",
+            Theme::Default => "[D]",
+            Theme::Compatible => "[D]",
         }
     }
 
     pub const fn cmd_icon(&self) -> &'static str {
         match self {
-            Theme::Default => "  ",
-            Theme::Compatible => "[CMD]",
-            Theme::Neon => "  ",
+            Theme::Default => "[*]",
+            Theme::Compatible => "[*]",
         }
     }
 
     pub const fn tab_icon(&self) -> &'static str {
         match self {
-            Theme::Default => "  ",
-            Theme::Compatible => ">> ",
-            Theme::Neon => "  ",
+            Theme::Default => ">> ",
+            Theme::Compatible => ">  ",
         }
     }
 
     pub const fn multi_select_icon(&self) -> &'static str {
         match self {
-            Theme::Default => "",
+            Theme::Default => "*",
             Theme::Compatible => "*",
             Theme::Neon => "",
         }
@@ -81,7 +76,7 @@ impl Theme {
 
     pub const fn success_color(&self) -> Color {
         match self {
-            Theme::Default => Color::Rgb(5, 255, 55),
+            Theme::Default => Color::LightGreen,
             Theme::Compatible => Color::Green,
             Theme::Neon => Color::Rgb(0, 255, 136),  // Bright neon green
         }
@@ -89,7 +84,7 @@ impl Theme {
 
     pub const fn fail_color(&self) -> Color {
         match self {
-            Theme::Default => Color::Rgb(199, 55, 44),
+            Theme::Default => Color::LightRed,
             Theme::Compatible => Color::Red,
             Theme::Neon => Color::Rgb(255, 0, 100),  // Neon hot pink
         }
@@ -98,49 +93,21 @@ impl Theme {
     pub const fn focused_color(&self) -> Color {
         match self {
             Theme::Default => Color::LightBlue,
-            Theme::Compatible => Color::LightBlue,
-            Theme::Neon => Color::Rgb(0, 255, 200),  // Bright cyan
+            Theme::Compatible => Color::LightCyan,
         }
     }
 
     pub const fn search_preview_color(&self) -> Color {
         match self {
             Theme::Default => Color::DarkGray,
-            Theme::Compatible => Color::DarkGray,
-            Theme::Neon => Color::Rgb(80, 20, 100),  // Dark purple
+            Theme::Compatible => Color::Gray,
         }
     }
 
     pub const fn unfocused_color(&self) -> Color {
         match self {
             Theme::Default => Color::Gray,
-            Theme::Compatible => Color::Gray,
-            Theme::Neon => Color::Rgb(100, 100, 150),  // Muted purple-blue
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn border_color(&self) -> Color {
-        match self {
-            Theme::Default => Color::White,
-            Theme::Compatible => Color::White,
-            Theme::Neon => Color::Rgb(0, 255, 255),  // Bright cyan neon glow
-        }
-    }
-
-    pub fn border_style(&self) -> Style {
-        match self {
-            Theme::Default => Style::new(),
-            Theme::Compatible => Style::new(),
-            Theme::Neon => Style::new().fg(Color::Rgb(0, 255, 255)).bold(),
-        }
-    }
-
-    pub fn background_color(&self) -> Color {
-        match self {
-            Theme::Default => Color::Reset,
-            Theme::Compatible => Color::Reset,
-            Theme::Neon => Color::Rgb(10, 10, 20),  // Dark space background
+            Theme::Compatible => Color::DarkGray,
         }
     }
 }
