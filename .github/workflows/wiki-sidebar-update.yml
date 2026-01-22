@@ -1,0 +1,101 @@
+name: Update Wiki Sidebar
+
+permissions:
+    contents: write
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "linutil.wiki/**/*.md"
+    workflow_dispatch:
+
+jobs:
+    update-sidebar:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Update Sidebar
+              run: |
+                  cd linutil.wiki
+                  python3 << 'EOF'
+                  import os
+                  import re
+                  from pathlib import Path
+
+                  # Build sidebar structure from directory tree
+                  def build_sidebar_structure(root_dir, ignore_dirs={'.git', 'images'}):
+                      structure = []
+                      
+                      # Add Home link
+                      structure.append("- [Home](Home.md)")
+                      structure.append("")
+                      
+                      # Process directories in sorted order
+                      for item in sorted(os.listdir(root_dir)):
+                          item_path = os.path.join(root_dir, item)
+                          
+                          # Skip ignored items
+                          if item.startswith('.') or item in ignore_dirs or item == '_Sidebar.md':
+                              continue
+                          
+                          if os.path.isdir(item_path):
+                              # Add directory as section header
+                              section_name = item.replace('_', ' ').title()
+                              structure.append(f"## {section_name}")
+                              structure.append("")
+                              
+                              # Process files in this directory
+                              files = sorted([f for f in os.listdir(item_path) if f.endswith('.md')])
+                              for file in files:
+                                  file_name = file.replace('.md', '').replace('_', ' ').title()
+                                  file_path = f"{item}/{file}"
+                                  structure.append(f"- [{file_name}]({file_path})")
+                              
+                              # Check for subdirectories
+                              subdirs = sorted([d for d in os.listdir(item_path) if os.path.isdir(os.path.join(item_path, d)) and not d.startswith('.')])
+                              for subdir in subdirs:
+                                  if subdir == 'images':
+                                      continue
+                                  subdir_name = subdir.replace('_', ' ').title()
+                                  structure.append(f"\n### {subdir_name}")
+                                  structure.append("")
+                                  
+                                  subdir_path = os.path.join(item_path, subdir)
+                                  sub_files = sorted([f for f in os.listdir(subdir_path) if f.endswith('.md')])
+                                  for sub_file in sub_files:
+                                      sub_file_name = sub_file.replace('.md', '').replace('_', ' ').title()
+                                      sub_file_path = f"{item}/{subdir}/{sub_file}"
+                                      structure.append(f"- [{sub_file_name}]({sub_file_path})")
+                              
+                              structure.append("")
+                      
+                      return "\n".join(structure)
+
+                  # Generate new sidebar content
+                  new_sidebar = "# Linutil Wiki\n\n" + build_sidebar_structure(".")
+
+                  # Write to _Sidebar.md
+                  with open('_Sidebar.md', 'w') as f:
+                      f.write(new_sidebar)
+
+                  print("Sidebar updated successfully!")
+                  EOF
+
+            - name: Commit and push changes
+              run: |
+                  cd linutil.wiki
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+                  if [[ $(git status --porcelain) ]]; then
+                    git add _Sidebar.md
+                    git commit -m "ci: auto-update sidebar from wiki structure"
+                    git push
+                  else
+                    echo "No changes to commit"
+                  fi
