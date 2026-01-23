@@ -3,6 +3,7 @@ use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
 #[derive(Debug, Parser, Clone)]
+#[command(name = "linutil")]
 pub struct Args {
     #[command(subcommand)]
     pub command: Option<Command>,

@@ -27,7 +27,7 @@ const MIN_HEIGHT: u16 = 25;
 const FLOAT_SIZE: u16 = 95;
 const CONFIRM_PROMPT_FLOAT_SIZE: u16 = 40;
 const LEFT_EXTRA_WIDTH: u16 = 4;
-const TITLE: &str = concat!(" LINUTIL v", env!("CARGO_PKG_VERSION"), " ");
+const TITLE: &str = " LINUTIL ";
 const LIST_HIGHLIGHT_SYMBOL: &str = "> ";
 const ACTIONS_GUIDE: &str = "List of important tasks performed by commands' names:
 
@@ -275,33 +275,6 @@ impl AppState {
             && (terminal_size.height < MIN_HEIGHT || terminal_size.width < MIN_WIDTH)
     }
 
-    fn create_hexagon_background(&self, area: Rect) -> impl Widget {
-        let lines: Vec<Line> = (0..area.height)
-            .map(|y| {
-                let mut spans = vec![];
-                for x in 0..area.width {
-                    // Create a subtle hexagon pattern with opacity
-                    let hex_char = if (x + y) % 3 == 0 && (x % 4 == 0 || (x + 1) % 4 == 0) {
-                        "⬡"
-                    } else if (x + y) % 5 == 0 && x % 6 == 0 {
-                        "◇"
-                    } else {
-                        " "
-                    };
-
-                    // Style hexagons with dim purple/blue tint
-                    let style = Style::new()
-                        .fg(Color::Rgb(50, 30, 80))
-                        .bg(Color::Rgb(10, 10, 20));
-
-                    spans.push(Span::styled(hex_char, style));
-                }
-                Line::from(spans)
-            })
-            .collect();
-
-        Paragraph::new(lines).style(Style::new().bg(Color::Rgb(10, 10, 20)))
-    }
 
     pub fn draw(&mut self, frame: &mut Frame) {
         let area = frame.area();
@@ -387,7 +360,7 @@ impl AppState {
             logo.draw(frame, left_chunks[0], &self.theme);
         } else {
             let label = Paragraph::new(Line::styled(
-                format!("Linutil V{}", env!("CARGO_PKG_VERSION")),
+                "LINUTIL",
                 Style::default().fg(self.theme.tab_color()).bold(),
             ))
             .alignment(Alignment::Center);

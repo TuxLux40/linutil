@@ -62,42 +62,6 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn handle_update() -> Result<()> {
-    use std::process::Command;
-    
-    // Try to find update.sh in the repository root
-    let possible_paths = [
-        "/home/oliver/git/linutil/update.sh",
-        "./update.sh",
-        "../update.sh",
-    ];
-    
-    let update_script = possible_paths.iter()
-        .find(|path| std::path::Path::new(path).exists());
-    
-    match update_script {
-        Some(script) => {
-            println!("Running update script: {}", script);
-            let status = Command::new("bash")
-                .arg(script)
-                .status()?;
-            
-            if status.success() {
-                println!("Update completed successfully!");
-            } else {
-                eprintln!("Update failed with exit code: {:?}", status.code());
-                std::process::exit(1);
-            }
-        }
-        None => {
-            eprintln!("Update script not found. Please run manually:");
-            eprintln!("  cd ~/git/linutil && git pull && cargo install --path .");
-            std::process::exit(1);
-        }
-    }
-    
-    Ok(())
-}
 
 fn run(terminal: &mut Terminal<CrosstermBackend<Stdout>>, state: &mut AppState) -> Result<()> {
     loop {

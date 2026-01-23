@@ -20,9 +20,14 @@ cleanup_system() {
             "$ESCALATION_TOOL" "$PACKAGER" autoremove -y
             ;;
         pacman)
+            "$ESCALATION_TOOL" rm -rf /var/cache/pacman/pkg/* || true
             "$ESCALATION_TOOL" "$PACKAGER" -Sc --noconfirm
-            # shellcheck disable=2046
-            "$ESCALATION_TOOL" "$PACKAGER" -Rns $(pacman -Qtdq) --noconfirm > /dev/null || true
+            ORPHANS="$(pacman -Qtdq 2>/dev/null || true)"
+            if [ -n "$ORPHANS" ]; then
+                "$ESCALATION_TOOL" "$PACKAGER" -Rns $ORPHANS --noconfirm >/dev/null || true
+            else
+                printf "%b\n" "${YELLOW}No orphan packages to remove.${RC}"
+            fi
             ;;
         apk)
             "$ESCALATION_TOOL" "$PACKAGER" cache clean
@@ -61,10 +66,10 @@ clean_data() {
         y|Y)
             printf "%b\n" "${YELLOW}Cleaning up old cache files and emptying trash...${RC}"
             if [ -d "$HOME/.cache" ]; then
-                find "$HOME/.cache/" -type f -atime +5 -delete
+                find "$HOME/.cache/" -type f -user "$USER" -atime +5 -delete 2>/dev/null || true
             fi
             if [ -d "$HOME/.local/share/Trash" ]; then
-                find "$HOME/.local/share/Trash" -mindepth 1 -delete
+                find "$HOME/.local/share/Trash" -mindepth 1 -user "$USER" -delete 2>/dev/null || true
             fi
             printf "%b\n" "${GREEN}Cache and trash cleanup completed.${RC}"
             ;;

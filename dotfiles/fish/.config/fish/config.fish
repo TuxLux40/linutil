@@ -39,8 +39,6 @@ if status is-interactive
 	# Set Qt platform theme
 	set -gx QT_QPA_PLATFORMTHEME qt6ct
 
-	# Add Cargo to PATH
-	export PATH="$PATH:/home/oliver/.cargo/bin"
 end
 
 # Load Homebrew environment if available
