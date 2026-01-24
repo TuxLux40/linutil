@@ -95,7 +95,7 @@ EOF
 
     info "Creating additional SSD-backed swapfile (generous size)"
     # Create a large swapfile to complement zram; default 8G, override via SWAPFILE_SIZE env (e.g., 16G)
-    SWAPFILE_SIZE="${SWAPFILE_SIZE:-8G}"
+    SWAPFILE_SIZE="${SWAPFILE_SIZE:-16G}"
     if ! grep -q '^/swapfile' /etc/fstab; then
         # Detect FS type for / and adjust for btrfs (disable CoW)
         FSTYPE="$(findmnt -no FSTYPE / || echo unknown)"
