@@ -85,13 +85,40 @@ main() {
     ${SUDO} pacman -S --needed --noconfirm zram-generator
     cat << 'EOF' | write_file /etc/systemd/zram-generator.conf
 [zram0]
-zram-size = ram / 2
+zram-size = ram * 1
 compression-algorithm = zstd
 swap-priority = 100
 EOF
     ${SUDO} systemctl daemon-reload
     # Try both possible units; one will exist depending on generator version
     ${SUDO} systemctl start systemd-zram-setup@zram0.service || ${SUDO} systemctl start dev-zram0.swap || true
+
+    info "Creating additional SSD-backed swapfile (generous size)"
+    # Create a large swapfile to complement zram; default 8G, override via SWAPFILE_SIZE env (e.g., 16G)
+    SWAPFILE_SIZE="${SWAPFILE_SIZE:-8G}"
+    if ! grep -q '^/swapfile' /etc/fstab; then
+        # Detect FS type for / and adjust for btrfs (disable CoW)
+        FSTYPE="$(findmnt -no FSTYPE / || echo unknown)"
+        if [ "$FSTYPE" = "btrfs" ]; then
+            ${SUDO} touch /swapfile
+            ${SUDO} chattr +C /swapfile || true
+        fi
+        if command -v fallocate >/dev/null 2>&1; then
+            ${SUDO} fallocate -l "$SWAPFILE_SIZE" /swapfile
+        else
+            # Fallback to dd (convert G to MiB)
+            case "$SWAPFILE_SIZE" in
+                *G|*g) SZ_MB=$(( ${SWAPFILE_SIZE%[Gg]} * 1024 )) ;;
+                *M|*m) SZ_MB=${SWAPFILE_SIZE%[Mm]} ;;
+                *) SZ_MB=8192 ;;
+            esac
+            ${SUDO} dd if=/dev/zero of=/swapfile bs=1M count="$SZ_MB" status=progress
+        fi
+        ${SUDO} chmod 600 /swapfile
+        ${SUDO} mkswap /swapfile
+        ${SUDO} sh -c 'echo "/swapfile none swap defaults,pri=50 0 0" >> /etc/fstab'
+    fi
+    ${SUDO} swapon /swapfile || true
 
     info "Installing and enabling earlyoom"
     ${SUDO} pacman -S --needed --noconfirm earlyoom
