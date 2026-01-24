@@ -82,6 +82,12 @@ description = "Yet Another Yogurt - An AUR Helper Written in Go. To know more ab
 script = "arch/yay-setup.sh"
 task_list = "I"
 
+[[data.entries]]
+name = "RPi Stabilization (ZRAM/earlyoom/journald)"
+description = "Stabilize Raspberry Pi on Arch Linux ARM: configure ZRAM swap, enable and tune earlyoom (protect sshd/tailscaled), and set journald limits with auto rotation/vacuum."
+script = "arch/rpi-stabilization.sh"
+task_list = "I PFM SS"
+
 [[data]]
 name = "Debian"
 
