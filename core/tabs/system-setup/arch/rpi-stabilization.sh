@@ -85,8 +85,8 @@ main() {
     ${SUDO} pacman -S --needed --noconfirm zram-generator
     cat << 'EOF' | write_file /etc/systemd/zram-generator.conf
 [zram0]
-zram-size = ram * 1
-compression-algorithm = zstd
+zram-size = ram / 3
+compression-algorithm = lz4
 swap-priority = 100
 EOF
     ${SUDO} systemctl daemon-reload
