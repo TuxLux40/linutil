@@ -1,0 +1,151 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.39.26.7824",
+      "templateHash": "5295953620084477651"
+    }
+  },
+  "parameters": {
+    "extensions_enablevmaccess_username": {
+      "type": "securestring"
+    },
+    "extensions_enablevmaccess_password": {
+      "type": "securestring"
+    },
+    "extensions_enablevmaccess_ssh_key": {
+      "type": "securestring"
+    },
+    "extensions_enablevmaccess_reset_ssh": {
+      "type": "securestring"
+    },
+    "extensions_enablevmaccess_remove_user": {
+      "type": "securestring"
+    },
+    "extensions_enablevmaccess_expiration": {
+      "type": "securestring"
+    },
+    "virtualMachines_LX_U1_name": {
+      "type": "string",
+      "defaultValue": "LX-U1"
+    },
+    "disks_LX_U1_OsDisk_1_50c0b0f09b94456eac7ce7f0ea8c1ec2_externalid": {
+      "type": "string",
+      "defaultValue": "/subscriptions/122d2226-7d88-4450-a24a-6e3699e18f7e/resourceGroups/RG1/providers/Microsoft.Compute/disks/LX-U1_OsDisk_1_50c0b0f09b94456eac7ce7f0ea8c1ec2"
+    },
+    "networkInterfaces_lx_u1179_externalid": {
+      "type": "string",
+      "defaultValue": "/subscriptions/122d2226-7d88-4450-a24a-6e3699e18f7e/resourceGroups/RG1/providers/Microsoft.Network/networkInterfaces/lx-u1179"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2024-11-01",
+      "name": "[parameters('virtualMachines_LX_U1_name')]",
+      "location": "germanywestcentral",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_D2ps_v5"
+        },
+        "additionalCapabilities": {
+          "hibernationEnabled": false
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "canonical",
+            "offer": "ubuntu-24_04-lts",
+            "sku": "ubuntu-pro-arm64",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "name": "[format('{0}_OsDisk_1_50c0b0f09b94456eac7ce7f0ea8c1ec2', parameters('virtualMachines_LX_U1_name'))]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS",
+              "id": "[parameters('disks_LX_U1_OsDisk_1_50c0b0f09b94456eac7ce7f0ea8c1ec2_externalid')]"
+            },
+            "deleteOption": "Delete",
+            "diskSizeGB": 32
+          },
+          "dataDisks": [],
+          "diskControllerType": "SCSI"
+        },
+        "osProfile": {
+          "computerName": "[parameters('virtualMachines_LX_U1_name')]",
+          "adminUsername": "azureuser",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "/home/azureuser/.ssh/authorized_keys",
+                  "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPp4NjUpVS1VYqcECQrHO/aKMbQMd5/7GEubBTzRWts41fJzECh3e6UbKtK0mL1s+xy/+RCnneZ/FtgsVJJEGquz+ef1JPx2HdvCs7YzOKXwHU/gokey4g7QMIgap15rLgZ1mn9QFjTz0iK8AFM8sgWfWvPMeiOLW0efhdfjRXRuYV7jFWbC8rZS7Fb1fKbftfNRkfpPCZ8wuNE58trietj6rN5nDL3OTP6UdSVpQ64oZFTh9ux3B7qG89MJndQoRkoXceUz5h1ShoBLIzz6Ye1rQlvFOPUfWs+J38K0jJszvh4ErZfbEG4Mndpv0SA8hxXNN3N7AW/Ro2AfRUPQJZ openpgp:0x2F1170E8"
+                }
+              ]
+            },
+            "provisionVMAgent": true,
+            "patchSettings": {
+              "patchMode": "ImageDefault",
+              "assessmentMode": "ImageDefault"
+            }
+          },
+          "secrets": [],
+          "allowExtensionOperations": true,
+          "requireGuestProvisionSignal": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[parameters('networkInterfaces_lx_u1179_externalid')]",
+              "properties": {
+                "deleteOption": "Detach"
+              }
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        },
+        "priority": "Spot",
+        "evictionPolicy": "Deallocate",
+        "billingProfile": {
+          "maxPrice": "[json('-1')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2024-11-01",
+      "name": "[format('{0}/{1}', parameters('virtualMachines_LX_U1_name'), 'enablevmaccess')]",
+      "location": "germanywestcentral",
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.OSTCExtensions",
+        "type": "VMAccessForLinux",
+        "typeHandlerVersion": "1.5",
+        "settings": {},
+        "protectedSettings": {
+          "username": "[parameters('extensions_enablevmaccess_username')]",
+          "password": "[parameters('extensions_enablevmaccess_password')]",
+          "ssh_key": "[parameters('extensions_enablevmaccess_ssh_key')]",
+          "reset_ssh": "[parameters('extensions_enablevmaccess_reset_ssh')]",
+          "remove_user": "[parameters('extensions_enablevmaccess_remove_user')]",
+          "expiration": "[parameters('extensions_enablevmaccess_expiration')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_LX_U1_name'))]"
+      ]
+    }
+  ]
+}

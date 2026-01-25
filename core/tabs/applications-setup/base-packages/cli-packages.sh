@@ -10,7 +10,7 @@ checkEnv
 
 printf "%b\n" "${CYAN}Installing CLI Tools...${RC}"
 
-BASE_PACKAGES="aircrack-ng atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git glances gotop gpg-tui gping gzip hashcat htop iftop iotop john jq just khal kmon lazysql-bin lazydocker libpwquality lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop opencode pcscd php-imagick ranger ripgrep samba sshfs tar tcpdump termscp termshark trash-cli trippy ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
+BASE_PACKAGES="aircrack-ng atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git glances gotop gpg-tui gping gzip hashcat htop iftop iotop john jq just khal kmon lazysql-bin lazydocker libpwquality lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop opencode pcscd php-imagick ranger ripgrep samba sshfs tar tcpdump termscp termshark trash-cli trippy ufw ugrep unrar unzip wavemon wget wireguard-tools xclip xz yazi yq yubikey-personalization zoxide zip"
 
 # Map packages using a common base plus small per-distro exception lists
 map_packages() {

@@ -9,7 +9,7 @@ services:
       - ${STORAGE_DIR}:/app/server/storage
       - ${STORAGE_DIR}/.env:/app/server/.env
     environment:
-      - STORAGE_DIR=${STORAGE_DIR}
+      - STORAGE_DIR=/app/server/storage
       - UID=${UID}
       - GID=${GID}
     image: mintplexlabs/anythingllm

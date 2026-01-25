@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "extensions_enablevmaccess_username": {
+            "value": null
+        },
+        "extensions_enablevmaccess_password": {
+            "value": null
+        },
+        "extensions_enablevmaccess_ssh_key": {
+            "value": null
+        },
+        "extensions_enablevmaccess_reset_ssh": {
+            "value": null
+        },
+        "extensions_enablevmaccess_remove_user": {
+            "value": null
+        },
+        "extensions_enablevmaccess_expiration": {
+            "value": null
+        },
+        "virtualMachines_LX_U1_name": {
+            "value": null
+        },
+        "disks_LX_U1_OsDisk_1_50c0b0f09b94456eac7ce7f0ea8c1ec2_externalid": {
+            "value": null
+        },
+        "networkInterfaces_lx_u1179_externalid": {
+            "value": null
+        }
+    }
+}

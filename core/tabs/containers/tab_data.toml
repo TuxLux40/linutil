@@ -10,6 +10,7 @@ description = "Edit compose.yaml and config for AnythingLLM - AI document chatbo
 task_list = "FM"
 command = "echo \"Edit compose.yaml and env.example for AnythingLLM (deploy scripts removed).\""
 
+
 [[data.entries]]
 name = "Calibre Web"
 description = "Edit compose.yaml and config for Calibre Web - eBook management"

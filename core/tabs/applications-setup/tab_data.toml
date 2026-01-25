@@ -8,6 +8,18 @@ name = "Claude Code Router"
 script = "AI/claude-code-router.sh"
 task_list = "I"
 
+[[data.entries]]
+name = "Ghost Agent"
+description = "Installiert/aktualisiert GH05TCREW Ghostcrew lokal und startet das Setup."
+script = "AI/ghostagent.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "AnythingLLM"
+description = "Editiere Compose und Env für AnythingLLM (Container-Dateien)."
+script = "AI/anythingllm.sh"
+task_list = "FM"
+
 [[data]]
 name = "Communication Apps"
 
