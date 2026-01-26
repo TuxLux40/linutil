@@ -5,6 +5,7 @@
 ENTWARE_ROOT="/volume1/@Entware"
 ENTWARE_OPT="${ENTWARE_ROOT}/opt"
 ENTWARE_FORCE_REMOVE_OPT="${ENTWARE_FORCE_REMOVE_OPT:-0}"
+ENTWARE_BACKUP_OPT="${ENTWARE_BACKUP_OPT:-0}"
 
 print_info() {
 	printf "%b\n" "$1"
@@ -56,14 +57,32 @@ ensure_opt_mount() {
 		exit 1
 	fi
 
+	if [ -L /opt ]; then
+		if [ "$(readlink /opt)" = "${ENTWARE_OPT}" ]; then
+			print_info "/opt already points to ${ENTWARE_OPT}."
+			return 0
+		fi
+		print_info "/opt is a symlink to a different target. Aborting."
+		exit 1
+	fi
+
 	if [ -e /opt ] && [ ! -d /opt ]; then
 		print_info "/opt exists but is not a directory. Aborting."
 		exit 1
 	fi
 
 	if [ -d /opt ] && [ "$(ls -A /opt 2>/dev/null)" ]; then
+		if [ "${ENTWARE_BACKUP_OPT}" = "1" ]; then
+			backup_path="/opt.backup-$(date +%Y%m%d%H%M%S)"
+			print_info "Backing up /opt contents to ${backup_path}..."
+			mv /opt "${backup_path}"
+			mkdir -p /opt
+			print_info "Backup complete."
+			return 0
+		fi
+
 		if [ "${ENTWARE_FORCE_REMOVE_OPT}" != "1" ]; then
-			print_info "/opt is not empty. Set ENTWARE_FORCE_REMOVE_OPT=1 to remove it."
+			print_info "/opt is not empty. Set ENTWARE_BACKUP_OPT=1 to move it aside or ENTWARE_FORCE_REMOVE_OPT=1 to remove it."
 			exit 1
 		fi
 		print_info "Removing existing /opt contents..."
