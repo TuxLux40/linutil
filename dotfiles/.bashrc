@@ -26,6 +26,11 @@ elif [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
+# Initialize Homebrew (Linuxbrew) if available
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 #######################################################
 # EXPORTS
 #######################################################

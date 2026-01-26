@@ -1,5 +1,21 @@
 # Fish configuration file
 
+# Load Homebrew environment early, with robust detection
+set -l __brew_candidates \
+	/home/linuxbrew/.linuxbrew/bin/brew \
+	~/.linuxbrew/bin/brew
+for __b in $__brew_candidates
+	if test -x $__b
+		command $__b shellenv | source
+		break
+	end
+end
+if not set -q HOMEBREW_PREFIX
+	if type -q brew
+		command brew shellenv | source
+	end
+end
+
 if status is-interactive
 	# Commands to run in interactive sessions can go here
 
@@ -39,12 +55,6 @@ if status is-interactive
 	# Set Qt platform theme
 	set -gx QT_QPA_PLATFORMTHEME qt6ct
 
-end
-
-# Load Homebrew environment if available
-set -l __brew_path /home/linuxbrew/.linuxbrew/bin/brew
-if test -x $__brew_path
-	command $__brew_path shellenv | source
 end
 
 # Set the default editor
