@@ -1,6 +1,8 @@
 #!/bin/sh
 # Install Entware on Synology NAS
 # Source: https://github-wiki-see.page/m/entware/entware/wiki/Install-on-Synology-NAS
+# NOTE: Entware requires /opt. If Docker/Container Manager uses /opt (e.g. containerd),
+# this setup is not compatible with running Docker at the same time.
 
 ENTWARE_ROOT="/volume1/@Entware"
 ENTWARE_OPT="${ENTWARE_ROOT}/opt"
@@ -161,6 +163,7 @@ Tips
 EOF
 }
 
+print_info "NOTE: Entware uses /opt. If Docker/Container Manager uses /opt (e.g. containerd), this script is not compatible."
 require_root
 detect_arch
 ensure_opt_mount
