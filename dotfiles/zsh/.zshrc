@@ -2,6 +2,9 @@
 
 # Only run interactively
 if [[ -o interactive ]]; then
+  if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    . "$(code --locate-shell-integration-path zsh)"
+  fi
   # Fastfetch if available
   command -v fastfetch >/dev/null && fastfetch
 

@@ -10,6 +10,9 @@ iatest=$(expr index "$-" i) # Check if the shell is interactive
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    . "$(code --locate-shell-integration-path bash)"
+fi
 if [ -f /usr/bin/fastfetch ]; then
 	fastfetch
 fi
