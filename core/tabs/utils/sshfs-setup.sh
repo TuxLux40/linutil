@@ -64,9 +64,64 @@ add_persistent_mount() {
     
     printf "%b" "Enter local mount point (e.g., /mnt/nas): "
     read -r LOCAL_MOUNT
+
+    IDENTITY_FILE=""
+    SSH_DIR="$HOME/.ssh"
+    if [ -d "$SSH_DIR" ]; then
+        IDENTITY_CANDIDATES=$(find "$SSH_DIR" -maxdepth 5 -type f \
+            \( -name "id_*" -o -name "*.key" -o -name "*.pem" -o -name "*.p8" -o -name "*.pk8" -o -name "*.ppk" \) \
+            ! -name "*.pub" \
+            -printf "%P\n" 2>/dev/null | sort)
+    else
+        IDENTITY_CANDIDATES=""
+    fi
+
+    if [ -n "$IDENTITY_CANDIDATES" ]; then
+        printf "%b\n" "Available SSH identity files:"
+        i=1
+        for f in $IDENTITY_CANDIDATES; do
+            printf "%b\n" "$i. $f"
+            i=$((i + 1))
+        done
+        printf "%b\n" "0. Use SSH agent/config (no identityfile)"
+        printf "%b\n" "M. Enter identity file path manually"
+        printf "%b" "Choose identity file (number): "
+        read -r ID_CHOICE
+
+        if [ "$ID_CHOICE" = "M" ] || [ "$ID_CHOICE" = "m" ]; then
+            printf "%b" "Enter identity file path: "
+            read -r IDENTITY_FILE
+        elif [ -n "$ID_CHOICE" ] && [ "$ID_CHOICE" != "0" ]; then
+            SELECTED=$(printf "%s\n" "$IDENTITY_CANDIDATES" | sed -n "${ID_CHOICE}p")
+            if [ -n "$SELECTED" ]; then
+                IDENTITY_FILE="$SSH_DIR/$SELECTED"
+            else
+                printf "%b\n" "${YELLOW}Invalid selection. Using SSH agent/config.${RC}"
+            fi
+        fi
+    else
+        PUB_KEYS=$(find "$SSH_DIR" -maxdepth 5 -type f -name "*.pub" -printf "%P\n" 2>/dev/null | sort)
+        if [ -n "$PUB_KEYS" ]; then
+            printf "%b\n" "${YELLOW}Only public keys found (.pub). SSH needs the private key. Using SSH agent/config.${RC}"
+        else
+            printf "%b\n" "${YELLOW}No SSH identity files found in $SSH_DIR. Using SSH agent/config.${RC}"
+        fi
+        printf "%b\n" "M. Enter identity file path manually"
+        printf "%b" "Choose (M or Enter to continue): "
+        read -r ID_CHOICE
+        if [ "$ID_CHOICE" = "M" ] || [ "$ID_CHOICE" = "m" ]; then
+            printf "%b" "Enter identity file path: "
+            read -r IDENTITY_FILE
+        fi
+    fi
     
     # Expand tilde if present
     LOCAL_MOUNT=$(eval echo "$LOCAL_MOUNT")
+
+    # Expand tilde if present for identity file
+    if [ -n "$IDENTITY_FILE" ]; then
+        IDENTITY_FILE=$(eval echo "$IDENTITY_FILE")
+    fi
     
     # Create the local mount directory
     mkdir -p "$LOCAL_MOUNT"
@@ -92,8 +147,13 @@ add_persistent_mount() {
     # reconnect: Automatically reconnect if connection drops
     # _netdev: Treat as network device (systemd waits for network)
     # x-systemd.nofail: Don't block boot if mount fails
-    printf "%s %s fuse.sshfs user,allow_other,reconnect,identityfile=$HOME/.ssh/id_rsa,_netdev,x-systemd.nofail 0 0\n" \
-        "$FULL_REMOTE" "$LOCAL_MOUNT" | \
+    SSHFS_OPTIONS="user,allow_other,reconnect,_netdev,x-systemd.nofail"
+    if [ -n "$IDENTITY_FILE" ]; then
+        SSHFS_OPTIONS="$SSHFS_OPTIONS,identityfile=$IDENTITY_FILE"
+    fi
+
+    printf "%s %s fuse.sshfs %s 0 0\n" \
+        "$FULL_REMOTE" "$LOCAL_MOUNT" "$SSHFS_OPTIONS" | \
         "$ESCALATION_TOOL" tee -a /etc/fstab > /dev/null
     
     # Reload systemd to recognize the new mount

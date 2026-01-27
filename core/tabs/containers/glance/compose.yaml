@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   glance:
-    image: glanceapp/glance # Uses the official Glance Docker image.
+    image: docker.io/glanceapp/glance # Uses the official Glance Docker image.
     container_name: glance # Assigns a custom container name for easy management.
     volumes:
       - ./home.yaml:/app/glance.yml # Mounts the home.yaml configuration file.

@@ -4,3 +4,7 @@
 rust/target
 rust/build
 /build/linutil
+
+# Synology indexing/thumbnail metadata
+@eaDir/
+.@__thumb

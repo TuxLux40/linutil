@@ -1,5 +1,0 @@
-docker run -d --name ollama \
-  -v /volume1/docker/ollama:/root/.ollama \
-  -p 11434:11434 \
-  --restart unless-stopped \
-  ollama/ollama:latest

@@ -184,6 +184,12 @@ script = "samba-ssh-setup.sh"
 task_list = "I SS PFM"
 
 [[data]]
+name = "SSHFS Setup"
+description = "This utility is designed to setup SSHFS and manage persistent mounts"
+script = "sshfs-setup.sh"
+task_list = "I SS PFM"
+
+[[data]]
 name = "Timeshift Backup"
 script = "timeshift.sh"
 task_list = "I"

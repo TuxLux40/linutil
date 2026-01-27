@@ -1,9 +1,0 @@
-# docker-run Vaultwarden
-# Tested and working
-mkdir /volume1/docker/vaultwarden/
-sudo docker run -d --name vaultwarden \
-  -e SIGNUPS_ALLOWED=false \
-  -e SIGNUPS_DOMAINS_WHITELIST=ADD YOUR DOMAINS HERE \
-  -v /volume1/docker/vaultwarden:/data \
-  -p 6060:80 \
-  --restart unless-stopped \
