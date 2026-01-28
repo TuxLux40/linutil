@@ -22,7 +22,7 @@ map_packages() {
             echo "$BASE_PACKAGES fd-find libpam-u2f gh bind9-dnsutils nfs-common"
             ;;
         dnf)
-            echo "$BASE_PACKAGES fd-find gh bind-utils nfs-utils"
+            echo "$BASE_PACKAGES fd-find gh bind-utils nfs-utils authselect"
             ;;
         zypper)
             echo "$BASE_PACKAGES fd gh bind-utils nfs-client"
