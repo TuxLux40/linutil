@@ -1,6 +1,36 @@
 name = "Applications Setup"
 
 [[data]]
+name = "AI"
+
+[[data.entries]]
+name = "AnythingLLM"
+description = "Bare-metal installer for AnythingLLM."
+script = "AI/anything-llm.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Claude Code Router"
+description = "Installs Claude Code Router with optional Ollama integration."
+script = "AI/claude-code-router.sh"
+task_list = "I"
+
+[[data]]
+name = "Base Packages"
+
+[[data.entries]]
+name = "CLI Packages"
+description = "Installs common command-line utilities."
+script = "base-packages/cli-packages.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "GUI Packages"
+description = "Installs common desktop applications."
+script = "base-packages/gui-packages.sh"
+task_list = "I"
+
+[[data]]
 name = "Communication Apps"
 
 [[data.entries]]
@@ -13,6 +43,24 @@ task_list = "I"
 name = "Jitsi"
 description = "Jitsi Meet is an open-source video conferencing tool that allows users to host and join secure meetings directly from their web browsers without the need for downloads."
 script = "communication-apps/jitsi-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Keybase"
+description = "Keybase is an end-to-end encrypted chat and file-sharing app tied to your identity."
+script = "communication-apps/keybase-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Matrix (Element)"
+description = "Installs Element, a Matrix client for decentralized secure messaging."
+script = "communication-apps/matrix-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Session"
+description = "Session is a privacy-focused messaging app built on a decentralized network."
+script = "communication-apps/session-setup.sh"
 task_list = "I"
 
 [[data.entries]]
@@ -31,6 +79,12 @@ task_list = "I"
 name = "Telegram"
 description = "Telegram is a cloud-based messaging app known for its speed and security, offering features like group chats, channels, and end-to-end encrypted calls."
 script = "communication-apps/telegram-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Threema"
+description = "Threema is a privacy-focused messaging app with end-to-end encryption."
+script = "communication-apps/threema-setup.sh"
 task_list = "I"
 
 [[data.entries]]
@@ -172,6 +226,12 @@ script = "developer-tools/githubdesktop.sh"
 task_list = "I"
 
 [[data.entries]]
+name = "Go"
+description = "Installs the Go programming language toolchain."
+script = "developer-tools/go-setup.sh"
+task_list = "I"
+
+[[data.entries]]
 name = "JetBrains Toolbox"
 description = "JetBrains Toolbox is a collection of tools and an app that help developers work with JetBrains products."
 script = "developer-tools/jetbrains-toolbox.sh"
@@ -265,6 +325,114 @@ name = "PDF Studio Viewer"
 script = "pdf-suites/pdfstudioviewer.sh"
 
 [[data]]
+name = "ProtonAG"
+
+[[data.entries]]
+name = "Proton Mail"
+description = "Installs the Proton Mail desktop client."
+script = "ProtonAG/protonmail.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Proton Mail Bridge"
+description = "Installs Proton Mail Bridge for desktop email clients."
+script = "ProtonAG/protonmail-bridge.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Proton Pass"
+description = "Installs Proton Pass password manager."
+script = "ProtonAG/protonpass.sh"
+task_list = "I"
+
+[[data]]
+name = "TUIs"
+
+[[data.entries]]
+name = "Corefreq"
+description = "Terminal UI for CPU monitoring and tuning."
+script = "TUIs/corefreq.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Distrobox TUI"
+description = "Terminal UI for managing Distrobox containers."
+script = "TUIs/distrobox-tui.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Kyanos"
+description = "Terminal UI for monitoring network traffic."
+script = "TUIs/kyanos.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "RecoverPy"
+description = "Terminal UI for file recovery workflows."
+script = "TUIs/recoverpy.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "SockeTTOP"
+description = "Terminal UI for socket and network connection monitoring."
+script = "TUIs/sockttop.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Trippy"
+description = "Terminal UI for network path tracing and diagnostics."
+script = "TUIs/trippy-install.sh"
+task_list = "I"
+
+[[data]]
+name = "Virtualization"
+
+[[data.entries]]
+name = "Bottles"
+description = "Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications."
+script = "virtualization/bottles-setup.sh"
+task_list = "FI"
+
+[[data.entries]]
+name = "Docker"
+description = "Docker is an open platform that uses OS-level virtualization to deliver software in packages called containers."
+script = "virtualization/docker-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Podman"
+description = "Podman is a daemon-less open platform that uses OS-level virtualization to deliver software in packages called containers."
+script = "virtualization/podman-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Podman-compose"
+description = "Podman Compose is a tool for defining and running multi-container applications using Podman."
+script = "virtualization/podman-compose-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Waydroid"
+description = "Waydroid is an emulator that allows you to run Android apps and games on Linux."
+script = "virtualization/waydroid-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Winboat"
+description = "Installs Winboat (Arch/AUR)."
+script = "virtualization/winboat-setup.sh"
+task_list = "I"
+
+[[data]]
+name = "VPN"
+
+[[data.entries]]
+name = "Tailscale"
+description = "Installs Tailscale for secure mesh networking."
+script = "VPN/tailscale-install.sh"
+task_list = "I"
+
+[[data]]
 name = "Web Browsers"
 
 [[data.entries]]
@@ -295,6 +463,12 @@ task_list = "I"
 name = "Lynx"
 description = "Lynx is a highly configurable text-based web browser for use on cursor-addressable character cell terminals."
 script = "browsers/lynx.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Microsoft Edge"
+description = "Microsoft Edge is a Chromium-based web browser by Microsoft."
+script = "browsers/microsoft-edge-bin.sh"
 task_list = "I"
 
 [[data.entries]]
@@ -346,6 +520,12 @@ script = "android-debloat.sh"
 task_list = "I"
 
 [[data]]
+name = "Atuin"
+description = "Installs Atuin and imports shell history."
+script = "atuin-install.sh"
+task_list = "I"
+
+[[data]]
 name = "Auto CPU Frequency"
 description = "Automatic CPU speed & power optimizer.\nhttps://github.com/AdnanHodzic/auto-cpufreq"
 script = "auto-cpufreq.sh"
@@ -388,6 +568,18 @@ script = "setup-flatpak.sh"
 task_list = "I"
 
 [[data]]
+name = "Flatpak Backup"
+description = "Generates a Flatpak restore script from current remotes and installed apps."
+script = "flatpak-backup.sh"
+task_list = "FM"
+
+[[data]]
+name = "Flatpak Restore"
+description = "Restores Flatpak remotes and apps from a backup script."
+script = "flatpak-restore.sh"
+task_list = "FM"
+
+[[data]]
 name = "Ghostty"
 description = "Ghostty is a terminal emulator that has embedded web technologies, allowing for a highly customizable and visually appealing terminal experience."
 script = "ghostty-setup.sh"
@@ -398,6 +590,12 @@ name = "Grub Theme"
 description = "Installs ChrisTitusTech's Top 5 Bootloader Themes script to allow for easy customization of GRUB."
 script = "grub-theme.sh"
 task_list = "PFM"
+
+[[data]]
+name = "Homebrew"
+description = "Installs Homebrew and configures shell integration."
+script = "homebrew-install.sh"
+task_list = "I"
 
 [[data]]
 name = "Kitty"
@@ -444,6 +642,24 @@ name = "Rofi"
 description = "Rofi is a window switcher, run dialog, ssh-launcher and dmenu replacement that started as a clone of simpleswitcher, written by Sean Pringle and later expanded by Dave Davenport. This command installs and configures rofi with configuration from CTT's DWM repo. https://github.com/ChrisTitusTech/dwm-titus"
 script = "rofi-setup.sh"
 task_list = "I FM"
+
+[[data]]
+name = "Snowflake Proxy"
+description = "Builds and installs the Tor Snowflake proxy from source."
+script = "snowflake-proxy.sh"
+task_list = "I"
+
+[[data]]
+name = "Snowflake WebUI"
+description = "Installs Snowflake proxy with Web UI and system tray integration."
+script = "snowflake-webui.sh"
+task_list = "I"
+
+[[data]]
+name = "Test Script Access"
+description = "Test entry for validating script access."
+script = "test-script-access.sh"
+task_list = "FM"
 
 [[data]]
 name = "Waydroid"

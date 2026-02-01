@@ -1,0 +1,13 @@
+[General]
+useReleaseToCapture=true
+
+[GuiConfig]
+quitAfterSaveCopyExport=true
+
+[ImageSave]
+imageSaveLocation=file:///mnt/nas/04_Pics/Screenshots
+lastImageSaveLocation=file:///mnt/nas/04_Pics/Screenshots/Screenshot_20251231_170745.png
+translatedScreenshotsFolder=Screenshots
+
+[VideoSave]
+translatedScreencastsFolder=Screencasts

@@ -27,12 +27,6 @@ description = "A Genesis emulator. NO Games are included"
 script = "emulators/sega/blastem.sh"
 task_list = "FM"
 
-# [[data.entries]]
-# name = "Yabause"
-# description = "A Sega Saturn emulator"
-# script = "emulators/sega/yabause.sh"
-# task_list = "FM"
-
 [[data.entries]]
 name = "bsnes"
 description = "Super Nintendo Emulator. NO Games are included"
@@ -70,6 +64,12 @@ script = "emulators/nintendo/melonds.sh"
 task_list = "FM"
 
 [[data.entries]]
+name = "Mesen2"
+description = "Nintendo emulator. NO Games are included"
+script = "emulators/nintendo/mesen2.sh"
+task_list = "FM"
+
+[[data.entries]]
 name = "mGBA"
 description = "Nintendo Game Boy Advance Emulator. NO Games are included"
 script = "emulators/nintendo/mgba.sh"
@@ -79,6 +79,12 @@ task_list = "FM"
 name = "Mupen 64 Plus"
 description = "N64 Emulator. NO Games are included"
 script = "emulators/nintendo/mupen64plus.sh"
+task_list = "FM"
+
+[[data.entries]]
+name = "PCSX"
+description = "A Playstation emulator. NO Games or Bios' are included"
+script = "emulators/playstation/pcsx.sh"
 task_list = "FM"
 
 [[data.entries]]
@@ -111,12 +117,6 @@ description = "Nintendo Switch emulator. NO Games are included"
 script = "emulators/nintendo/ryujinx.sh"
 task_list = "FM"
 
-# [[data.entries]]
-# name = "PCSX"
-# description = "A Playstation emulator. NO Games or Bios' are included"
-# script = "emulators/playstation/pcsx.sh"
-# task_list = "FM"
-
 [[data.entries]]
 name = "snes9x"
 description = "Super Nintendo Emulator. NO Games are included"
@@ -135,6 +135,12 @@ description = "An Experimental Xbox 360 emulator. NO Games or Bios' are included
 script = "emulators/xbox/xenia.sh"
 task_list = "FM"
 
+[[data.entries]]
+name = "Yabause"
+description = "A Sega Saturn emulator"
+script = "emulators/sega/yabause.sh"
+task_list = "FM"
+
 [[data]]
 name = "Fallout 76"
 
@@ -143,4 +149,28 @@ name = "Fallout 76 INI and Mods"
 description = "This script will add a Custom Fallout 76 INI file that improves performance and stability. It also includes some quality of life improvements."
 script = "fallout-76/fallout76settings.sh"
 task_list = "FM"
+
+[[data]]
+name = "Deckify"
+description = "Installs Deckify for Steam Deck customization."
+script = "deckify-setup.sh"
+task_list = "I"
+
+[[data]]
+name = "Decky Plugin Loader (Install)"
+description = "Installs Decky Plugin Loader."
+script = "decky-plugin-loader-install.sh"
+task_list = "I"
+
+[[data]]
+name = "Decky Plugin Loader (Remove)"
+description = "Removes Decky Plugin Loader."
+script = "decky-plugin-loader-remove.sh"
+task_list = "RP"
+
+[[data]]
+name = "Sunshine"
+description = "Installs Sunshine game streaming host."
+script = "sunshine.sh"
+task_list = "I"
 

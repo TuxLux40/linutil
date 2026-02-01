@@ -1,0 +1,320 @@
+# add_newline = false
+# continuation_prompt = "[▸▹ ](dimmed white)"
+
+# Increase timeout for scanning directories
+scan_timeout = 100
+
+# Format of the prompt
+format = """\
+[░▒▓](#7f8f4f)\
+$os\
+$python\
+$username\
+$hostname\
+$localip\
+[](bg:#66635a fg:#7f8f4f)\
+$directory\
+[](fg:#66635a bg:#d8a028)\
+$git_branch\
+$git_status\
+[](fg:#d8a028 bg:#3f4139)\
+$c\
+$elixir\
+$elm\
+$golang\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+[](fg:#3f4139 bg:#66635a)\
+$docker_context\
+[](fg:#66635a bg:#3f4139)\
+$cmd_duration\
+$time\
+[ ](fg:#3f4139)
+"""
+# Module configurations
+[fill]
+symbol = ' 󰫈󰋙 '
+
+[username]
+show_always = true
+style_user = "fg:#ffffff bg:#7f8f4f bold"
+style_root = "fg:#ffffff bg:#d8a028 bold"
+format = '[$user ]($style)'
+
+[hostname]
+ssh_only = true
+style = "fg:#ffffff bg:#7f8f4f"
+format = '[on $hostname ]($style)'
+
+[localip]
+ssh_only = true
+style = "fg:#ffffff bg:#7f8f4f"
+format = '[ $localipv4 ]($style)'
+
+[directory]
+style = "fg:#ffffff bg:#66635a"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+".config" = " "
+".gnupg" = "󰌾 "
+".ssh" = "󰌾 "
+
+[c]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:#ffffff bg:#66635a"
+format = '[ $symbol $context ]($style)$path'
+
+[elixir]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[git_branch]
+symbol = ""
+style = "fg:#ffffff bg:#d8a028"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "fg:#ffffff bg:#d8a028"
+format = '[$all_status$ahead_behind ]($style)'
+
+[golang]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[java]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[julia]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[nim]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[php]
+symbol = " "
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = ""
+style = "fg:#ffffff bg:#7f8f4f"
+format = '[(\($virtualenv\) )]($style)'
+
+[rust]
+symbol = ""
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[direnv]
+symbol = ""
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[cmd_duration]
+style = "fg:#ffffff bg:#3f4139"
+min_time = 1
+format = '[ 󰔟 $duration]($style)'
+
+[time]
+disabled = false
+time_format = "%T"              # Hour:Minute:Second Format
+style = "fg:#ffffff bg:#3f4139"
+format = '[  $time ]($style)'
+
+[status]
+style = "fg:#ffffff bg:#3f4139"
+format = '[ $symbol ($version) ]($style)'
+
+[os]
+disabled = false
+style = "fg:#ffffff bg:#7f8f4f"
+format = '[ $symbol ]($style)'
+
+[aws]
+symbol = " "
+
+[buf]
+symbol = " "
+
+[bun]
+symbol = " "
+
+[cpp]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[crystal]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[deno]
+symbol = " "
+
+[fennel]
+symbol = " "
+
+[fortran]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[gcloud]
+symbol = " "
+
+[git_commit]
+tag_symbol = '  '
+
+[gradle]
+symbol = " "
+
+[guix_shell]
+symbol = " "
+
+[haxe]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[meson]
+symbol = "󰔷 "
+
+[nix_shell]
+symbol = " "
+
+[ocaml]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
+[package]
+symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[pixi]
+symbol = "󰏗 "
+
+[rlang]
+symbol = "󰟔 "
+
+[ruby]
+symbol = " "
+
+[scala]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[xmake]
+symbol = " "
+
+[zig]
+symbol = " "

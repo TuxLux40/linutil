@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  snipeit:
+    image: snipe/snipe-it:latest
+    container_name: snipeit
+    restart: unless-stopped
+    ports:
+      - "${SNIPEIT_PORT}:80"
+    environment:
+      # Core app
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: "${SNIPEIT_APP_URL}"
+      APP_TIMEZONE: "CET"
+      APP_LOCALE: "de"
+      # Generate and set a persistent APP_KEY (base64:...) before production
+      # If left empty on first run, check container logs for a generated key and set it here.
+      APP_KEY: "${SNIPEIT_APP_KEY}"
+      # Database (Synology MariaDB 10 typically listens on 3307)
+      DB_CONNECTION: mysql
+      DB_HOST: "${MARIADB_HOST}"
+      DB_PORT: "${MARIADB_PORT}"
+      DB_DATABASE: "${SNIPEIT_DB_DATABASE}"
+      DB_USERNAME: "${SNIPEIT_DB_USER}"
+      DB_PASSWORD: "${SNIPEIT_DB_PASSWORD}"
+      # Mail (optional; configure for password resets, notifications)
+    #      MAIL_DRIVER: smtp
+    #      MAIL_HOST: smtp.example.com
+    #      MAIL_PORT: "587"
+    #      MAIL_USERNAME: ""
+    #      MAIL_PASSWORD: ""
+    #      MAIL_ENCRYPTION: tls
+    #      MAIL_FROM_ADDR: "noreply@example.com"
+    #      MAIL_FROM_NAME: "Snipe-IT"
+    volumes:
+      - ${DOCKER_VOLUME_BASE}/snipeit/data:/var/lib/snipeit

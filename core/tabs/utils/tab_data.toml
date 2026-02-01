@@ -150,6 +150,12 @@ script = "encrypt_decrypt_tool.sh"
 task_list = "I FM"
 
 [[data]]
+name = "Locale Setup"
+description = "Configures system locales and locale-related defaults."
+script = "locale-setup.sh"
+task_list = "FM"
+
+[[data]]
 name = "Numlock on Startup"
 description = "This utility is designed to enable Num Lock at boot, rather than within desktop environments like KDE or GNOME"
 script = "numlock.sh"
@@ -191,6 +197,12 @@ values = [ "dnf" ]
 name = "US Locale Setup"
 description = "This fixes US UTF-8 Locale and Folder listings"
 script = "locale-us-setup.sh"
+task_list = "FM"
+
+[[data]]
+name = "Utility Functions"
+description = "Shared helper functions for utility scripts."
+script = "utility_functions.sh"
 task_list = "FM"
 
 [[data]]

@@ -1,0 +1,12 @@
+# docker-run VS Code Server
+# TESTED AND WORKING
+sudo docker run -d --name=vscodeserver \
+-p 8377:8443 \
+-e PUID=1026 \
+-e PGID=100 \
+-e TZ=Europe/Berlin \
+-e PASSWORD=CHANGME \
+-e PROXY_DOMAIN=code.MYDOMAIN.com \
+-e SUDO_PASSWORD=CHANGEME \
+-v /volume1/docker/codeserver:/config \
+--restart unless-stopped \

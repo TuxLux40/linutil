@@ -1,0 +1,11 @@
+[Keyboard]
+NumLock=0
+RepeatDelay=250
+RepeatRate=40
+
+[Libinput][5426][131][Razer Razer Basilisk X HyperSpeed]
+PointerAcceleration=0.600
+
+[Mouse]
+cursorSize=30
+cursorTheme=Win7Bulid-cursors

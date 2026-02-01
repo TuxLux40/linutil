@@ -1,0 +1,5 @@
+[Style]
+MenuHighlightMode=MM_SUBTLE
+ScrollBarAddLineButtons=1
+ScrollBarWidth=20
+ViewTriangularExpanderSize=TE_NORMAL

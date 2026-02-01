@@ -31,6 +31,12 @@ task_list = "SI D"
 multi_select = false
 
 [[data.entries]]
+name = "BlackArch Setup"
+description = "Installs BlackArch repositories and tools."
+script = "arch/blackarch-setup.sh"
+task_list = "I"
+
+[[data.entries]]
 name = "Hyprland JaKooLit"
 description = "Install JaKooLit's Hyprland configuration"
 script = "arch/hyprland-kool.sh"
@@ -176,6 +182,21 @@ data = "command_exists"
 values = ["btrfs"]
 
 [[data]]
+name = "Fixes"
+
+[[data.entries]]
+name = "Raspberry Pi HDMI Fix"
+description = "Applies HDMI fixes for Raspberry Pi systems."
+script = "fixes/rpi-hdmi-fix.sh"
+task_list = "FM"
+
+[[data.entries]]
+name = "Shader Cache Increase"
+description = "Increases shader cache settings for improved performance."
+script = "fixes/shader-cache-increase.sh"
+task_list = "FM"
+
+[[data]]
 name = "Ubuntu"
 
 [[data.preconditions]]
@@ -201,6 +222,12 @@ script = "compile-setup.sh"
 task_list = "I"
 
 [[data]]
+name = "Dotfiles Setup"
+description = "Symlinks selected dotfiles packages from this repository into your home directory."
+script = "dotfiles-setup.sh"
+task_list = "FM"
+
+[[data]]
 name = "Full System Cleanup"
 description = "This script is designed to remove unnecessary packages, clean old cache files, remove temporary files, and to empty the trash."
 script = "system-cleanup.sh"
@@ -221,10 +248,34 @@ script = "gaming-setup.sh"
 task_list = "I"
 
 [[data]]
+name = "Git Config"
+description = "Configures global Git username, email, and GPG signing."
+script = "git-config.sh"
+task_list = "FM"
+
+[[data]]
 name = "Global Theme"
 description = "This script is designed to handle the installation and configuration of global theming"
 script = "global-theme.sh"
 task_list = "I PFM"
+
+[[data]]
+name = "KDE Shortcuts"
+description = "Applies a predefined KDE keyboard shortcuts configuration."
+script = "kde-shortcuts.sh"
+task_list = "FM"
+
+[[data]]
+name = "OpenRGB Udev Rules"
+description = "Installs OpenRGB udev rules and reloads udev."
+script = "openrgb-udev-install.sh"
+task_list = "I"
+
+[[data]]
+name = "Postinstall KDE"
+description = "Runs KDE post-install configuration (themes and shortcuts)."
+script = "postinstall-kde.sh"
+task_list = "FM"
 
 [[data]]
 name = "Remove Snaps"
