@@ -15,7 +15,7 @@ task_list = "I SS"
 [[data.preconditions]]
 matches = true
 data = "command_exists"
-values = [ "firewall-cmd" ]
+values = ["firewall-cmd"]
 [[data]]
 name = "Sunshine Port Forward"
 description = "Configures port forwarding for Sunshine game streaming."
@@ -31,11 +31,10 @@ task_list = "I SS"
 [[data.preconditions]]
 matches = false
 data = "command_exists"
-values = [ "firewall-cmd" ]
+values = ["firewall-cmd"]
 
 [[data]]
 name = "YubiKey PAM"
 description = "Configures YubiKey PAM authentication."
 script = "yk-pam.sh"
 task_list = "I"
-

@@ -173,4 +173,3 @@ name = "Sunshine"
 description = "Installs Sunshine game streaming host."
 script = "sunshine.sh"
 task_list = "I"
-
