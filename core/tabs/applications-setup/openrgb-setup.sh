@@ -82,14 +82,24 @@ install_udev_rules() {
     udev_tmp=$(mktemp)
     trap 'rm -f "$udev_tmp"' EXIT
     curl -fsSLo "$udev_tmp" "$UDEV_RULE_URL"
+    if [ -f "/usr/lib/udev/rules.d/${UDEV_RULE_NAME}" ]; then
+        if [ -f "/etc/udev/rules.d/${UDEV_RULE_NAME}" ]; then
+            printf "%b\n" "${YELLOW}Duplicate udev rules detected in /etc and /usr/lib. Removing /etc copy.${RC}"
+            "$ESCALATION_TOOL" rm -f "/etc/udev/rules.d/${UDEV_RULE_NAME}"
+        fi
+        printf "%b\n" "${GREEN}Using packaged udev rules from /usr/lib.${RC}"
+        return 0
+    fi
+
     if [ -f "/etc/udev/rules.d/${UDEV_RULE_NAME}" ] && cmp -s "$udev_tmp" "/etc/udev/rules.d/${UDEV_RULE_NAME}"; then
         printf "%b\n" "${GREEN}Udev rules already up to date.${RC}"
-    else
-        "$ESCALATION_TOOL" cp "$udev_tmp" "/etc/udev/rules.d/${UDEV_RULE_NAME}"
-        "$ESCALATION_TOOL" udevadm control --reload-rules
-        "$ESCALATION_TOOL" udevadm trigger
-        printf "%b\n" "${GREEN}Udev rules loaded. Log out/in to apply group changes.${RC}"
+        return 0
     fi
+
+    "$ESCALATION_TOOL" cp "$udev_tmp" "/etc/udev/rules.d/${UDEV_RULE_NAME}"
+    "$ESCALATION_TOOL" udevadm control --reload-rules
+    "$ESCALATION_TOOL" udevadm trigger
+    printf "%b\n" "${GREEN}Udev rules loaded. Log out/in to apply group changes.${RC}"
 }
 
 load_i2c_modules() {
