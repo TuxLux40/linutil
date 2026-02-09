@@ -7,5 +7,7 @@
 			"path": "../linutil.wiki"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
 }

@@ -266,12 +266,6 @@ script = "kde-shortcuts.sh"
 task_list = "FM"
 
 [[data]]
-name = "OpenRGB Udev Rules"
-description = "Installs OpenRGB udev rules and reloads udev."
-script = "openrgb-udev-install.sh"
-task_list = "I"
-
-[[data]]
 name = "Postinstall KDE"
 description = "Runs KDE post-install configuration (themes and shortcuts)."
 script = "postinstall-kde.sh"

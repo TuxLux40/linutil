@@ -313,31 +313,20 @@ EOF
 reload_kde_shortcuts() {
     printf "%b\n" "${YELLOW}Reloading KDE shortcuts...${RC}"
     
-    # Restart KWin to apply shortcuts
-    if command -v kwin_x11 >/dev/null 2>&1; then
-        kwin_x11 --replace &
-        printf "%b\n" "${GREEN}KWin restarted (X11).${RC}"
-    elif command -v kwin_wayland >/dev/null 2>&1; then
-        # Wayland requires a different approach
-        kquitapp6 kwin || true
-        sleep 1
-        kwin_wayland &
-        printf "%b\n" "${GREEN}KWin restarted (Wayland).${RC}"
-    fi
-    
-    # Restart plasmashell to apply shortcuts
-    if command -v plasmashell >/dev/null 2>&1; then
-        kquitapp6 plasmashell || killall plasmashell 2>/dev/null || true
-        sleep 2
-        plasmashell &
-        printf "%b\n" "${GREEN}Plasmashell restarted.${RC}"
-    fi
-    
-    # Notify KDE about configuration changes
+    # Notify KDE about configuration changes (quieter method)
     if command -v kbuildsycoca6 >/dev/null 2>&1; then
-        kbuildsycoca6 --noincremental
+        kbuildsycoca6 --noincremental >/dev/null 2>&1
         printf "%b\n" "${GREEN}KDE system configuration cache rebuilt.${RC}"
     fi
+    
+    # Send signal to reload shortcuts without full restart
+    if command -v qdbus-qt6 >/dev/null 2>&1; then
+        qdbus-qt6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
+        printf "%b\n" "${GREEN}KWin shortcuts reloaded.${RC}"
+    fi
+    
+    printf "%b\n" "${YELLOW}Note: Some shortcuts require a plasma restart to take effect.${RC}"
+    printf "%b\n" "${YELLOW}You can restart plasma with: plasmashell --replace &${RC}"
 }
 
 show_important_shortcuts() {
