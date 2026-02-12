@@ -40,6 +40,12 @@ script = "emulators/nintendo/dolphin-emu.sh"
 task_list = "FM"
 
 [[data.entries]]
+name = "EmuDeck"
+description = "EmuDeck installer for Steam Deck and handhelds. NO Games are included"
+script = "emulators/EmuDeck.sh"
+task_list = "FM"
+
+[[data.entries]]
 name = "Flycast"
 description = "A Dreamcase emulator. NO Games are included"
 script = "emulators/sega/flycast.sh"
