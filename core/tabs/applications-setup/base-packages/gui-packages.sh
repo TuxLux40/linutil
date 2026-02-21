@@ -14,41 +14,16 @@ printf "%b\n" "${CYAN}Installing GUI Applications...${RC}"
 BASE_PACKAGES="gimp gramps libreoffice-fresh obs-studio calibre vlc filezilla ghostty signal-desktop kde-connect kleopatra zed podman-desktop"
 
 # Packages preferred to install from Flathub (to avoid dependency conflicts)
-FLATPAK_PREFERRED="clamtk cohesion journald-browser gearlever"
+FLATPAK_PREFERRED="clamui cohesion journald-browser gearlever"
 
 # Check if flatpak is available, try to install if not
-check_flatpak() {
-    if ! command -v flatpak >/dev/null 2>&1; then
-        printf "%b\n" "${YELLOW}Flatpak not found, attempting to install...${RC}"
-        case "$PACKAGER" in
-            pacman)
-                "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm flatpak
-                ;;
-            apt-get|nala)
-                "$ESCALATION_TOOL" "$PACKAGER" update
-                "$ESCALATION_TOOL" "$PACKAGER" install -y flatpak
-                ;;
-            dnf)
-                "$ESCALATION_TOOL" "$PACKAGER" install -y flatpak
-                ;;
-            zypper)
-                "$ESCALATION_TOOL" "$PACKAGER" install -y flatpak
-                ;;
-            apk)
-                "$ESCALATION_TOOL" "$PACKAGER" add flatpak
-                ;;
-            xbps-install)
-                "$ESCALATION_TOOL" "$PACKAGER" -S flatpak
-                ;;
-        esac
-    fi
-}
+. ../../setup-flatpak.sh
 
 # Map packages using a common base plus per-distro specific packages
 map_packages() {
     case "$PACKAGER" in
         pacman)
-            echo "$BASE_PACKAGES vlc-plugins-extra yubikey-personalization-gui gnupg-logviewer lact qemu-emulators-full octopi"
+            echo "$BASE_PACKAGES vlc-plugins-extra yubikey-personalization-gui gnupg-logviewer lact qemu-emulators-full octopi proton-mail-bin proton-pass google-chrome microsoft-edge-stable-bin"
             ;;
         apt-get|nala)
             echo "$BASE_PACKAGES qemu-emulators-full vlc-plugin-base vlc-plugin-qt vlc-plugin-skins2"

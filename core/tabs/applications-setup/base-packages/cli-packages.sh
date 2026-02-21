@@ -10,13 +10,13 @@ checkEnv
 
 printf "%b\n" "${CYAN}Installing CLI Tools...${RC}"
 
-BASE_PACKAGES="aircrack-ng atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git glances gotop gpg-tui gping gzip hashcat htop iftop iotop john jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop opencode pcscd php-imagick ranger ripgrep samba sshfs tar tcpdump termscp termshark trash-cli trippy ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
+BASE_PACKAGES="aircrack-ng atop bat bluetui bmon btop bzip2 cargo ctop curl diskonaut dnsmasq exa fzf git glances gotop gpg-tui gping grub-customizer gzip hashcat htop iftop iotop john jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop opencode pcscd php-imagick ranger ripgrep samba sshfs starship stow tar tcpdump termscp termshark trash-cli trippy ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
 
 # Map packages using a common base plus small per-distro exception lists
 map_packages() {
     case "$PACKAGER" in
         pacman)
-            echo "$BASE_PACKAGES fd oryx pamu2f github-cli bind nfs-utils crush-bin gdu gtop sockttop kyanos corefreq lazymake ducker glow cronboard sshm gocheat multranslate searxngr distrobox-tui nemu caligula rainfrog systemd-manager-tui"
+            echo "$BASE_PACKAGES fd oryx pamu2f github-cli bind nfs-utils gdu gtop sockttop kyanos corefreq lazymake ducker glow cronboard sshm gocheat multranslate searxngr distrobox-tui nemu caligula rainfrog systemd-manager-tui"
             ;;
         apt-get|nala)
             echo "$BASE_PACKAGES fd-find libpam-u2f gh bind9-dnsutils nfs-common"
