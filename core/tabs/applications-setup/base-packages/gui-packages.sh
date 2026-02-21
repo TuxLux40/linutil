@@ -3,7 +3,7 @@
 # GUI Applications Installation Script
 # Installs graphical desktop applications from official repos and AUR
 
-. "$(dirname "$(realpath "$0")")/../../common-script.sh"
+. ../../common-script.sh
 
 checkEnv
 

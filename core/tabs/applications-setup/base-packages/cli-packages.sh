@@ -4,7 +4,7 @@
 # Installs useful command-line utilities for post-system-setup
 # Focuses on productivity, security, and development tools
 
-. "$(dirname "$(realpath "$0")")/../common-script.sh"
+. ../../common-script.sh
 
 checkEnv
 

@@ -1,47 +1,100 @@
-#!/bin/sh
-set -e
+#!/bin/bash -e
 
-# Minimal Tailscale install + setup
+. ../../common-script.sh
+. ../../common-service-script.sh
 
-# 1) Install Tailscale via official script if missing
-if ! command -v tailscale >/dev/null 2>&1; then
-	curl -fsSL https://tailscale.com/install.sh | sh
-fi
+install_tailscale() {
+	if ! command_exists tailscale; then
+		printf "%b\n" "${YELLOW}Installing Tailscale...${RC}"
+		curl -fsSL https://tailscale.com/install.sh | sh
+	else
+		printf "%b\n" "${GREEN}Tailscale is already installed.${RC}"
+	fi
+}
 
-# 2) Enable and start tailscaled (best-effort if systemd exists)
-if command -v systemctl >/dev/null 2>&1; then
-	sudo systemctl enable --now tailscaled
-fi
+enable_tailscaled() {
+	printf "%b\n" "${YELLOW}Enabling tailscaled...${RC}"
+	startAndEnableService tailscaled
+}
 
-# 3) Set operator (best-effort)
-sudo tailscale set --operator="$USER" || true
+enable_ssh_service() {
+	ssh_service=""
+	case "$INIT_MANAGER" in
+		systemctl)
+			if "$ESCALATION_TOOL" "$INIT_MANAGER" list-unit-files --type=service 2>/dev/null | awk '{print $1}' | grep -qx "ssh.service"; then
+				ssh_service="ssh"
+			elif "$ESCALATION_TOOL" "$INIT_MANAGER" list-unit-files --type=service 2>/dev/null | awk '{print $1}' | grep -qx "sshd.service"; then
+				ssh_service="sshd"
+			fi
+			;;
+		rc-service)
+			if rc-service -l 2>/dev/null | grep -qx "sshd"; then
+				ssh_service="sshd"
+			elif rc-service -l 2>/dev/null | grep -qx "ssh"; then
+				ssh_service="ssh"
+			fi
+			;;
+		sv)
+			if [ -d "/etc/sv/sshd" ] || [ -d "/var/service/sshd" ]; then
+				ssh_service="sshd"
+			elif [ -d "/etc/sv/ssh" ] || [ -d "/var/service/ssh" ]; then
+				ssh_service="ssh"
+			fi
+			;;
+	esac
 
-# 4) Enable OpenSSH (unit name varies by distro; best-effort)
-if command -v systemctl >/dev/null 2>&1; then
-	sudo systemctl enable --now ssh.service 2>/dev/null || \
-	sudo systemctl enable --now sshd.service 2>/dev/null || true
-fi
+	if [ -n "$ssh_service" ]; then
+		printf "%b\n" "${YELLOW}Enabling SSH service (${ssh_service})...${RC}"
+		startAndEnableService "$ssh_service"
+	else
+		printf "%b\n" "${YELLOW}SSH service not detected; skipping enable step.${RC}"
+	fi
+}
 
-# 5) Enable IP forwarding (persist if possible)
-if [ -d /etc/sysctl.d ]; then
-	sudo tee /etc/sysctl.d/99-tailscale.conf >/dev/null <<'EOF'
+configure_ip_forwarding() {
+	printf "%b\n" "${YELLOW}Configuring IP forwarding...${RC}"
+	if [ -d /etc/sysctl.d ]; then
+		"$ESCALATION_TOOL" tee /etc/sysctl.d/99-tailscale.conf >/dev/null <<'EOF'
 net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1
 EOF
-	sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
-else
-	sudo sysctl -w net.ipv4.ip_forward=1
-	sudo sysctl -w net.ipv6.conf.all.forwarding=1
-fi
+		"$ESCALATION_TOOL" sysctl -p /etc/sysctl.d/99-tailscale.conf
+	else
+		"$ESCALATION_TOOL" sysctl -w net.ipv4.ip_forward=1
+		"$ESCALATION_TOOL" sysctl -w net.ipv6.conf.all.forwarding=1
+	fi
+}
 
-# 6) Bring Tailscale up
-# - Non-interactive if TS_AUTHKEY is set
-# - Otherwise try interactive (non-fatal if unattended)
-if [ -n "${TS_AUTHKEY:-}" ]; then
-	sudo tailscale up --ssh --accept-routes --authkey="$TS_AUTHKEY"
-else
-	sudo tailscale up --ssh --accept-routes || true
-fi
+bring_tailscale_up() {
+	printf "%b\n" "${YELLOW}Bringing Tailscale up...${RC}"
+	if [ -n "${TS_AUTHKEY:-}" ]; then
+		"$ESCALATION_TOOL" tailscale up --ssh --accept-routes --authkey="$TS_AUTHKEY"
+	else
+		if ! "$ESCALATION_TOOL" tailscale up --ssh --accept-routes; then
+			printf "%b\n" "${YELLOW}Tailscale up did not complete. You can rerun 'tailscale up' interactively.${RC}"
+		fi
+	fi
+}
+
+set_tailscale_operator() {
+	printf "%b\n" "${YELLOW}Setting Tailscale operator to ${USER}...${RC}"
+	if "$ESCALATION_TOOL" tailscale set --operator="$USER"; then
+		printf "%b\n" "${GREEN}Operator set successfully.${RC}"
+	else
+		printf "%b\n" "${YELLOW}Failed to set operator. Make sure Tailscale is up and authenticated, then rerun 'tailscale set --operator=${USER}'.${RC}"
+	fi
+}
+
+checkEnv
+checkEscalationTool
+checkInitManager
+checkCommandRequirements "curl"
+install_tailscale
+enable_tailscaled
+enable_ssh_service
+configure_ip_forwarding
+bring_tailscale_up
+set_tailscale_operator
 
 # Tips:
 # - To advertise subnets later:

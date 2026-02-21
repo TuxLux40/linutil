@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-. ../common-script.sh
+. ../../common-script.sh
 
 checkGpu() {
     if lspci | grep -i nvidia >/dev/null; then

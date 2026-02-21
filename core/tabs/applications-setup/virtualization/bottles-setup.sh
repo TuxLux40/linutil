@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-. ../common-script.sh
+. ../../common-script.sh
 
 installBottles() {
     if ! command_exists com.usebottles.bottles; then

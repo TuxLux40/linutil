@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-. ../common-script.sh
-. ../common-service-script.sh
+. ../../common-script.sh
+. ../../common-service-script.sh
 
 # Function to prompt the user for installation choice
 choose_installation() {

@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-. ../common-script.sh
+. ../../common-script.sh
 
 installPodmanCompose() {
     if ! command_exists podman-compose; then
