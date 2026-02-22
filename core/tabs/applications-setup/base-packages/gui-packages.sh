@@ -17,7 +17,7 @@ BASE_PACKAGES="gimp gramps libreoffice-fresh obs-studio calibre vlc filezilla gh
 FLATPAK_PREFERRED="clamui cohesion journald-browser gearlever"
 
 # Check if flatpak is available, try to install if not
-. ../../setup-flatpak.sh
+. ../setup-flatpak.sh
 
 # Map packages using a common base plus per-distro specific packages
 map_packages() {
