@@ -8,7 +8,6 @@ trap cleanup EXIT
 
 msg() { printf "%b%s%b\n" "$2" "$1" "$RC"; }
 header() { printf "\n%b=== %s ===%b\n\n" "$CYAN" "$1" "$RC"; }
-confirm() { printf "%b%s (yes/NO): %b" "$YELLOW" "$1" "$RC"; read -r r; [ "$r" = "yes" ]; }
 
 install_pam_u2f() {
     command_exists pamu2fcfg && return 0
@@ -41,8 +40,7 @@ register_yubikey() {
     mkdir -p "$yk_dir" && chown "$user:$user" "$yk_dir" && chmod 700 "$yk_dir"
     
     if [ -s "$key_file" ]; then
-        msg "Existing keys found" "$YELLOW"
-        confirm "Overwrite?" || { echo "$key_file"; return 0; }
+        msg "Existing keys found, creating backup..." "$YELLOW"
         cp "$key_file" "${key_file}.backup-$(date +%s)"
     fi
     
@@ -140,7 +138,6 @@ configure() {
     
     msg "Will configure: $selected" "$YELLOW"
     msg "WARNING: Keep recovery method ready!" "$YELLOW"
-    confirm "Continue?" || return
     
     printf "\n"
     for m in $selected; do
