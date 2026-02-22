@@ -129,7 +129,18 @@ add_systemd_mount() {
         M="$HOME/mnt/$H"
     fi
 
-    mkdir -p "$M"
+    # Create mount directory with appropriate privileges
+    if [ "$MODE" = "system" ]; then
+        if ! "$ESCALATION_TOOL" mkdir -p "$M"; then
+            printf "%b\n" "${RED}[FAIL] Could not create mount directory at $M${RC}"
+            return 1
+        fi
+    else
+        if ! mkdir -p "$M"; then
+            printf "%b\n" "${RED}[FAIL] Could not create mount directory at $M${RC}"
+            return 1
+        fi
+    fi
 
     # Convert mount path to systemd unit name (e.g., /home/user/mnt/server -> home-user-mnt-server)
     UNIT_NAME=$(unit_name_from_path "$M")
