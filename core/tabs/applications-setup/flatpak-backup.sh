@@ -9,13 +9,24 @@ output_file="${1:-/home/oliver/git/TL40-Dots/scripts/pkg-scripts/flatpak-restore
 echo "# Flatpak Restore Script" > "$output_file"
 echo "# Generated on $(date)" >> "$output_file"
 
+# Known flatpakrepo URLs (include GPG keys)
+declare -A KNOWN_FLATPAKREPO_URLS=(
+    ["flathub"]="https://flathub.org/repo/flathub.flatpakrepo"
+    ["flathub-beta"]="https://flathub.org/beta-repo/flathub-beta.flatpakrepo"
+    ["gnome-nightly"]="https://nightly.gnome.org/gnome-nightly.flatpakrepo"
+    ["kde-applications"]="https://distribute.kde.org/kdeapps.flatpakrepo"
+    ["appcenter"]="https://flatpak.elementary.io/repo.flatpakrepo"
+)
+
 # Backup remotes
 if flatpak remotes --show-details >/dev/null 2>&1; then
-    flatpak remotes --show-details | awk -F'\t' '{
-        prio = ($4 != "-" && $4 ~ /^[0-9]+$/) ? " --prio="$4 : ""
-        title = ($2 != "") ? " --title=\""$2"\"" : ""
-        print "flatpak remote-add --if-not-exists --user \""$1"\" \""$3"\"" prio title
-    }' >> "$output_file"
+    while IFS=$'\t' read -r name title url rest; do
+        if [[ -n "${KNOWN_FLATPAKREPO_URLS[$name]}" ]]; then
+            echo "flatpak remote-add --if-not-exists --user \"$name\" \"${KNOWN_FLATPAKREPO_URLS[$name]}\"" >> "$output_file"
+        else
+            echo "flatpak remote-add --if-not-exists --user \"$name\" \"$url\"" >> "$output_file"
+        fi
+    done < <(flatpak remotes --show-details)
 else
     echo "# No remotes found" >> "$output_file"
 fi

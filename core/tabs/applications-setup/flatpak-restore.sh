@@ -1,10 +1,9 @@
 # Flatpak Restore Script
 # Generated on Do 15. Jan 01:00:00 CET 2026
-flatpak remote-add --if-not-exists --user "flathub" "https://dl.flathub.org/repo/" --title="Flathub"
-flatpak remote-add --if-not-exists --user "flathub" "https://dl.flathub.org/repo/" --title="Flathub"
+flatpak remote-add --if-not-exists --user "flathub" "https://flathub.org/repo/flathub.flatpakrepo"
 flatpak remote-add --if-not-exists --user "webkit-sdk" "http://software.igalia.com/webkit-sdk-repo/" --title="WebKit Developer SDK"
 flatpak remote-add --if-not-exists --user "fedora" "oci+https://registry.fedoraproject.org" --title="Fedora"
-flatpak remote-add --if-not-exists --user "appcenter" "https://flatpak.elementary.io/repo" --title="AppCenter"
+flatpak remote-add --if-not-exists --user "appcenter" "https://flatpak.elementary.io/repo.flatpakrepo"
 flatpak install --assumeyes --user flathub "app.grayjay.Grayjay"
 flatpak install --assumeyes --user flathub "com.bktus.gpgfrontend"
 flatpak install --assumeyes --user flathub "com.cassidyjames.butler"
