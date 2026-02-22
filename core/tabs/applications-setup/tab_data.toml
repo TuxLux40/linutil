@@ -592,6 +592,12 @@ script = "ghostty-setup.sh"
 task_list = "I FM"
 
 [[data]]
+name = "Grub Customizer"
+description = "Graphical interface to configure GRUB bootloader settings and appearance."
+script = "grub-customizer.sh"
+task_list = "I"
+
+[[data]]
 name = "Grub Theme"
 description = "Installs ChrisTitusTech's Top 5 Bootloader Themes script to allow for easy customization of GRUB."
 script = "grub-theme.sh"

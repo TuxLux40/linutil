@@ -7,6 +7,12 @@ script = "apparmor-grub-setup.sh"
 task_list = "I"
 
 [[data]]
+name = "ClamAV"
+description = "Installs and configures ClamAV antivirus scanner for malware detection."
+script = "clamav-setup.sh"
+task_list = "I SS"
+
+[[data]]
 name = "FirewallD Firewall Baselines (CTT)"
 description = "Configure FirewallD with CTT's recommended baseline rules for improved system security. For more information visit: https://christitus.com/linux-security-mistakes"
 script = "firewalld-baselines.sh"
