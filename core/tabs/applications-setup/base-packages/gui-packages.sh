@@ -81,11 +81,6 @@ install_with_fallback() {
     return 1
 }
 
-# Ensure Flatpak is available if needed
-if [ -n "$FLATPAK_PREFERRED" ]; then
-    check_flatpak
-fi
-
 # Install packages based on package manager
 case "$PACKAGER" in
     pacman)

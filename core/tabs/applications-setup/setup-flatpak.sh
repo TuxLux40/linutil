@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
-. ../common-script.sh
+if ! type checkEnv > /dev/null 2>&1; then
+    . ../common-script.sh
+fi
 
 checkDE() {
     if [ -n "$XDG_CURRENT_DESKTOP" ]; then
