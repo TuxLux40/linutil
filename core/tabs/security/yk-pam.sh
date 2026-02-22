@@ -178,11 +178,15 @@ check_and_install_pam_u2f() {
 check_yubikey_present() {
     log_info "Checking for connected YubiKey..."
     
-    if timeout 2 pamu2fcfg -t -c >/dev/null 2>&1; then
+    # Try with escalation tool first (needed for /dev/hidraw* access)
+    if timeout 5 "$ESCALATION_TOOL" pamu2fcfg --verbose --no-user-presence 2>&1 | grep -q "Tap_YubiKey\|found 1"; then
         log_success "YubiKey detected"
         return 0
     else
-        log_error "No YubiKey detected or timeout. Insert YubiKey and try again."
+        log_error "No YubiKey detected or timeout. Please check:"
+        log_info "  - YubiKey is inserted properly"
+        log_info "  - Run this script with sudo/doas"
+        log_info "  - Or add your user to 'plugdev' or 'input' group"
         return 1
     fi
 }
