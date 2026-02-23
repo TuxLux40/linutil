@@ -104,12 +104,26 @@ add_systemd_mount() {
     read -r U
     printf "%b" "${YELLOW}Remote host: ${RC}"
     read -r H
+    printf "%b" "${YELLOW}SSH port [22]: ${RC}"
+    read -r SSH_PORT
+    SSH_PORT=${SSH_PORT:-22}
     printf "%b" "${YELLOW}Remote path [/volume1]: ${RC}"
     read -r P
     P=${P:-/volume1}
     printf "%b" "${YELLOW}Local mount [~/mnt/$H]: ${RC}"
     read -r M
     M=${M:-$HOME/mnt/$H}
+
+    printf "%b" "${YELLOW}SSH identity file (blank for default agent keys): ${RC}"
+    read -r ID_FILE
+
+    printf "%b" "${YELLOW}Enable automount? [Y/n]: ${RC}"
+    read -r USE_AUTOMOUNT
+    if [ -n "$USE_AUTOMOUNT" ] && [ "$USE_AUTOMOUNT" = "n" ]; then
+        USE_AUTOMOUNT="no"
+    else
+        USE_AUTOMOUNT="yes"
+    fi
 
     MODE="system"
     printf "%b" "${YELLOW}Use system-wide mount? [Y/n]: ${RC}"
@@ -153,6 +167,14 @@ add_systemd_mount() {
         mkdir -p "$HOME/.config/systemd/user"
     fi
 
+    SSHFS_OPTIONS="allow_other,reconnect,ServerAliveInterval=15,_netdev"
+    if [ -n "$SSH_PORT" ] && [ "$SSH_PORT" != "22" ]; then
+        SSHFS_OPTIONS="${SSHFS_OPTIONS},port=${SSH_PORT}"
+    fi
+    if [ -n "$ID_FILE" ]; then
+        SSHFS_OPTIONS="${SSHFS_OPTIONS},IdentityFile=${ID_FILE},UserKnownHostsFile=${HOME}/.ssh/known_hosts,StrictHostKeyChecking=accept-new"
+    fi
+
     MOUNT_UNIT_CONTENT="[Unit]
 Description=SSHFS mount for $U@$H:$P
 After=network-online.target
@@ -162,7 +184,7 @@ Wants=network-online.target
 What=$U@$H:$P
 Where=$M
 Type=fuse.sshfs
-Options=allow_other,reconnect,ServerAliveInterval=15,_netdev
+Options=$SSHFS_OPTIONS
 
 [Install]
 WantedBy=default.target
@@ -185,32 +207,54 @@ WantedBy=default.target
         printf "%b" "$MOUNT_UNIT_CONTENT" > "$MOUNT_UNIT"
     fi
 
-    # Create automount unit
-    if [ "$MODE" = "system" ]; then
-        printf "%b" "$AUTOMOUNT_UNIT_CONTENT" | "$ESCALATION_TOOL" tee "$AUTOMOUNT_UNIT" >/dev/null
-    else
-        printf "%b" "$AUTOMOUNT_UNIT_CONTENT" > "$AUTOMOUNT_UNIT"
+    # Create automount unit (optional)
+    if [ "$USE_AUTOMOUNT" = "yes" ]; then
+        if [ "$MODE" = "system" ]; then
+            printf "%b" "$AUTOMOUNT_UNIT_CONTENT" | "$ESCALATION_TOOL" tee "$AUTOMOUNT_UNIT" >/dev/null
+        else
+            printf "%b" "$AUTOMOUNT_UNIT_CONTENT" > "$AUTOMOUNT_UNIT"
+        fi
     fi
 
     if [ "$MODE" = "system" ]; then
         "$ESCALATION_TOOL" systemctl daemon-reload
-        if "$ESCALATION_TOOL" systemctl enable --now "$UNIT_NAME.automount" 2>&1; then
+        if [ "$USE_AUTOMOUNT" = "yes" ]; then
+            if "$ESCALATION_TOOL" systemctl enable --now "$UNIT_NAME.automount" 2>&1; then
+                printf "%b\n" "${GREEN}[OK] Created systemd system automount for $M${RC}"
+                return 0
+            fi
+            printf "%b\n" "${RED}[FAIL] Could not enable automount unit. Falling back to direct mount...${RC}"
+        fi
+
+        if "$ESCALATION_TOOL" systemctl enable --now "$UNIT_NAME.mount" 2>&1; then
             printf "%b\n" "${GREEN}[OK] Created systemd system mount for $M${RC}"
         else
-            printf "%b\n" "${RED}[FAIL] Could not enable automount unit. Check journalctl -xe for details${RC}"
+            printf "%b\n" "${RED}[FAIL] Could not enable mount unit. Check journalctl -xe for details${RC}"
             printf "%b\n" "${YELLOW}Mount unit files created at:${RC}"
             printf "%b\n" "  $MOUNT_UNIT"
-            printf "%b\n" "  $AUTOMOUNT_UNIT"
+            if [ "$USE_AUTOMOUNT" = "yes" ]; then
+                printf "%b\n" "  $AUTOMOUNT_UNIT"
+            fi
         fi
     else
         systemctl --user daemon-reload
-        if systemctl --user enable --now "$UNIT_NAME.automount" 2>&1; then
+        if [ "$USE_AUTOMOUNT" = "yes" ]; then
+            if systemctl --user enable --now "$UNIT_NAME.automount" 2>&1; then
+                printf "%b\n" "${GREEN}[OK] Created systemd user automount for $M${RC}"
+                return 0
+            fi
+            printf "%b\n" "${RED}[FAIL] Could not enable automount unit. Falling back to direct mount...${RC}"
+        fi
+
+        if systemctl --user enable --now "$UNIT_NAME.mount" 2>&1; then
             printf "%b\n" "${GREEN}[OK] Created systemd user mount for $M${RC}"
         else
-            printf "%b\n" "${RED}[FAIL] Could not enable automount unit. Check journalctl -xe for details${RC}"
+            printf "%b\n" "${RED}[FAIL] Could not enable mount unit. Check journalctl -xe for details${RC}"
             printf "%b\n" "${YELLOW}Mount unit files created at:${RC}"
             printf "%b\n" "  $MOUNT_UNIT"
-            printf "%b\n" "  $AUTOMOUNT_UNIT"
+            if [ "$USE_AUTOMOUNT" = "yes" ]; then
+                printf "%b\n" "  $AUTOMOUNT_UNIT"
+            fi
         fi
     fi
 }
@@ -322,11 +366,50 @@ remove_mount() {
 # Attempts to access the mount directory to trigger automount if needed
 # Optionally displays systemd unit status for troubleshooting on failure
 test_mount() {
-    printf "%b" "Mount point: "; read -r M
+    printf "%b\n" "${YELLOW}Available mount points:${RC}"
+    
+    # Show system mounts
+    if [ -d "/etc/systemd/system" ] && ls "/etc/systemd/system"/*.mount >/dev/null 2>&1; then
+        for unit in /etc/systemd/system/*.mount; do
+            if [ -f "$unit" ]; then
+                WHERE=$(grep "^Where=" "$unit" 2>/dev/null | cut -d'=' -f2)
+                [ -n "$WHERE" ] && printf "%b\n" "  $WHERE (system)"
+            fi
+        done
+    fi
+    
+    # Show user mounts
+    if [ -d "$HOME/.config/systemd/user" ] && ls "$HOME/.config/systemd/user"/*.mount >/dev/null 2>&1; then
+        for unit in "$HOME/.config/systemd/user"/*.mount; do
+            if [ -f "$unit" ]; then
+                WHERE=$(grep "^Where=" "$unit" 2>/dev/null | cut -d'=' -f2)
+                [ -n "$WHERE" ] && printf "%b\n" "  $WHERE (user)"
+            fi
+        done
+    fi
+    
+    printf "%b" "${YELLOW}Mount point (absolute path): ${RC}"
+    read -r M
+    
+    # Validate input is an absolute path
+    case "$M" in
+        /*)
+            # Valid absolute path
+            ;;
+        *)
+            printf "%b\n" "${RED}[FAIL] '$M' is not an absolute path (must start with /)${RC}"
+            return 1
+            ;;
+    esac
+    
     printf "%b\n" "${YELLOW}Testing mount...${RC}"
 
     # Try to access the mount point to trigger automount
-    ls "$M" >/dev/null 2>&1 && printf "%b\n" "${GREEN}[OK] Mount accessible${RC}" || {
+    if ls "$M" >/dev/null 2>&1; then
+        printf "%b\n" "${GREEN}[OK] Mount accessible${RC}"
+        printf "%b\n" "Contents:"
+        ls -lh "$M" 2>/dev/null | head -10 || printf "%b\n" "${YELLOW}(empty or no permission)${RC}"
+    else
         printf "%b\n" "${RED}[FAIL] Mount not accessible${RC}"
         printf "%b" "View systemd status? (y/n): "; read -r VIEWSTATUS
         if [ "$VIEWSTATUS" = "y" ]; then
@@ -334,11 +417,12 @@ test_mount() {
             if [ -f "/etc/systemd/system/${UNIT_NAME}.mount" ]; then
                 "$ESCALATION_TOOL" systemctl status "${UNIT_NAME}.mount" --no-pager || true
             else
-                ensure_systemd_user || return
-                systemctl --user status "${UNIT_NAME}.mount" --no-pager || true
+                if ensure_systemd_user; then
+                    systemctl --user status "${UNIT_NAME}.mount" --no-pager || true
+                fi
             fi
         fi
-    }
+    fi
 }
 
 # Install packages if not already present
