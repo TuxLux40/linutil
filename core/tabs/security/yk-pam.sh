@@ -33,7 +33,7 @@ installYubicoPAM() {
     printf "%b\n" "${YELLOW}Installing required packages for Yubico PAM...${RC}"
     case "$PACKAGER" in
         pacman)
-            "$ESCALATION_TOOL" "$PACKAGER" -S --noconfirm --needed pamu2f pcsc-tools pcsclite yubico-pam
+            "$ESCALATION_TOOL" "$PACKAGER" -S --noconfirm --needed pam-u2f pcsc-tools pcsclite yubico-pam
             ;;
         apt-get|nala)
             "$ESCALATION_TOOL" "$PACKAGER" update
