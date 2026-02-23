@@ -33,11 +33,11 @@ installYubicoPAM() {
     printf "%b\n" "${YELLOW}Installing required packages for Yubico PAM...${RC}"
     case "$PACKAGER" in
         pacman)
-            "$ESCALATION_TOOL" "$PACKAGER" -S --noconfirm --needed pamu2f pcsc-tools pcsclite scdaemon yubico-pam
+            "$ESCALATION_TOOL" "$PACKAGER" -S --noconfirm --needed pamu2f pcsc-tools pcsclite yubico-pam
             ;;
         apt-get|nala)
             "$ESCALATION_TOOL" "$PACKAGER" update
-            "$ESCALATION_TOOL" "$PACKAGER" install -y libpam-u2f pcscd scdaemon yubikey-manager
+            "$ESCALATION_TOOL" "$PACKAGER" install -y libpam-u2f pcscd yubikey-manager
             ;;
         dnf)
             "$ESCALATION_TOOL" "$PACKAGER" install -y pam-u2f pcsc-lite pcsc-tools gnupg2-smime yubikey-manager
@@ -46,10 +46,10 @@ installYubicoPAM() {
             "$ESCALATION_TOOL" "$PACKAGER" install -y pam-u2f pcsc-lite pcsc-tools gnupg2 yubikey-manager
             ;;
         apk)
-            "$ESCALATION_TOOL" "$PACKAGER" add pam-u2f pcsc-lite pcsc-tools gnupg-scdaemon yubikey-manager
+            "$ESCALATION_TOOL" "$PACKAGER" add pam-u2f pcsc-lite pcsc-tools gnupg yubikey-manager
             ;;
         xbps-install)
-            "$ESCALATION_TOOL" "$PACKAGER" -Sy pam-u2f pcsclite pcsc-tools gnupg2-scdaemon yubikey-manager
+            "$ESCALATION_TOOL" "$PACKAGER" -Sy pam-u2f pcsclite pcsc-tools gnupg2 yubikey-manager
             ;;
         eopkg)
             "$ESCALATION_TOOL" "$PACKAGER" install -y pam-u2f pcscd yubikey-manager
