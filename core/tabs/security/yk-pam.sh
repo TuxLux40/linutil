@@ -1,176 +1,140 @@
 #!/bin/sh -e
 
+# Yubico PAM configuration script for sudo and polkit-1 modules
+# See https://developers.yubico.com/pam-u2f/ for more information
+
 . ../common-script.sh
 
-TEMP_DIR=""
-cleanup() { [ -n "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"; }
-trap cleanup EXIT
+CONFIG_DIR="${HOME}/.config/Yubico"
+CONFIG_FILE="${CONFIG_DIR}/u2f_keys"
 
-msg() { printf "%b%s%b\n" "$2" "$1" "$RC"; }
-header() { printf "\n%b=== %s ===%b\n\n" "$CYAN" "$1" "$RC"; }
-
-install_pam_u2f() {
-    command_exists pamu2fcfg && return 0
-    msg "Installing pam-u2f..." "$CYAN"
-    
-    case "$PACKAGER" in
-        pacman|dnf|zypper|apk) PKG="pam-u2f" ;;
-        apt-get|nala) PKG="libpam-u2f"; "$ESCALATION_TOOL" "$PACKAGER" update >/dev/null 2>&1 ;;
-        *) msg "Unsupported package manager" "$RED"; return 1 ;;
-    esac
-    
-    "$ESCALATION_TOOL" "$PACKAGER" install -y "$PKG" >/dev/null 2>&1 || { msg "Install failed" "$RED"; return 1; }
-    msg "Installed successfully" "$GREEN"
+confirmProceeding() {
+   printf "%b\n" "${YELLOW}This script will configure Yubico PAM for sudo and polkit-1 modules.${RC}"
+   printf "%b\n" "${YELLOW}It will install required packages, enable systemd services,${RC}"
+   printf "%b\n" "${YELLOW}generate U2F keys, and update PAM configuration files.${RC}"
+   printf "%b\n" "${RED}It is highly recommended to have a separate root shell open for recovery!${RC}"
+   printf "%b" "${YELLOW}Do you want to proceed? (y/N): ${RC}"
+   read -r response
+   if ! echo "$response" | grep -qi "^y"; then
+      printf "%b\n" "${YELLOW}Aborting...${RC}"
+      exit 0
+   fi
 }
 
-check_yubikey() {
-    msg "Checking for YubiKey..." "$CYAN"
-    timeout 5 "$ESCALATION_TOOL" pamu2fcfg --verbose --no-user-presence 2>&1 | grep -q "Tap_YubiKey\|found 1" || {
-        msg "No YubiKey detected" "$RED"
-        return 1
-    }
-    msg "YubiKey detected" "$GREEN"
+installYubicoPackages() {
+   if command_exists pamu2fcfg; then
+      printf "%b\n" "${GREEN}pamu2f is already installed${RC}"
+      return
+   fi
+
+   printf "%b\n" "${YELLOW}Installing Yubico PAM packages...${RC}"
+   case "$PACKAGER" in
+      pacman)
+         "$ESCALATION_TOOL" "$PACKAGER" -S --noconfirm --needed pamu2f pcsc-lite scdaemon yubico-pam
+         ;;
+      apt-get|nala)
+         "$ESCALATION_TOOL" "$PACKAGER" update >/dev/null 2>&1
+         "$ESCALATION_TOOL" "$PACKAGER" install -y libpam-u2f pcsc-lite scdaemon
+         ;;
+      dnf)
+         "$ESCALATION_TOOL" "$PACKAGER" install -y pamu2f pcsc-lite scdaemon
+         ;;
+      zypper)
+         "$ESCALATION_TOOL" "$PACKAGER" install -y pamu2f pcsc-lite scdaemon
+         ;;
+      apk)
+         "$ESCALATION_TOOL" "$PACKAGER" add pamu2f pcsc-lite scdaemon
+         ;;
+      xbps-install)
+         "$ESCALATION_TOOL" "$PACKAGER" -Sy pamu2f pcsc-lite scdaemon
+         ;;
+      eopkg)
+         "$ESCALATION_TOOL" "$PACKAGER" install -y pamu2f pcsc-lite scdaemon
+         ;;
+      *)
+         "$ESCALATION_TOOL" "$PACKAGER" install -y pamu2f pcsc-lite scdaemon
+         ;;
+   esac
 }
 
-register_yubikey() {
-    local user="${1:-${SUDO_USER:-$USER}}"
-    local yk_dir="$(eval echo ~$user)/.config/yubico"
-    local key_file="$yk_dir/u2f_keys"
-    
-    mkdir -p "$yk_dir" && chown "$user:$user" "$yk_dir" && chmod 700 "$yk_dir"
-    
-    if [ -s "$key_file" ]; then
-        msg "Existing keys found, creating backup..." "$YELLOW"
-        cp "$key_file" "${key_file}.backup-$(date +%s)"
-    fi
-    
-    msg "Insert YubiKey and tap it..." "$CYAN"
-    TEMP_DIR=$(mktemp -d)
-    "$ESCALATION_TOOL" -u "$user" pamu2fcfg -n >"$TEMP_DIR/key" 2>/dev/null || { msg "Registration failed" "$RED"; return 1; }
-    "$ESCALATION_TOOL" tee "$key_file" >/dev/null <"$TEMP_DIR/key"
-    "$ESCALATION_TOOL" chown "$user:$user" "$key_file" && "$ESCALATION_TOOL" chmod 600 "$key_file"
-    msg "Registration successful" "$GREEN"
-    echo "$key_file"
+enableYubicoServices() {
+   if ! command_exists systemctl; then
+      printf "%b\n" "${YELLOW}systemctl not found, skipping service enablement${RC}"
+      return
+   fi
+
+   printf "%b\n" "${YELLOW}Enabling Yubico PAM services...${RC}"
+   for svc in pcscd.service scdaemon.service; do
+      if systemctl list-unit-files "$svc" >/dev/null 2>&1; then
+         "$ESCALATION_TOOL" systemctl enable --now "$svc"
+      fi
+   done
 }
 
-
-
-add_pam_u2f() {
-    local file="$1" keyfile="$2" backup="${1}.backup-$(date +%s)"
-    
-    grep -q '^auth[[:space:]].*pam_u2f\.so' "$file" && { msg "$(basename $file): already configured" "$YELLOW"; return 0; }
-    
-    "$ESCALATION_TOOL" cp "$file" "$backup"
-    
-    local tmp=$(mktemp)
-    awk -v line="auth sufficient pam_u2f.so authfile=$keyfile cue" '
-        !done && /^@include/ { print line; done=1 }
-        { print }
-        END { if (!done) print line }
-    ' "$file" > "$tmp"
-    
-    "$ESCALATION_TOOL" cp "$tmp" "$file" && rm -f "$tmp"
-    msg "$(basename $file): configured" "$GREEN"
+setupConfigDirectory() {
+   printf "%b\n" "${YELLOW}Creating configuration directory at ${CONFIG_DIR}...${RC}"
+   mkdir -p "$CONFIG_DIR"
+   chmod 700 "$CONFIG_DIR"
 }
 
+generateYubicoKeys() {
+   if [ -f "$CONFIG_FILE" ]; then
+      printf "%b\n" "${YELLOW}U2F keys file already exists at ${CONFIG_FILE}${RC}"
+      printf "%b" "${YELLOW}Do you want to regenerate? (y/N): ${RC}"
+      read -r response
+      if ! echo "$response" | grep -qi "^y"; then
+         return
+      fi
+   fi
 
-list_configured() {
-    header "Configured Modules"
-    local found=0
-    for f in /etc/pam.d/*; do
-        grep -q '^auth[[:space:]].*pam_u2f\.so' "$f" 2>/dev/null && {
-            printf "  %b✓ %s%b\n" "$GREEN" "$(basename $f)" "$RC"
-            found=1
-        }
-    done
-    [ "$found" = 0 ] && msg "None configured" "$CYAN"
+   printf "%b\n" "${YELLOW}Generating U2F keys (touch your Yubikey when prompted)...${RC}"
+   if pamu2fcfg > "${CONFIG_FILE}.tmp"; then
+      mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
+      chmod 600 "$CONFIG_FILE"
+      printf "%b\n" "${GREEN}U2F keys saved to ${CONFIG_FILE}${RC}"
+   else
+      printf "%b\n" "${RED}Failed to generate U2F keys. Is your Yubikey connected?${RC}"
+      rm -f "${CONFIG_FILE}.tmp"
+      exit 1
+   fi
 }
 
-restore_backup() {
-    header "Restore from Backup"
-    local backups=$(ls /etc/pam.d/*.backup-* 2>/dev/null)
-    [ -z "$backups" ] && { msg "No backups found" "$CYAN"; return; }
-    
-    echo "$backups" | nl -w2 -s'. '
-    printf "\nRestore (number or skip): "
-    read -r n
-    [ -z "$n" ] && return
-    
-    local backup=$(echo "$backups" | sed -n "${n}p")
-    [ -z "$backup" ] && { msg "Invalid selection" "$RED"; return; }
-    
-    local orig="${backup%.backup-*}"
-    "$ESCALATION_TOOL" cp "$backup" "$orig"
-    msg "Restored: $(basename $orig)" "$GREEN"
+addPamConfig() {
+   local pam_config="auth sufficient pam_u2f.so authfile=${CONFIG_FILE} cue"
+   local pam_file="$1"
+   local pam_name="$2"
+
+   if ! [ -f "$pam_file" ]; then
+      printf "%b\n" "${RED}PAM file ${pam_file} not found${RC}"
+      return 1
+   fi
+
+   # Backup original PAM file
+   if [ ! -f "${pam_file}.bak" ]; then
+      printf "%b\n" "${YELLOW}Backing up ${pam_file}...${RC}"
+      "$ESCALATION_TOOL" cp "$pam_file" "${pam_file}.bak"
+   fi
+
+   # Check if config already exists
+   if "$ESCALATION_TOOL" grep -q "pam_u2f.so" "$pam_file"; then
+      printf "%b\n" "${GREEN}Yubico PAM already configured in ${pam_name}${RC}"
+      return 0
+   fi
+
+   printf "%b\n" "${YELLOW}Adding Yubico PAM config to ${pam_name}...${RC}"
+   "$ESCALATION_TOOL" sed -i "2i ${pam_config}" "$pam_file"
+   printf "%b\n" "${GREEN}Updated ${pam_name}${RC}"
 }
 
-
-configure() {
-    header "YubiKey PAM Configuration"
-    install_pam_u2f || return 1
-    check_yubikey || return 1
-    
-    local keyfile=$(register_yubikey) || return 1
-    
-    local modules="sudo su login sshd gdm-password sddm lightdm polkit-1"
-    local available=""
-    for m in $modules; do
-        [ -f "/etc/pam.d/$m" ] && available="$available $m"
-    done
-    
-    [ -z "$available" ] && { msg "No PAM modules found" "$RED"; return 1; }
-    
-    printf "\nAvailable modules:\n"
-    echo "$available" | tr ' ' '\n' | nl -w2 -s'. '
-    
-    printf "\nSelect (space-separated numbers or 'all'): "
-    read -r sel
-    [ -z "$sel" ] && return
-    
-    local selected=""
-    [ "$sel" = "all" ] && selected="$available" || {
-        for n in $sel; do
-            selected="$selected $(echo "$available" | tr ' ' '\n' | sed -n "${n}p")"
-        done
-    }
-    
-    [ -z "$selected" ] && { msg "Nothing selected" "$RED"; return 1; }
-    
-    msg "Will configure: $selected" "$YELLOW"
-    msg "WARNING: Keep recovery method ready!" "$YELLOW"
-    
-    printf "\n"
-    for m in $selected; do
-        add_pam_u2f "/etc/pam.d/$m" "$keyfile"
-    done
-    
-    printf "\n"
-    msg "Testing sudo..." "$CYAN"
-    "$ESCALATION_TOOL" -k && "$ESCALATION_TOOL" echo "Test OK!" >/dev/null 2>&1 && msg "Test passed" "$GREEN" || msg "Test failed" "$RED"
+main() {
+   confirmProceeding
+   installYubicoPackages
+   enableYubicoServices
+   setupConfigDirectory
+   generateYubicoKeys
+   addPamConfig "/etc/pam.d/sudo" "sudo"
+   addPamConfig "/etc/pam.d/polkit-1" "polkit-1"
+   printf "%b\n" "${GREEN}Yubico PAM configuration complete!${RC}"
 }
 
-
-main_menu() {
-    while true; do
-        header "YubiKey PAM Configuration"
-        cat << 'EOF'
-[1] Configure YubiKey
-[2] List configured modules
-[3] Restore backup
-[4] Exit
-EOF
-        printf "Select: "
-        read -r c
-        
-        case "$c" in
-            1) configure ;;
-            2) list_configured ;;
-            3) restore_backup ;;
-            4) exit 0 ;;
-        esac
-    done
-}
-
-checkEnv
-main_menu
-
+main
