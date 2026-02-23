@@ -1,7 +1,0 @@
-docker run -d \
-      --name openobserve \
-      -v /volume1/docker/openobserve:/data \
-      -p 5080:5080 \
-      -e ZO_ROOT_USER_EMAIL="root@example.com" \
-      -e ZO_ROOT_USER_PASSWORD="Complexpass#123" \
-      public.ecr.aws/zinclabs/openobserve:latest
