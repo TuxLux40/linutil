@@ -74,24 +74,37 @@ enableServices() {
     "$ESCALATION_TOOL" systemctl enable --now pcscd.service
     sleep 1
     "$ESCALATION_TOOL" systemctl start pcscd.service
-    sleep 1
-    "$ESCALATION_TOOL" systemctl status pcscd.service
+    
+    # Check service status without pager
+    if "$ESCALATION_TOOL" systemctl is-active --quiet pcscd.service; then
+        printf "%b\n" "${GREEN}pcscd service is running${RC}"
+    else
+        printf "%b\n" "${YELLOW}Warning: pcscd service may not be running properly${RC}"
+    fi
 }
 
 enableServices
 
 # Create the configuration directory if it doesn't exist
-printf "%b\n" "${YELLOW}Creating configuration directory at %s...${RC}" "$CONFIG_DIR"
+printf "%b\n" "${YELLOW}Creating configuration directory at${RC}" "$CONFIG_DIR"
 mkdir -p "$CONFIG_DIR"
 
 # Generate the U2F keys and save them to the configuration file
-printf "%b\n" "${YELLOW}Generating U2F keys and saving to %s...${RC}" "$CONFIG_FILE"
+printf "%b\n" "${YELLOW}Generating U2F keys and saving to${RC}" "$CONFIG_FILE"
 pamu2fcfg > "$CONFIG_FILE"
 
 # Add the PAM configuration for Yubico to the system
 # auth sufficient pam_u2f.so authfile=$keyfile cue [prompt=Touch your YubiKey]
 printf "%b\n" "${YELLOW}Adding auth line to sudo module...${RC}"
 "$ESCALATION_TOOL" sed -i '2i auth sufficient pam_u2f.so authfile='"$CONFIG_FILE"' cue [prompt=Touch your YubiKey]' /etc/pam.d/sudo
-printf "%b\n" "${YELLOW}Adding auth line to polkit-1 module...${RC}"
-"$ESCALATION_TOOL" sed -i '2i auth sufficient pam_u2f.so authfile='"$CONFIG_FILE"' cue [prompt=Touch your YubiKey]' /etc/pam.d/polkit-1
-printf "%b\n" "${GREEN}Done. If you want to revert the changes, you can remove the lines added to /etc/pam.d/sudo and /etc/pam.d/polkit-1 with your text editor.${RC}"
+
+# Check if polkit-1 exists before modifying it
+if [ -f /etc/pam.d/polkit-1 ]; then
+    printf "%b\n" "${YELLOW}Adding auth line to polkit-1 module...${RC}"
+    "$ESCALATION_TOOL" sed -i '2i auth sufficient pam_u2f.so authfile='"$CONFIG_FILE"' cue [prompt=Touch your YubiKey]' /etc/pam.d/polkit-1
+else
+    printf "%b\n" "${YELLOW}polkit-1 not found at /etc/pam.d/polkit-1, skipping...${RC}"
+fi
+
+printf "%b\n" "${GREEN}Done! Yubico PAM has been configured successfully.${RC}"
+printf "%b\n" "${CYAN}If you want to revert the changes, you can remove the lines added to /etc/pam.d/sudo and /etc/pam.d/polkit-1 with your text editor.${RC}"
