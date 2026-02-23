@@ -562,12 +562,6 @@ script = "fastfetch-setup.sh"
 task_list = "I FM"
 
 [[data]]
-name = "OpenRGB Setup"
-description = "Installs OpenRGB, udev rules, i2c modules, and optional autostart entries."
-script = "openrgb-setup.sh"
-task_list = "I"
-
-[[data]]
 name = "Flatpak / Flathub"
 description = "Flatpak is a universal application sandbox for Linux that uses isolated packages from Flathub to prevent conflicts and system alterations, while alleviating dependency concerns. This command installs Flatpak and adds the Flathub repository"
 script = "setup-flatpak.sh"
@@ -636,6 +630,12 @@ task_list = "I"
 matches = true
 data = "command_exists"
 values = ["linutil"]
+
+[[data]]
+name = "OpenRGB Setup"
+description = "Installs OpenRGB, udev rules, i2c modules, and optional autostart entries."
+script = "openrgb-setup.sh"
+task_list = "I"
 
 [[data]]
 name = "Podman"

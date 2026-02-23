@@ -150,9 +150,15 @@ script = "encrypt_decrypt_tool.sh"
 task_list = "I FM"
 
 [[data]]
-name = "Locale Setup"
-description = "Configures system locales and locale-related defaults."
-script = "locale-setup.sh"
+name = "Locale Setup (DE)"
+description = "Configures system locale with English UI and German formats (time, date, currency) plus German keyboard layout."
+script = "locale-setup-de.sh"
+task_list = "FM"
+
+[[data]]
+name = "Locale Setup (US)"
+description = "Configures system locale with US English settings."
+script = "locale-us-setup.sh"
 task_list = "FM"
 
 [[data]]
@@ -174,14 +180,14 @@ script = "service-control.sh"
 task_list = "I PFM SS"
 
 [[data]]
-name = "SSH Commands"
-script = "ssh.sh"
-task_list = "I FM SS"
-
-[[data]]
 name = "SFTP Mount"
 description = "Configures SSHFS for mounting remote directories via SSH/SFTP with automatic mount setup."
 script = "sftp-mount-setup.sh"
+task_list = "I FM SS"
+
+[[data]]
+name = "SSH Commands"
+script = "ssh.sh"
 task_list = "I FM SS"
 
 [[data]]
