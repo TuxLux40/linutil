@@ -12,19 +12,16 @@ install_sshfs() {
     printf "%b\n" "${YELLOW}Installing sshfs...${RC}"
     case "$PACKAGER" in
         pacman)       "$ESCALATION_TOOL" pacman -S --needed --noconfirm sshfs ;;
-        apk)          "$ESCALATION_TOOL" apk add sshfs ;;
+        apt-get|nala) "$ESCALATION_TOOL" "$PACKAGER" install -y sshfs ;;
+        dnf)          "$ESCALATION_TOOL" "$PACKAGER" install -y fuse-sshfs ;;
         xbps-install) "$ESCALATION_TOOL" xbps-install -Sy sshfs ;;
+        apk)          "$ESCALATION_TOOL" apk add sshfs ;;
         *)            "$ESCALATION_TOOL" "$PACKAGER" install -y sshfs ;;
     esac
 }
 
 add_mount() {
     install_sshfs || return 1
-
-    # allow_other needs user_allow_other in /etc/fuse.conf (one-time)
-    if [ -f /etc/fuse.conf ] && grep -q '^#user_allow_other' /etc/fuse.conf; then
-        "$ESCALATION_TOOL" sed -i 's/^#user_allow_other/user_allow_other/' /etc/fuse.conf
-    fi
 
     printf "\n%b\n" "${YELLOW}--- New SSHFS mount ---${RC}"
 
@@ -44,29 +41,6 @@ add_mount() {
     printf "%b" "Local mount point [/mnt/$RHOST]: "
     read -r MPOINT; MPOINT=${MPOINT:-/mnt/$RHOST}
 
-    KEYFILE=""
-    for k in "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_ecdsa"; do
-        [ -f "$k" ] && { KEYFILE="$k"; break; }
-    done
-    printf "%b" "SSH key [${KEYFILE:-none found, enter path}]: "
-    read -r K; KEYFILE=${K:-$KEYFILE}
-
-    if [ -z "$KEYFILE" ]; then
-        ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519" -N "" || return 1
-        KEYFILE="$HOME/.ssh/id_ed25519"
-        printf "%b\n" "${YELLOW}Copy key to server: ssh-copy-id -i $KEYFILE $RUSER@$RHOST${RC}"
-        printf "%b" "Press Enter once done..."
-        read -r _
-    fi
-
-    mkdir -p "$MPOINT" 2>/dev/null || "$ESCALATION_TOOL" mkdir -p "$MPOINT" || {
-        printf "%b\n" "${RED}Cannot create $MPOINT${RC}"; return 1
-    }
-
-    OPTS="idmap=user,allow_other,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3"
-    OPTS="${OPTS},IdentityFile=${KEYFILE},StrictHostKeyChecking=accept-new"
-    [ "$RPORT" != "22" ] && OPTS="${OPTS},port=${RPORT}"
-
     NAME="sshfs-$(printf "%s" "$RHOST" | tr -cs '0-9A-Za-z' '-' | sed 's/^-//;s/-$//')"
     SCRIPT="$SCRIPTS_DIR/${NAME}.sh"
     DESKTOP="$AUTOSTART_DIR/${NAME}.desktop"
@@ -75,7 +49,7 @@ add_mount() {
 
     cat > "$SCRIPT" << EOF
 #!/bin/sh
-exec sshfs $RUSER@$RHOST:$RPATH $MPOINT -o $OPTS
+sudo sshfs "$RUSER@$RHOST:$RPATH" "$MPOINT" -p $RPORT -o idmap=user -o allow_other
 EOF
     chmod +x "$SCRIPT"
 
@@ -93,7 +67,7 @@ EOF
     printf "%b" "${YELLOW}Mount now? [Y/n]: ${RC}"
     read -r NOW
     if [ -z "$NOW" ] || [ "$NOW" = "y" ] || [ "$NOW" = "Y" ]; then
-        if sshfs "$RUSER@$RHOST:$RPATH" "$MPOINT" -o "$OPTS"; then
+        if sudo sshfs "$RUSER@$RHOST:$RPATH" "$MPOINT" -p "$RPORT" -o idmap=user -o allow_other; then
             printf "%b\n" "${GREEN}[OK] Mounted at $MPOINT${RC}"
         else
             printf "%b\n" "${RED}[FAIL] Check SSH connection. Run manually: $SCRIPT${RC}"
@@ -108,7 +82,7 @@ list_mounts() {
         [ -f "$DF" ] || continue
         FOUND=1
         NAME=$(basename "$DF" .desktop)
-        MP=$(awk '/^exec sshfs/{print $4; exit}' \
+        MP=$(awk '/sudo sshfs/{print $4; exit}' \
             "$(grep '^Exec=' "$DF" | cut -d= -f2-)" 2>/dev/null)
         printf "  %s  ->  %s\n" "$NAME" "$MP"
     done
@@ -148,7 +122,7 @@ remove_mount() {
     for N in $NAMES; do
         if [ "$i" = "$SEL" ]; then
             SCRIPT=$(grep '^Exec=' "$AUTOSTART_DIR/${N}.desktop" | cut -d= -f2-)
-            MP=$(awk '/^exec sshfs/{print $4; exit}' "$SCRIPT" 2>/dev/null)
+            MP=$(awk '/sudo sshfs/{print $4; exit}' "$SCRIPT" 2>/dev/null)
             if [ -n "$MP" ] && grep -q " ${MP} " /proc/mounts 2>/dev/null; then
                 fusermount3 -u "$MP" 2>/dev/null || fusermount -u "$MP" 2>/dev/null || true
             fi
