@@ -196,6 +196,12 @@ description = "Increases shader cache settings for improved performance."
 script = "fixes/shader-cache-increase.sh"
 task_list = "FM"
 
+[[data.entries]]
+name = "Undervolt CPU & GPU"
+description = "Reduces CPU/GPU voltage to lower heat and improve sustained performance. Supports Intel (intel-undervolt), AMD mobile (ryzenadj), AMD desktop (pstate EPP), NVIDIA (power limit), and AMD GPU (CoreCtrl)."
+script = "fixes/undervolt.sh"
+task_list = "I FM SS"
+
 [[data]]
 name = "Ubuntu"
 
