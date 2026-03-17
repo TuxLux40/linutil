@@ -266,12 +266,6 @@ script = "global-theme.sh"
 task_list = "I PFM"
 
 [[data]]
-name = "KDE Shortcuts"
-description = "Applies a predefined KDE keyboard shortcuts configuration."
-script = "kde-shortcuts.sh"
-task_list = "FM"
-
-[[data]]
 name = "Postinstall KDE"
 description = "Runs KDE post-install configuration (themes and shortcuts)."
 script = "postinstall-kde.sh"

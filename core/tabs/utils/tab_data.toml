@@ -180,9 +180,9 @@ script = "service-control.sh"
 task_list = "I PFM SS"
 
 [[data]]
-name = "SFTP Mount"
+name = "SFTP Setup"
 description = "Configures SSHFS for mounting remote directories via SSH/SFTP with automatic mount setup."
-script = "sftp-mount-setup.sh"
+script = "sftp-setup.sh"
 task_list = "I FM SS"
 
 [[data]]
