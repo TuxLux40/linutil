@@ -61,7 +61,7 @@ data = { containing_file = "/sys/devices/virtual/dmi/id/board_vendor" }
 values = ["Valve"]
 
 [[data.entries]]
-name = "Nvidia Drivers && Hardware Acceleration"
+name = "Nvidia Drivers & Hardware Acceleration"
 description = "This script installs and configures nvidia drivers with Hardware Acceleration."
 script = "arch/nvidia-drivers.sh"
 task_list = "I FM SS"
@@ -266,10 +266,11 @@ script = "global-theme.sh"
 task_list = "I PFM"
 
 [[data]]
-name = "Postinstall KDE"
-description = "Runs KDE post-install configuration (themes and shortcuts)."
-script = "postinstall-kde.sh"
-task_list = "FM"
+name = "GPU Driver"
+description = "Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance."
+script = "gpu-driver.sh"
+task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Remove Snaps"
