@@ -36,8 +36,10 @@ if status is-interactive
     # Set xterm
     export TERM=xterm-256color
 
-	# Set Qt platform theme
-	set -gx QT_QPA_PLATFORMTHEME qt6ct
+	# Let Plasma provide the native Qt platform theme in KDE sessions.
+	if test "$XDG_CURRENT_DESKTOP" != "KDE"
+		set -gx QT_QPA_PLATFORMTHEME qt6ct
+	end
 
 	# Add Cargo to PATH
 	export PATH="$PATH:/home/oliver/.cargo/bin"

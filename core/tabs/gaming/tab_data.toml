@@ -179,18 +179,6 @@ script = "arc-raiders-mod.sh"
 task_list = "FM"
 
 [[data]]
-name = "Diablo II Resurrected Loot Filter"
-description = "Installs a loot filter for Diablo II Resurrected from ChrisTitusTech/d2r-loot-filter. Highlights high runes and other valuable items. Works on Battle.net and single player. After install, add launch option: -mod lootfilter -txt"
-script = "diablo2-titus-mod.sh"
-task_list = "FM"
-
-[[data]]
-name = "Fallout 76 INI and Mods"
-description = "Installs a custom Fallout76Custom.ini and mods from ChrisTitusTech/fallout76-configs via Steam. Improves performance and stability with quality of life tweaks."
-script = "fallout76-titus-mod.sh"
-task_list = "FM"
-
-[[data]]
 name = "Deckify"
 description = "Installs Deckify for Steam Deck customization."
 script = "deckify-setup.sh"
@@ -207,6 +195,18 @@ name = "Decky Plugin Loader (Remove)"
 description = "Removes Decky Plugin Loader."
 script = "decky-plugin-loader-remove.sh"
 task_list = "RP"
+
+[[data]]
+name = "Diablo II Resurrected Loot Filter"
+description = "Installs a loot filter for Diablo II Resurrected from ChrisTitusTech/d2r-loot-filter. Highlights high runes and other valuable items. Works on Battle.net and single player. After install, add launch option: -mod lootfilter -txt"
+script = "diablo2-titus-mod.sh"
+task_list = "FM"
+
+[[data]]
+name = "Fallout 76 INI and Mods"
+description = "Installs a custom Fallout76Custom.ini and mods from ChrisTitusTech/fallout76-configs via Steam. Improves performance and stability with quality of life tweaks."
+script = "fallout76-titus-mod.sh"
+task_list = "FM"
 
 [[data]]
 name = "Sunshine"

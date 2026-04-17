@@ -206,12 +206,6 @@ data = "command_exists"
 values = ["dnf"]
 
 [[data]]
-name = "US Locale Setup"
-description = "This fixes US UTF-8 Locale and Folder listings"
-script = "locale-us-setup.sh"
-task_list = "FM"
-
-[[data]]
 name = "Utility Functions"
 description = "Shared helper functions for utility scripts."
 script = "utility_functions.sh"

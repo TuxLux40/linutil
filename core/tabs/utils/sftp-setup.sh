@@ -84,6 +84,7 @@ read -r MPOINT
 case "$MPOINT" in
     "~/"*) MPOINT="/home/$(id -un)/${MPOINT#~/}" ;;
     "~")   MPOINT="/home/$(id -un)" ;;
+    "/home/$(id -un)/~/"*) MPOINT="/home/$(id -un)/${MPOINT#/home/$(id -un)/~/}" ;;
     "/"*)  ;;
     *)     printf "%b\n" "${RED}Mount point must be an absolute path (e.g. /home/$(id -un)/nas).${RC}"; exit 1 ;;
 esac
@@ -145,13 +146,13 @@ fi
 cat > "$SERVICE_FILE" << EOF
 [Unit]
 Description=SSHFS mount $RUSER@$RHOST:$RPATH at $MPOINT
-After=network-online.target
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=sshfs $RUSER@$RHOST:$RPATH $MPOINT -o IdentityFile=$KEYFILE,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3,idmap=user
+Type=simple
+ExecStart=sshfs $RUSER@$RHOST:$RPATH $MPOINT -f -o IdentityFile=$KEYFILE,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3,idmap=user
 ExecStop=fusermount -u $MPOINT
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=default.target
