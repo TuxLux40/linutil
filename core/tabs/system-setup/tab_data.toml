@@ -266,6 +266,12 @@ script = "global-theme.sh"
 task_list = "I PFM"
 
 [[data]]
+name = "NeoWin KDE Theme"
+description = "Installs the NeoWin Windows 11-inspired KDE Plasma theme with automatic dark/light switching, Willow Blur window decorations, WinSur cursors, and a Win11 sound pack."
+script = "neowin-setup.sh"
+task_list = "I PFM"
+
+[[data]]
 name = "GPU Driver"
 description = "Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance."
 script = "gpu-driver.sh"

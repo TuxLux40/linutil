@@ -632,18 +632,6 @@ script = "rofi-setup.sh"
 task_list = "I FM"
 
 [[data]]
-name = "Snowflake Proxy"
-description = "Builds and installs the Tor Snowflake proxy from source."
-script = "snowflake-proxy.sh"
-task_list = "I"
-
-[[data]]
-name = "Snowflake WebUI"
-description = "Installs Snowflake proxy with Web UI and system tray integration."
-script = "snowflake-webui.sh"
-task_list = "I"
-
-[[data]]
 name = "Test Script Access"
 description = "Test entry for validating script access."
 script = "test-script-access.sh"
