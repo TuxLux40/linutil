@@ -1,9 +1,9 @@
 name = "Security"
 
 [[data]]
-name = "AppArmor GRUB Setup"
-description = "Configures GRUB to enable AppArmor and related security settings."
-script = "apparmor-grub-setup.sh"
+name = "AppArmor Setup"
+description = "Enables AppArmor by adding it to the kernel lsm= list. Autodetects the bootloader (Limine, systemd-boot, GRUB, rEFInd), installs the apparmor package, the extended profile set (apparmor.d / apparmor-profiles), builds AppAnvil GUI from the TuxLux40/AppAnvil fork, backs up edited configs, and enables apparmor.service."
+script = "apparmor-setup.sh"
 task_list = "I"
 
 [[data]]

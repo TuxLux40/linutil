@@ -3,65 +3,111 @@
     "rust-analyzer": {
       "command": "rust-analyzer",
       "args": [],
-      "cwd": "/home/titus/github/linutil",
+      "cwd": "/home/oliver/git/linutil",
       "env": {
         "RUST_LOG": "info"
       }
     },
     "bash-language-server": {
       "command": "bash-language-server",
-      "args": ["start"],
-      "cwd": "/home/titus/github/linutil",
+      "args": [
+        "start"
+      ],
+      "cwd": "/home/oliver/git/linutil",
       "env": {}
     },
     "cargo-tools": {
       "command": "cargo",
-      "args": ["--version"],
-      "cwd": "/home/titus/github/linutil",
+      "args": [
+        "--version"
+      ],
+      "cwd": "/home/oliver/git/linutil",
       "capabilities": {
         "build": {
           "command": "cargo",
-          "args": ["build", "--release"]
+          "args": [
+            "build",
+            "--release"
+          ]
         },
         "test": {
-          "command": "cargo", 
-          "args": ["test"]
+          "command": "cargo",
+          "args": [
+            "test"
+          ]
         },
         "lint": {
           "command": "cargo",
-          "args": ["clippy", "--", "-Dwarnings"]
+          "args": [
+            "clippy",
+            "--",
+            "-Dwarnings"
+          ]
         },
         "format": {
           "command": "cargo",
-          "args": ["fmt", "--all"]
+          "args": [
+            "fmt",
+            "--all"
+          ]
         },
         "format-check": {
           "command": "cargo",
-          "args": ["fmt", "--all", "--check"]
+          "args": [
+            "fmt",
+            "--all",
+            "--check"
+          ]
         },
         "cross-compile-aarch64": {
           "command": "cross",
-          "args": ["build", "--target=aarch64-unknown-linux-musl", "--release"]
+          "args": [
+            "build",
+            "--target=aarch64-unknown-linux-musl",
+            "--release"
+          ]
         }
       }
     },
     "shellcheck": {
       "command": "shellcheck",
-      "args": ["--version"],
-      "cwd": "/home/titus/github/linutil",
+      "args": [
+        "--version"
+      ],
+      "cwd": "/home/oliver/git/linutil",
       "capabilities": {
         "check-script": {
           "command": "shellcheck",
-          "args": ["-f", "gcc"]
+          "args": [
+            "-f",
+            "gcc"
+          ]
         }
+      }
+    },
+    "mariadb": {
+      "command": "/home/oliver/git/linutil/.opencode/mariadb-mcp/.venv/bin/python",
+      "args": [
+        "src/server.py"
+      ],
+      "cwd": "/home/oliver/git/linutil/.opencode/mariadb-mcp",
+      "env": {
+        "PYTHONUNBUFFERED": "1"
       }
     }
   },
   "workspace": {
     "type": "rust-cargo",
-    "root": "/home/titus/github/linutil",
-    "members": ["tui", "core", "xtask"],
-    "defaultMembers": ["tui", "core"],
+    "root": "/home/oliver/git/linutil",
+    "members": [
+      "tui",
+      "core",
+      "xtask"
+    ],
+    "defaultMembers": [
+      "tui",
+      "core"
+    ],
     "edition": "2021",
     "profile": {
       "release": {
@@ -75,18 +121,25 @@
   },
   "fileTypes": {
     "rust": {
-      "extensions": [".rs"],
+      "extensions": [
+        ".rs"
+      ],
       "languageServer": "rust-analyzer",
       "formatter": "cargo-tools",
       "linter": "cargo-tools"
     },
     "bash": {
-      "extensions": [".sh", ".bash"],
-      "languageServer": "bash-language-server", 
+      "extensions": [
+        ".sh",
+        ".bash"
+      ],
+      "languageServer": "bash-language-server",
       "linter": "shellcheck"
     },
     "toml": {
-      "extensions": [".toml"],
+      "extensions": [
+        ".toml"
+      ],
       "languageServer": "rust-analyzer"
     }
   },
@@ -108,7 +161,7 @@
       "description": "Format all Rust code"
     },
     "format-check": {
-      "command": "cargo fmt --all --check", 
+      "command": "cargo fmt --all --check",
       "description": "Check if code is formatted"
     },
     "check-scripts": {
@@ -125,7 +178,9 @@
       "edition": "2021",
       "features": [],
       "clippy": {
-        "deny": ["warnings"]
+        "deny": [
+          "warnings"
+        ]
       }
     },
     "shellcheck": {
