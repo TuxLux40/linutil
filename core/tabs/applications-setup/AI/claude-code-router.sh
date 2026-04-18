@@ -3,9 +3,7 @@
 # Claude Code Router Installation Script with Ollama Integration
 # Installs and configures Claude Code Router for use with Ollama
 
-. ../common-script.sh
-
-checkEnv
+. ../../common-script.sh
 
 # Check root privileges
 checkRoot() {
@@ -95,12 +93,20 @@ installClaudeCodeRouter() {
         printf "%b\n" "${GREEN}Claude Code Router has been installed${RC}"
     fi
 
+    # Make sure npm global bin is on PATH for current script session
+    NPM_BIN="$(npm config get prefix 2>/dev/null)/bin"
+    case ":$PATH:" in
+        *":$NPM_BIN:"*) ;;
+        *) PATH="$NPM_BIN:$PATH"; export PATH ;;
+    esac
+
     # Verify installation
     if command_exists ccr; then
         printf "%b\n" "${GREEN}Claude Code Router version: $(ccr --version)${RC}"
     else
-        printf "%b\n" "${RED}Installation failed! ccr command not available${RC}"
-        printf "%b\n" "${CYAN}Tip: Consider using nvm (Node Version Manager) to avoid permission issues${RC}"
+        printf "%b\n" "${RED}ccr command not on PATH${RC}"
+        printf "%b\n" "${CYAN}npm global bin: ${NPM_BIN}${RC}"
+        printf "%b\n" "${CYAN}Add this to your shell rc: export PATH=\"${NPM_BIN}:\$PATH\"${RC}"
         exit 1
     fi
 }
@@ -114,13 +120,19 @@ setupOllamaModels() {
         return
     fi
 
-    # Check if Ollama service is running
-    if ! systemctl --user is-active --quiet ollama 2>/dev/null && ! pgrep -x ollama >/dev/null 2>&1; then
+    # Ollama installer creates a system service, not a user service
+    if ! pgrep -x ollama >/dev/null 2>&1 && ! systemctl is-active --quiet ollama 2>/dev/null; then
         printf "%b\n" "${CYAN}Starting Ollama service...${RC}"
-        if systemctl --user start ollama 2>/dev/null; then
-            printf "%b\n" "${GREEN}Ollama service has been started${RC}"
+        if systemctl list-unit-files ollama.service >/dev/null 2>&1; then
+            if "$ESCALATION_TOOL" systemctl start ollama; then
+                printf "%b\n" "${GREEN}Ollama service has been started${RC}"
+            else
+                printf "%b\n" "${YELLOW}systemctl start failed. Trying manual start...${RC}"
+                ollama serve >/dev/null 2>&1 &
+                sleep 3
+            fi
         else
-            printf "%b\n" "${YELLOW}Could not start Ollama service. Trying manual start...${RC}"
+            printf "%b\n" "${YELLOW}No ollama.service found. Starting manually...${RC}"
             ollama serve >/dev/null 2>&1 &
             sleep 3
         fi
@@ -140,20 +152,37 @@ setupOllamaModels() {
     fi
 
     MODELS="qwen2.5-coder:latest deepseek-r1:8b llama3.2:latest"
-    MODEL_ARRAY="$MODELS"
 
-    COUNT=1
-    for model in $MODEL_ARRAY; do
-        if echo "$model_choice" | grep -q "$COUNT"; then
-            printf "%b\n" "${CYAN}Installing model: $model (This may take some time)...${RC}"
-            if ollama pull "$model"; then
-                printf "%b\n" "${GREEN}Model $model has been installed${RC}"
-            else
-                printf "%b\n" "${RED}Error installing $model${RC}"
+    # Tokenize user input so "12" does not accidentally match model index 12
+    for token in $model_choice; do
+        COUNT=1
+        for model in $MODELS; do
+            if [ "$token" = "$COUNT" ]; then
+                printf "%b\n" "${CYAN}Installing model: $model (This may take some time)...${RC}"
+                if ollama pull "$model"; then
+                    printf "%b\n" "${GREEN}Model $model has been installed${RC}"
+                else
+                    printf "%b\n" "${RED}Error installing $model${RC}"
+                fi
+                break
             fi
-        fi
-        COUNT=$((COUNT + 1))
+            COUNT=$((COUNT + 1))
+        done
     done
+}
+
+models_to_json_array() {
+    # Convert a comma-separated list into a JSON string array
+    echo "$1" | awk -F',' '{
+        printf "["
+        for (i = 1; i <= NF; i++) {
+            gsub(/^ +| +$/, "", $i)
+            if ($i == "") continue
+            if (i > 1) printf ", "
+            printf "\"%s\"", $i
+        }
+        printf "]"
+    }'
 }
 
 # Configure Claude Code Router
@@ -163,52 +192,163 @@ configureClaudeCodeRouter() {
     CONFIG_DIR="$HOME/.claude-code-router"
     CONFIG_FILE="$CONFIG_DIR/config.json"
 
-    # Create configuration directory
     mkdir -p "$CONFIG_DIR"
 
-    # Ask for Ollama URL
-    OLLAMA_URL="http://localhost:11434"
-    printf "%b" "${GREEN}Ollama API URL (default: $OLLAMA_URL): ${RC}"
-    read -r custom_ollama_url
-    if [ -n "$custom_ollama_url" ]; then
-        OLLAMA_URL="$custom_ollama_url"
+    # Pick providers
+    USE_OLLAMA="true"
+    USE_OPENROUTER="false"
+    printf "%b" "${GREEN}Add OpenRouter provider as well? [y/N] ${RC}"
+    read -r want_or
+    if [ "$want_or" = "y" ] || [ "$want_or" = "Y" ]; then
+        USE_OPENROUTER="true"
     fi
 
-    # Detect installed models
-    printf "%b\n" "${CYAN}Detecting installed Ollama models...${RC}"
-    AVAILABLE_MODELS=""
-    if command_exists ollama; then
-        AVAILABLE_MODELS=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}' | tr '\n' ',' | sed 's/,$//')
+    printf "%b" "${GREEN}Include Ollama provider? [Y/n] ${RC}"
+    read -r want_ol
+    if [ "$want_ol" = "n" ] || [ "$want_ol" = "N" ]; then
+        USE_OLLAMA="false"
     fi
 
-    if [ -z "$AVAILABLE_MODELS" ]; then
-        AVAILABLE_MODELS="qwen2.5-coder:latest"
-        printf "%b\n" "${YELLOW}No Ollama models found. Using default: $AVAILABLE_MODELS${RC}"
-    else
-        printf "%b\n" "${GREEN}Found models: $AVAILABLE_MODELS${RC}"
+    if [ "$USE_OLLAMA" = "false" ] && [ "$USE_OPENROUTER" = "false" ]; then
+        printf "%b\n" "${RED}At least one provider must be selected${RC}"
+        exit 1
     fi
 
-    # Ask for default models
-    printf "%b\n" "${CYAN}Choose default models for different tasks:${RC}"
-    printf "%b\n" "${CYAN}  1. default   - Main model for normal requests${RC}"
-    printf "%b\n" "${CYAN}  2. background - Fast model for background tasks${RC}"
-    printf "%b\n" "${CYAN}  3. think     - Model for complex reasoning${RC}"
+    OLLAMA_MODELS_JSON=""
+    default_model=""
+    background_model=""
+    think_model=""
+    long_model=""
+    DEFAULT_PROVIDER=""
 
-    printf "%b" "${GREEN}Default model for 'default' (Enter for qwen2.5-coder:latest): ${RC}"
-    read -r default_model
-    default_model=${default_model:-qwen2.5-coder:latest}
+    if [ "$USE_OLLAMA" = "true" ]; then
+        OLLAMA_URL="http://localhost:11434"
+        printf "%b" "${GREEN}Ollama API URL (default: $OLLAMA_URL): ${RC}"
+        read -r custom_ollama_url
+        if [ -n "$custom_ollama_url" ]; then
+            OLLAMA_URL="$custom_ollama_url"
+        fi
 
-    printf "%b" "${GREEN}Default model for 'background' (Enter for $default_model): ${RC}"
-    read -r background_model
-    background_model=${background_model:-$default_model}
+        printf "%b\n" "${CYAN}Detecting installed Ollama models...${RC}"
+        AVAILABLE_MODELS=""
+        if command_exists ollama; then
+            AVAILABLE_MODELS=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}' | tr '\n' ',' | sed 's/,$//')
+        fi
+        if [ -z "$AVAILABLE_MODELS" ]; then
+            AVAILABLE_MODELS="qwen2.5-coder:latest"
+            printf "%b\n" "${YELLOW}No Ollama models found. Using default: $AVAILABLE_MODELS${RC}"
+        else
+            printf "%b\n" "${GREEN}Found models: $AVAILABLE_MODELS${RC}"
+        fi
+        OLLAMA_MODELS_JSON=$(models_to_json_array "$AVAILABLE_MODELS")
 
-    printf "%b" "${GREEN}Default model for 'think' (Enter for deepseek-r1:8b): ${RC}"
-    read -r think_model
-    think_model=${think_model:-deepseek-r1:8b}
+        printf "%b" "${GREEN}Ollama default model (Enter for qwen2.5-coder:latest): ${RC}"
+        read -r default_model
+        default_model=${default_model:-qwen2.5-coder:latest}
 
-    # Create configuration file
+        printf "%b" "${GREEN}Ollama background model (Enter for $default_model): ${RC}"
+        read -r background_model
+        background_model=${background_model:-$default_model}
+
+        printf "%b" "${GREEN}Ollama think model (Enter for deepseek-r1:8b): ${RC}"
+        read -r think_model
+        think_model=${think_model:-deepseek-r1:8b}
+
+        DEFAULT_PROVIDER="ollama"
+    fi
+
+    OPENROUTER_KEY=""
+    OR_MODELS_JSON=""
+    or_default=""
+    or_background=""
+    or_think=""
+    or_long=""
+
+    if [ "$USE_OPENROUTER" = "true" ]; then
+        printf "%b" "${GREEN}OpenRouter API key (leave empty to use \$OPENROUTER_API_KEY env): ${RC}"
+        read -r OPENROUTER_KEY
+        if [ -z "$OPENROUTER_KEY" ]; then
+            # shellcheck disable=SC2016  # literal $VAR for ccr env interpolation
+            OPENROUTER_KEY='$OPENROUTER_API_KEY'
+        fi
+
+        OR_DEFAULT_MODELS="anthropic/claude-sonnet-4,anthropic/claude-3.7-sonnet:thinking,google/gemini-2.5-pro-preview,deepseek/deepseek-chat"
+        printf "%b" "${GREEN}OpenRouter models (comma-separated, Enter for defaults): ${RC}"
+        read -r or_models
+        or_models=${or_models:-$OR_DEFAULT_MODELS}
+        OR_MODELS_JSON=$(models_to_json_array "$or_models")
+
+        printf "%b" "${GREEN}OpenRouter default model (Enter for anthropic/claude-sonnet-4): ${RC}"
+        read -r or_default
+        or_default=${or_default:-anthropic/claude-sonnet-4}
+
+        printf "%b" "${GREEN}OpenRouter background model (Enter for deepseek/deepseek-chat): ${RC}"
+        read -r or_background
+        or_background=${or_background:-deepseek/deepseek-chat}
+
+        printf "%b" "${GREEN}OpenRouter think model (Enter for anthropic/claude-3.7-sonnet:thinking): ${RC}"
+        read -r or_think
+        or_think=${or_think:-anthropic/claude-3.7-sonnet:thinking}
+
+        printf "%b" "${GREEN}OpenRouter longContext model (Enter for google/gemini-2.5-pro-preview): ${RC}"
+        read -r or_long
+        or_long=${or_long:-google/gemini-2.5-pro-preview}
+
+        if [ -z "$DEFAULT_PROVIDER" ]; then
+            DEFAULT_PROVIDER="openrouter"
+            default_model="$or_default"
+            background_model="$or_background"
+            think_model="$or_think"
+            long_model="$or_long"
+        else
+            long_model="$or_long"
+        fi
+    fi
+
+    # Build Providers array
+    PROVIDERS_JSON=""
+    if [ "$USE_OLLAMA" = "true" ]; then
+        PROVIDERS_JSON=$(cat <<EOF
+    {
+      "name": "ollama",
+      "api_base_url": "${OLLAMA_URL}/v1/chat/completions",
+      "api_key": "ollama",
+      "models": ${OLLAMA_MODELS_JSON}
+    }
+EOF
+)
+    fi
+    if [ "$USE_OPENROUTER" = "true" ]; then
+        OR_BLOCK=$(cat <<EOF
+    {
+      "name": "openrouter",
+      "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
+      "api_key": "${OPENROUTER_KEY}",
+      "models": ${OR_MODELS_JSON},
+      "transformer": { "use": ["openrouter"] }
+    }
+EOF
+)
+        if [ -n "$PROVIDERS_JSON" ]; then
+            PROVIDERS_JSON="${PROVIDERS_JSON},
+${OR_BLOCK}"
+        else
+            PROVIDERS_JSON="$OR_BLOCK"
+        fi
+    fi
+
+    # Build Router block
+    ROUTER_ENTRIES="    \"default\": \"${DEFAULT_PROVIDER},${default_model}\",
+    \"background\": \"${DEFAULT_PROVIDER},${background_model}\",
+    \"think\": \"${DEFAULT_PROVIDER},${think_model}\""
+    if [ "$USE_OPENROUTER" = "true" ] && [ -n "$long_model" ]; then
+        ROUTER_ENTRIES="${ROUTER_ENTRIES},
+    \"longContext\": \"openrouter,${long_model}\""
+    fi
+    ROUTER_ENTRIES="${ROUTER_ENTRIES},
+    \"longContextThreshold\": 60000"
+
     printf "%b\n" "${CYAN}Creating configuration file: $CONFIG_FILE${RC}"
-
     cat > "$CONFIG_FILE" <<EOF
 {
   "PORT": 3456,
@@ -218,27 +358,21 @@ configureClaudeCodeRouter() {
   "API_TIMEOUT_MS": 600000,
 
   "Providers": [
-    {
-      "name": "ollama",
-      "api_base_url": "${OLLAMA_URL}/v1/chat/completions",
-      "api_key": "ollama",
-      "models": [$(echo "$AVAILABLE_MODELS" | sed 's/,/", "/g' | sed 's/^/"/' | sed 's/$/"/')]
-    }
+${PROVIDERS_JSON}
   ],
 
   "Router": {
-    "default": "ollama,${default_model}",
-    "background": "ollama,${background_model}",
-    "think": "ollama,${think_model}",
-    "longContextThreshold": 60000
-  },
-
-  "transformers": []
+${ROUTER_ENTRIES}
+  }
 }
 EOF
 
+    chmod 600 "$CONFIG_FILE"
     printf "%b\n" "${GREEN}Configuration file has been created${RC}"
     printf "%b\n" "${CYAN}Configuration saved to: $CONFIG_FILE${RC}"
+    if [ "$USE_OPENROUTER" = "true" ] && [ "$OPENROUTER_KEY" = "\$OPENROUTER_API_KEY" ]; then
+        printf "%b\n" "${YELLOW}Remember to export OPENROUTER_API_KEY in your shell${RC}"
+    fi
 }
 
 # Create systemd service (optional)
@@ -256,6 +390,12 @@ createSystemdService() {
 
     mkdir -p "$SERVICE_DIR"
 
+    CCR_BIN=$(command -v ccr)
+    if [ -z "$CCR_BIN" ]; then
+        printf "%b\n" "${RED}ccr not found in PATH, skipping systemd service${RC}"
+        return
+    fi
+
     cat > "$SERVICE_FILE" <<EOF
 [Unit]
 Description=Claude Code Router Service
@@ -263,7 +403,8 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$(command -v ccr) server
+Environment=PATH=${PATH}
+ExecStart=${CCR_BIN} server
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal
@@ -361,6 +502,7 @@ main() {
     printf "%b\n" "${CYAN}================================================${RC}"
     printf "\n"
 
+    checkEnv
     checkRoot
     checkDependencies
     installClaudeCodeRouter

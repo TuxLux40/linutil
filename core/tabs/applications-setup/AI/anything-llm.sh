@@ -4,7 +4,7 @@
 # AnythingLLM bare-metal installer
 # Clones, builds, and prepares services from source as documented in BARE_METAL.md
 
-. ../common-script.sh
+. ../../common-script.sh
 
 REPO_URL="https://github.com/Mintplex-Labs/anything-llm.git"
 DEFAULT_INSTALL_DIR="$HOME/anything-llm"
