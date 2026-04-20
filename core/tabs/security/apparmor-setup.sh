@@ -34,8 +34,14 @@ trap cleanup EXIT
 # --- Pre-flight checks --------------------------------------------------------
 
 if [ "$(id -u)" -ne 0 ]; then
-    printf "%b\n" "${RED}Error: This script must be run as root (use sudo).${RC}"
-    exit 1
+    if command -v sudo > /dev/null 2>&1; then
+        exec sudo sh "$0" "$@"
+    elif command -v doas > /dev/null 2>&1; then
+        exec doas sh "$0" "$@"
+    else
+        printf "%b\n" "${RED}Error: This script must be run as root. No sudo or doas found.${RC}"
+        exit 1
+    fi
 fi
 
 checkEscalationTool
