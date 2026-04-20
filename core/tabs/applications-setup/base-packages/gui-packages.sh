@@ -11,7 +11,7 @@ printf "%b\n" "${CYAN}Installing GUI Applications...${RC}"
 
 # Base GUI packages available across distributions
 # Add new packages here as needed, but only when having the same name across distros
-BASE_PACKAGES="gimp gramps libreoffice-fresh obs-studio calibre vlc filezilla ghostty signal-desktop kde-connect kleopatra zed podman-desktop"
+BASE_PACKAGES="gramps libreoffice-fresh calibre vlc filezilla kde-connect kleopatra podman-desktop"
 
 # Packages preferred to install from Flathub (to avoid dependency conflicts)
 FLATPAK_PREFERRED="clamui cohesion journald-browser gearlever"
@@ -23,7 +23,7 @@ FLATPAK_PREFERRED="clamui cohesion journald-browser gearlever"
 map_packages() {
     case "$PACKAGER" in
         pacman)
-            echo "$BASE_PACKAGES vlc-plugins-extra yubikey-personalization-gui gnupg-logviewer lact qemu-emulators-full octopi proton-mail-bin proton-pass google-chrome microsoft-edge-stable-bin"
+            echo "$BASE_PACKAGES vlc-plugins-extra yubikey-personalization-gui gnupg-logviewer lact qemu-emulators-full octopi"
             ;;
         apt-get|nala)
             echo "$BASE_PACKAGES qemu-emulators-full vlc-plugin-base vlc-plugin-qt vlc-plugin-skins2"

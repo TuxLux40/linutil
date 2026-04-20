@@ -146,13 +146,16 @@ fi
 cat > "$SERVICE_FILE" << EOF
 [Unit]
 Description=SSHFS mount $RUSER@$RHOST:$RPATH at $MPOINT
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
 ExecStart=sshfs $RUSER@$RHOST:$RPATH $MPOINT -f -o IdentityFile=$KEYFILE,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3,idmap=user
 ExecStop=fusermount -u $MPOINT
 Restart=on-failure
-RestartSec=5
+RestartSec=10
+StartLimitIntervalSec=0
 
 [Install]
 WantedBy=default.target

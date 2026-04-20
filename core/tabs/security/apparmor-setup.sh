@@ -38,6 +38,9 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+checkEscalationTool
+checkPackageManager 'nala apt-get dnf pacman zypper apk xbps-install eopkg'
+
 # --- Detect bootloader --------------------------------------------------------
 
 detect_bootloader() {
