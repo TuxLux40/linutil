@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(journalctl *)",
+      "Bash(pacman -Q *)",
+      "Bash(pacman -Ss *)",
+      "Bash(pacman -Si *)",
+      "Bash(bootctl status *)",
+      "Bash(bootctl list *)",
+      "Bash(lspci *)",
+      "Bash(systemctl status *)",
+      "Bash(systemctl is-enabled *)",
+      "Bash(systemctl is-active *)",
+      "Bash(sensors *)",
+      "Bash(nvidia-smi *)",
+      "Bash(scx_loader status)",
+      "Bash(intel-undervolt read)"
+    ]
+  }
+}
