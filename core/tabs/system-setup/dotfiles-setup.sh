@@ -2,45 +2,42 @@
 
 . ../common-script.sh
 
-# Dotfiles are always in the linutil repo under dotfiles/
-DOTFILES_DIR="$HOME/git/linutil/dotfiles"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/TuxLux40/dotfiles.git}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+
+install_git() {
+    case "$PACKAGER" in
+        pacman)       "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm git ;;
+        apk)          "$ESCALATION_TOOL" "$PACKAGER" add git ;;
+        xbps-install) "$ESCALATION_TOOL" "$PACKAGER" -Sy git ;;
+        *)            "$ESCALATION_TOOL" "$PACKAGER" install -y git ;;
+    esac
+}
 
 main() {
-    # Verify dotfiles directory exists
-    if [ ! -d "$DOTFILES_DIR" ]; then
-        printf "%b\n" "${RED}Dotfiles directory not found at $DOTFILES_DIR${RC}"
+    if ! command_exists git; then
+        printf "%b\n" "${YELLOW}git not installed, installing...${RC}"
+        install_git
+    fi
+
+    if [ -d "$DOTFILES_DIR/.git" ]; then
+        printf "%b\n" "${CYAN}Updating dotfiles repo at $DOTFILES_DIR${RC}"
+        git -C "$DOTFILES_DIR" pull --ff-only
+    elif [ -e "$DOTFILES_DIR" ]; then
+        printf "%b\n" "${RED}$DOTFILES_DIR exists and is not a git checkout${RC}"
+        exit 1
+    else
+        printf "%b\n" "${CYAN}Cloning $DOTFILES_REPO -> $DOTFILES_DIR${RC}"
+        git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
+    fi
+
+    if [ ! -x "$DOTFILES_DIR/install.sh" ] && [ ! -f "$DOTFILES_DIR/install.sh" ]; then
+        printf "%b\n" "${RED}install.sh missing in $DOTFILES_DIR${RC}"
         exit 1
     fi
 
-    # Ensure GNU stow is installed
-    if ! command_exists stow; then
-        printf "%b\n" "${YELLOW}GNU stow is not installed.${RC}"
-        install_stow
-    fi
-
-    printf "%b\n" "${YELLOW}Note: Existing config files will be deleted and replaced with repo versions.${RC}"
-    printf "%b\n" "${YELLOW}No backups will be created - repo is source of truth.${RC}"
-    printf "%b\n" "${CYAN}Stowing all dotfiles to $HOME...${RC}"
-    
-    cd "$DOTFILES_DIR" || exit 1
-    
-    # Loop through each package directory and stow it
-    for dir in */; do
-        if [ -d "$dir" ]; then
-            package="${dir%/}"
-            printf "%b\n" "${YELLOW}  • $package${RC}"
-            # Remove old symlinks first
-            stow -D "$package" -t "$HOME" 2>/dev/null || true
-            # Force overwrite: adopt conflicts then restore repo version immediately
-            # This deletes existing files and creates symlinks to repo (no backups)
-            stow --adopt "$package" -t "$HOME" 2>&1 | grep -v "BUG in find_stowed_path" || true
-        fi
-    done
-    
-    # Restore repo versions (repo is source of truth, local changes discarded)
-    git restore . 2>/dev/null || true
-
-    printf "%b\n" "${GREEN}Done!${RC}"
+    printf "%b\n" "${YELLOW}Note: repo is source of truth. Existing local config files will be replaced with repo versions.${RC}"
+    sh "$DOTFILES_DIR/install.sh"
 }
 
 checkEnv
