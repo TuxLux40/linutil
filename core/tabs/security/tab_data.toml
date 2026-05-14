@@ -1,16 +1,64 @@
 name = "Security"
 
 [[data]]
+name = "Desktop Hardening"
+description = "Applies a GrapheneOS-inspired desktop hardening baseline by orchestrating the existing security scripts and new passive hardening modules. Prefers passive, desktop-safe defaults and GUI-manageable tooling where practical."
+script = "desktop-hardening.sh"
+task_list = "I K FM SS"
+
+[[data]]
 name = "AppArmor Setup"
 description = "Enables AppArmor by adding it to the kernel lsm= list. Autodetects the bootloader (Limine, systemd-boot, GRUB, rEFInd), installs the apparmor package, the extended profile set (apparmor.d / apparmor-profiles), builds AppAnvil GUI from the TuxLux40/AppAnvil fork, backs up edited configs, and enables apparmor.service."
 script = "apparmor-setup.sh"
 task_list = "I"
 
 [[data]]
+name = "Kernel Hardening"
+description = "Applies sysctl hardening for BPF, file protections, martian logging, and redirect handling, then blacklists uncommon network protocols. Skips settings that would interfere with Bluetooth, containers, virtualization, or Tailscale."
+script = "kernel-hardening.sh"
+task_list = "K FM"
+
+[[data]]
+name = "Process Hardening"
+description = "Disables core dumps and optionally enables hidepid=2 for stronger /proc isolation. hidepid remains opt-in because it can affect monitoring tools."
+script = "proc-hardening.sh"
+task_list = "FM SS"
+
+[[data]]
+name = "PAM Hardening"
+description = "Sets stronger password policy defaults with pwquality, yescrypt where appropriate, and stricter password aging and umask settings."
+script = "pam-hardening.sh"
+task_list = "I FM"
+
+[[data]]
+name = "Auditd Setup"
+description = "Installs auditd and deploys comprehensive baseline audit rules: file deletions, privilege escalation, sensitive file changes (passwd/shadow/sudoers), SSH configuration, kernel module operations, network monitoring, and system call auditing. Lynis-compatible."
+script = "auditd-setup.sh"
+task_list = "I SS"
+
+[[data]]
 name = "ClamAV"
 description = "Installs and configures ClamAV antivirus scanner for malware detection."
 script = "clamav-setup.sh"
 task_list = "I SS"
+
+[[data]]
+name = "SSH Hardening"
+description = "Hardens sshd_config with stricter forwarding, authentication, session, and logging defaults. Skipped automatically if sshd is not installed."
+script = "ssh-hardening.sh"
+task_list = "FM SS"
+
+[[data]]
+name = "USBGuard Setup"
+description = "Installs USBGuard and generates an allowlist from the devices currently attached. New USB devices will be blocked until explicitly authorized."
+script = "usbguard-setup.sh"
+task_list = "I SS"
+
+[[data]]
+name = "Login Banner"
+description = "Writes an authorization warning banner to local and SSH login banners and configures sshd to display it when present."
+script = "login-banner.sh"
+task_list = "FM SS"
 
 [[data]]
 name = "FirewallD Firewall Baselines (CTT)"
