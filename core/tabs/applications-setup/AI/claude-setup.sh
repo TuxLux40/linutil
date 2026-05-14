@@ -1,4 +1,3 @@
-
 #!/bin/sh -e
 
 . ../common-script.sh
@@ -16,14 +15,14 @@ installClaude() {
         printf "%b" "${YELLOW}Do you want to update Claude CLI? [y/N] ${RC}"
         read -r update_choice
         case "$update_choice" in
-            y | Y)
-                printf "%b\n" "${CYAN}Updating Claude CLI...${RC}"
-                curl -fsSL https://claude.ai/install.sh | bash
-                printf "%b\n" "${GREEN}Claude CLI updated successfully.${RC}"
-                ;;
-            *)
-                printf "%b\n" "${CYAN}Skipping update.${RC}"
-                ;;
+        y | Y)
+            printf "%b\n" "${CYAN}Updating Claude CLI...${RC}"
+            curl -fsSL https://claude.ai/install.sh | bash
+            printf "%b\n" "${GREEN}Claude CLI updated successfully.${RC}"
+            ;;
+        *)
+            printf "%b\n" "${CYAN}Skipping update.${RC}"
+            ;;
         esac
     else
         printf "%b\n" "${CYAN}Installing Claude CLI...${RC}"
