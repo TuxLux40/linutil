@@ -40,6 +40,5 @@ installExtra() {
 }
 
 checkEnv
-checkEscalationTool
 checkFlatpak
 installExtra

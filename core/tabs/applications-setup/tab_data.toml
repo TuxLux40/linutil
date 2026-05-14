@@ -538,12 +538,6 @@ script = "mybash-setup.sh"
 task_list = "I FM"
 
 [[data]]
-name = "DWM-Titus"
-description = "DWM is a dynamic window manager for X.\nIt manages windows in tiled, monocle and floating layouts.\nAll of the layouts can be applied dynamically, optimising the environment for the application in use and the task performed.\nThis command installs and configures DWM and a desktop manager.\nThe list of patches applied can be found in CTT's DWM repository\nhttps://github.com/ChrisTitusTech/dwm-titus"
-script = "dwmtitus-setup.sh"
-task_list = "I PFM SS"
-
-[[data]]
 name = "Fastfetch"
 description = "Fastfetch is a neofetch-like tool for fetching system information and displaying it prettily. It is written mainly in C, with performance and customizability in mind. This command installs fastfetch and configures from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash"
 script = "fastfetch-setup.sh"
@@ -630,12 +624,6 @@ name = "Rofi"
 description = "Rofi is a window switcher, run dialog, ssh-launcher and dmenu replacement that started as a clone of simpleswitcher, written by Sean Pringle and later expanded by Dave Davenport. This command installs and configures rofi with configuration from CTT's DWM repo. https://github.com/ChrisTitusTech/dwm-titus"
 script = "rofi-setup.sh"
 task_list = "I FM"
-
-[[data]]
-name = "Test Script Access"
-description = "Test entry for validating script access."
-script = "test-script-access.sh"
-task_list = "FM"
 
 [[data]]
 name = "ZSH Prompt"

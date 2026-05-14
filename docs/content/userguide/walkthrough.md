@@ -139,7 +139,6 @@ https://github.com/ChrisTitusTech/dwm-titus
 - **Linutil Updater**: Updates your local Linutil crate installation.
 - **OpenRGB Setup**: Installs OpenRGB, udev rules, i2c modules, and optional autostart entries.
 - **Rofi**: Rofi is a window switcher, run dialog, ssh-launcher and dmenu replacement that started as a clone of simpleswitcher, written by Sean Pringle and later expanded by Dave Davenport. This command installs and configures rofi with configuration from CTT's DWM repo. https://github.com/ChrisTitusTech/dwm-titus
-- **Test Script Access**: Test entry for validating script access.
 - **ZSH Prompt**: The Z shell is a Unix shell that can be used as an interactive login shell and as a command interpreter for shell scripting. Zsh is an extended Bourne shell with many improvements, including some features of Bash, ksh, and tcsh. This command installs ZSH prompt and provides basic configuration.
 
 ## Gaming
@@ -147,35 +146,50 @@ https://github.com/ChrisTitusTech/dwm-titus
 
 ### Emulators
 
-- **Blastem**: A Genesis emulator. NO Games are included
+
+### Nintendo Emulators
+
 - **bsnes**: Super Nintendo Emulator. NO Games are included
 - **Dolphin Emulator**: GameCube and Wii Emulator. NO Games are included
 - **EmuDeck**: EmuDeck installer for Steam Deck and handhelds. NO Games are included
-- **Flycast**: A Dreamcase emulator. NO Games are included
 - **Gopher 64**: N64 Emulator. NO Games are included
-- **Kronos**: A Sega Saturn emulator. NO Games are included
 - **MelonDS**: Nintendo DS and DSi Emulator. NO Games are included
 - **Mesen2**: Nintendo emulator. NO Games are included
 - **mGBA**: Nintendo Game Boy Advance Emulator. NO Games are included
 - **Mupen 64 Plus**: N64 Emulator. NO Games are included
-- **PCSX**: A Playstation emulator. NO Games or Bios' are included
-- **PCSX2**: A Playstation 2 emulator. NO Games or Bios' are included
-- **Play!**: An Experimental Playstation 2 emulator. NO Games or Bios' are included
-- **RetroArch Game Emulator**: Frontend for emulators, game engines and media players. NO Games or Bios' are included
-- **RPCS3**: A Playstation 3 emulator. NO Games or Bios' are included
 - **Ryujinx**: Nintendo Switch emulator. NO Games are included
 - **snes9x**: Super Nintendo Emulator. NO Games are included
+
+### PlayStation Emulators
+
+- **PCSX2**: A Playstation 2 emulator. NO Games or Bios' are included
+- **Play!**: An Experimental Playstation 2 emulator. NO Games or Bios' are included
+- **RPCS3**: A Playstation 3 emulator. NO Games or Bios' are included
+
+### Sega Emulators
+
+- **Blastem**: A Genesis emulator. NO Games are included
+- **Flycast**: A Dreamcase emulator. NO Games are included
+- **Kronos**: A Sega Saturn emulator. NO Games are included
+
+### Multi-System Emulators
+
+- **RetroArch Game Emulator**: Frontend for emulators, game engines and media players. NO Games or Bios' are included
+
+### Xbox Emulators
+
 - **XEMU**: An Original Xbox emulator. NO Games or Bios' are included
 - **Xenia**: An Experimental Xbox 360 emulator. NO Games or Bios' are included
 - **Yabause**: A Sega Saturn emulator
 
-### Related Tools and Setups
+### Tools and Setups
 
 - **Auto CPU Frequency**: Automatic CPU speed & power optimizer.
 https://github.com/AdnanHodzic/auto-cpufreq
 - **Auto Mount Drive**: This utility is designed to help with automating the process of mounting a drive on to your system.
 - **Bottles**: Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications.
-- **Gaming Dependencies**: Run the Gaming Dependencies installer (same script kept under System Setup).
+- **Gaming Dependencies**: This script is designed to handle the installation of gaming dependencies across different Linux distributions.
+- **General GPU Drivers**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
 - **Nvidia Drivers & Hardware Acceleration**: Opens the Arch-specific NVIDIA installer (kept under System Setup / Arch).
 - **Waydroid**: Waydroid is an emulator that allows you to run Android apps and games on Linux.
 - **Arc Raiders Titus Mods**: Applies optimized game configuration files from ChrisTitusTech/arc-raiders. Sets Engine.ini to read-only to prevent the game from overwriting the settings, disables motion blur, and enables VRR optimizations.
@@ -259,8 +273,8 @@ https://github.com/AdnanHodzic/auto-cpufreq
 - **Gaming Dependencies**: This script is designed to handle the installation of gaming dependencies across different Linux distributions
 - **Git Config**: Configures global Git username, email, and GPG signing.
 - **Global Theme**: This script is designed to handle the installation and configuration of global theming
-- **NeoWin KDE Theme**: Installs the NeoWin Windows 11-inspired KDE Plasma theme with automatic dark/light switching, Willow Blur window decorations, WinSur cursors, and a Win11 sound pack.
 - **GPU Driver**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
+- **NeoWin KDE Theme**: Installs the NeoWin Windows 11-inspired KDE Plasma theme with automatic dark/light switching, Willow Blur window decorations, WinSur cursors, and a Win11 sound pack.
 - **Remove Snaps**: This script is designed to remove snap
 - **TTY Fonts**: This Script will set the default TTY font to Terminus size 32 Bold
 
@@ -290,7 +304,6 @@ https://github.com/AdnanHodzic/auto-cpufreq
 
 ### User Account Manager
 
-- **Auto Mount Drive**: This utility is designed to help with automating the process of mounting a drive on to your system.
 - **Bluetooth Manager**: This utility is designed to manage bluetooth in your system
 - **Locale Setup (DE)**: Configures system locale with English UI and German formats (time, date, currency) plus German keyboard layout.
 - **Locale Setup (US)**: Configures system locale with US English settings.

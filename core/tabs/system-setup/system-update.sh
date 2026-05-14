@@ -5,7 +5,7 @@
 fastUpdate() {
     case "$PACKAGER" in
         pacman)
-            "$AUR_HELPER" -S --needed --noconfirm rate-mirrors-bin
+            "$AUR_HELPER" -S --needed --noconfirm rate-mirrors
 
             printf "%b\n" "${YELLOW}Generating a new list of mirrors using rate-mirrors. This process may take a few seconds...${RC}"
 
@@ -19,7 +19,7 @@ fastUpdate() {
                 dtype_local="arch"
             fi
 
-            if ! "$ESCALATION_TOOL" rate-mirrors --top-mirrors-number-to-retest=5 --disable-comments --save /etc/pacman.d/mirrorlist --allow-root "$dtype_local" > /dev/null || [ ! -s "/etc/pacman.d/mirrorlist" ]; then
+            if ! "$ESCALATION_TOOL" rate-mirrors --disable-comments --allow-root --save=/etc/pacman.d/mirrorlist "$dtype_local" --max-delay=21600 > /dev/null || [ ! -s "/etc/pacman.d/mirrorlist" ]; then
                 printf "%b\n" "${RED}Rate-mirrors failed, restoring backup.${RC}"
                 "$ESCALATION_TOOL" cp /etc/pacman.d/mirrorlist.bak /etc/pacman.d/mirrorlist
             fi
