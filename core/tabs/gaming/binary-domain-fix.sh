@@ -35,11 +35,17 @@ find_game_dir() {
 find_localconfig() {
     # Prefer the account that already has a Binary Domain entry
     for _cfg in "$HOME/.local/share/Steam/userdata"/*/config/localconfig.vdf; do
-        [ -f "$_cfg" ] && grep -q '"203750"' "$_cfg" && { LOCALCONFIG="$_cfg"; return 0; }
+        [ -f "$_cfg" ] && grep -q '"203750"' "$_cfg" && {
+            LOCALCONFIG="$_cfg"
+            return 0
+        }
     done
     # Fall back to any available localconfig
     for _cfg in "$HOME/.local/share/Steam/userdata"/*/config/localconfig.vdf; do
-        [ -f "$_cfg" ] && { LOCALCONFIG="$_cfg"; return 0; }
+        [ -f "$_cfg" ] && {
+            LOCALCONFIG="$_cfg"
+            return 0
+        }
     done
     return 1
 }
@@ -83,7 +89,7 @@ if ! command_exists protontricks; then
     exit 1
 fi
 
-if ! pgrep -x steam > /dev/null 2>&1; then
+if ! pgrep -x steam >/dev/null 2>&1; then
     printf "%b\n" "${RED}Steam must be RUNNING for Steps 1 and 2.${RC}"
     printf "%b\n" "${YELLOW}Start Steam, then re-run this script.${RC}"
     exit 1
@@ -189,7 +195,7 @@ read -r _unused
 
 # Wait up to 60 s for Steam to exit
 _waited=0
-while pgrep -x steam > /dev/null 2>&1; do
+while pgrep -x steam >/dev/null 2>&1; do
     if [ "$_waited" -ge 60 ]; then
         printf "%b\n" "${RED}Steam is still running after 60 s. Close it manually and re-run.${RC}"
         exit 1
