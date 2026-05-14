@@ -207,6 +207,12 @@ script = "arc-raiders-mod.sh"
 task_list = "FM"
 
 [[data]]
+name = "Binary Domain Fix"
+description = "Fixes Binary Domain (AppID 203750) on Linux/Proton. Installs XAudio2 via protontricks (sound fix), runs BinaryDomainConfiguration.exe to write a valid GPU GUID and restore max graphics, then patches localconfig.vdf with the correct launch options and disables Steam Input (gamepad fix). Steps 1–2 require Steam running; Step 3 requires Steam closed."
+script = "binary-domain-fix.sh"
+task_list = "FM"
+
+[[data]]
 name = "Deckify"
 description = "Installs Deckify for Steam Deck customization."
 script = "deckify-setup.sh"
