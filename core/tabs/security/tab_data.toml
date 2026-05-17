@@ -31,6 +31,12 @@ script = "pam-hardening.sh"
 task_list = "I FM"
 
 [[data]]
+name = "AIDE Setup"
+description = "Installs AIDE (Advanced Intrusion Detection Environment), validates the configuration, initialises the baseline database, and enables the daily aidecheck.timer (or a cron fallback) for ongoing filesystem integrity monitoring. Resolves the FINT-4316 Lynis warning."
+script = "aide-setup.sh"
+task_list = "I SS"
+
+[[data]]
 name = "Auditd Setup"
 description = "Installs auditd and deploys comprehensive baseline audit rules: file deletions, privilege escalation, sensitive file changes (passwd/shadow/sudoers), SSH configuration, kernel module operations, network monitoring, and system call auditing. Lynis-compatible."
 script = "auditd-setup.sh"

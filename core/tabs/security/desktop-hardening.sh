@@ -92,6 +92,9 @@ main() {
     run_sibling_script "Applying auditd baseline..." "auditd-setup.sh"
     record_item "$APPLIED_FILE" "auditd rules for auditing and incident visibility"
 
+    run_sibling_script "Setting up AIDE filesystem integrity monitoring..." "aide-setup.sh"
+    record_item "$APPLIED_FILE" "AIDE baseline database and daily integrity check timer"
+
     run_sibling_script "Applying ClamAV baseline..." "clamav-setup.sh"
     record_item "$APPLIED_FILE" "ClamAV with the ClamUI graphical frontend"
 
@@ -119,9 +122,6 @@ main() {
     record_item "$SKIPPED_FILE" "Login banners remain optional because they are more compliance-focused than desktop-focused"
 
     record_item "$RECOMMENDED_FILE" "Use AppAnvil for AppArmor profile tuning and ClamUI for malware scans"
-    record_item "$RECOMMENDED_FILE" "Use Flatpak plus Flatseal to reduce application access to the filesystem and desktop portals"
-    record_item "$RECOMMENDED_FILE" "Use Firejail for browsers, PDF readers, messaging apps, and other untrusted content handlers; prefer Firetools when your distro packages it"
-    record_item "$RECOMMENDED_FILE" "Use Lynis for periodic hardening audits and AIDE for filesystem integrity monitoring"
     record_item "$RECOMMENDED_FILE" "Use Timeshift or Snapper with a GUI such as Btrfs Assistant for rollback and recovery"
     record_item "$RECOMMENDED_FILE" "Prefer full-disk encryption with LUKS for at-rest protection when the system is installed or reinstalled"
     record_item "$RECOMMENDED_FILE" "Keep USBGuard and YubiKey PAM as opt-in upgrades once the baseline is stable on your machine"
