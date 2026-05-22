@@ -81,7 +81,7 @@ echo
 echo "Uploading $ASSET to release $tag..."
 if ! gh release view "$tag" >/dev/null 2>&1; then
     echo "Release $tag does not exist — creating it."
-    gh release create "$tag" --prerelease --generate-notes --title "Pre-Release $tag"
+    gh release create "$tag" --generate-notes --title "Release $tag"
 fi
 gh release upload "$tag" "$DIST_DIR/$ASSET" --clobber
 
