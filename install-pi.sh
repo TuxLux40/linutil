@@ -11,9 +11,9 @@
 #   LINUTIL_REPO=tuxlux40/linutil
 #   LINUTIL_INSTALL_DIR=/usr/local/bin
 {
-rc='\033[0m'
-red='\033[0;31m'
-green='\033[0;32m'
+rc=$(printf '\033[0m')
+red=$(printf '\033[0;31m')
+green=$(printf '\033[0;32m')
 
 check() {
     exit_code=$1
