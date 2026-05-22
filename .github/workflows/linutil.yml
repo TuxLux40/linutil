@@ -2,6 +2,9 @@ name: LinUtil Release
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - '[0-9][0-9].[0-9]*.[0-9]*'
 
 permissions:
   contents: write
@@ -53,7 +56,11 @@ jobs:
       - name: Extract Version
         id: extract_version
         run: |
-          version=$(date +"%Y.%m.%d")
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            version="${GITHUB_REF_NAME}"
+          else
+            version=$(date +"%Y.%m.%d")
+          fi
           echo "version=$version" >> $GITHUB_ENV
         shell: bash
 
@@ -64,8 +71,8 @@ jobs:
           tag_name: ${{ env.version }}
           name: Pre-Release ${{ env.version }}
           body: |
-            ![GitHub Downloads (specific asset, specific tag)](https://img.shields.io/github/downloads/ChrisTitusTech/linutil/${{ env.version }}/linutil)
-            ![GitHub Downloads (specific asset, specific tag)](https://img.shields.io/github/downloads/ChrisTitusTech/linutil/${{ env.version }}/linutil-aarch64)
+            ![GitHub Downloads (specific asset, specific tag)](https://img.shields.io/github/downloads/${{ github.repository }}/${{ env.version }}/linutil)
+            ![GitHub Downloads (specific asset, specific tag)](https://img.shields.io/github/downloads/${{ github.repository }}/${{ env.version }}/linutil-aarch64)
 
           append_body: true
           generate_release_notes: true
