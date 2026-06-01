@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-. ../common-script.sh
+. ../../common-script.sh
 
 checkRoot() {
     if [ "$(id -u)" -eq 0 ]; then
