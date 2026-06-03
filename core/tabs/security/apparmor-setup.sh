@@ -439,13 +439,60 @@ case "$BOOTLOADER" in
         ;;
 esac
 
+# --- Configure AppArmor parser cache ------------------------------------------
+#
+# Writing a binary cache cuts boot time significantly when many profiles are
+# loaded: the parser reads the compiled cache instead of reparsing text files
+# on every boot. Applied for all distros, not just Arch.
+
+configure_apparmor_cache() {
+    PARSER_CONF="/etc/apparmor/parser.conf"
+    if [ ! -f "$PARSER_CONF" ]; then
+        return
+    fi
+    CHANGED=0
+    if ! grep -q '^cache-loc' "$PARSER_CONF"; then
+        mkdir -p /etc/apparmor/earlypolicy/
+        printf '\n# Added by linutil apparmor-setup\ncache-loc /etc/apparmor/earlypolicy/\n' >> "$PARSER_CONF"
+        CHANGED=1
+    fi
+    if ! grep -q '^write-cache' "$PARSER_CONF"; then
+        printf 'write-cache\n' >> "$PARSER_CONF"
+        CHANGED=1
+    fi
+    if [ "$CHANGED" = "1" ]; then
+        printf "%b\n" "${GREEN}✓ AppArmor parser cache configured (speeds up boot).${RC}"
+    fi
+}
+
 # --- Install extended profile set --------------------------------------------
 #
 # Base apparmor pkg on most distros ships only a small profile set. Extended
 # profile packages cover desktop apps (browsers, chat, editors, etc).
 # All installed in complain mode by default — log-only, no breakage.
+#
+# WARNING: Extended sets can contain 500–2000+ profiles. Without a compiled
+# cache the first boot after installation may pause for 1–3 minutes while
+# AppArmor parses them. This script pre-populates the cache automatically to
+# minimise that delay, but the first boot will still be slightly slower than
+# normal. Subsequent boots use the binary cache and are fast.
 
 install_extended_profiles() {
+    printf "\n"
+    printf "%b\n" "${YELLOW}Extended AppArmor profiles (500–2000+ rules for browsers, editors, etc.)${RC}"
+    printf "%b\n" "${YELLOW}increase security coverage but can slow the first post-install boot by${RC}"
+    printf "%b\n" "${YELLOW}1–3 minutes while profiles are compiled. The cache built afterwards${RC}"
+    printf "%b\n" "${YELLOW}makes all subsequent boots fast.${RC}"
+    printf "%b" "Install extended profiles? [y/N]: "
+    read -r ext_answer
+    case "$ext_answer" in
+        [Yy]|[Yy][Ee][Ss]) ;;
+        *)
+            printf "%b\n" "${CYAN}Skipping extended profiles. Base profile set only.${RC}"
+            return
+            ;;
+    esac
+
     case "$PACKAGER" in
         pacman)
             # apparmor.d-git: roddhjav/apparmor.d, ~2000 profiles.
@@ -470,12 +517,6 @@ install_extended_profiles() {
                     printf "%b\n" "${RED}Cannot install AUR package as root without SUDO_USER. Run '${AUR_HELPER} -S apparmor.d-git' as your user.${RC}"
                 fi
             fi
-            # apparmor.d requires cache-loc configured for early policy.
-            if [ -f /etc/apparmor/parser.conf ] && ! grep -q '^cache-loc' /etc/apparmor/parser.conf; then
-                printf "%b\n" "${YELLOW}Configuring apparmor parser cache-loc for early policy...${RC}"
-                mkdir -p /etc/apparmor/earlypolicy/
-                printf '\n# Added by linutil apparmor-setup\ncache-loc /etc/apparmor/earlypolicy/\nwrite-cache\n' >> /etc/apparmor/parser.conf
-            fi
             ;;
         apt|apt-get)
             printf "%b\n" "${YELLOW}Installing apparmor-profiles and apparmor-profiles-extra...${RC}"
@@ -496,8 +537,17 @@ install_extended_profiles() {
     esac
 }
 
-printf "%b\n" "${YELLOW}Installing extended AppArmor profile set...${RC}"
+printf "%b\n" "${YELLOW}Configuring AppArmor parser cache...${RC}"
+configure_apparmor_cache
+
 install_extended_profiles
+
+# Pre-populate the binary cache so the first reboot is not slow.
+if command -v apparmor_parser > /dev/null 2>&1 && [ -d /etc/apparmor.d ]; then
+    printf "%b\n" "${YELLOW}Pre-compiling AppArmor profiles into cache (this may take a moment)...${RC}"
+    apparmor_parser --write-cache /etc/apparmor.d/ 2>/dev/null || true
+    printf "%b\n" "${GREEN}✓ Profile cache populated.${RC}"
+fi
 
 # --- Install AppAnvil GUI from fork ------------------------------------------
 #
