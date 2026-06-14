@@ -21,6 +21,12 @@ description = "Installs Honcho AI memory (honcho-cli, config wizard, optional Cl
 script = "AI/honcho-setup.sh"
 task_list = "I"
 
+[[data.entries]]
+name = "MCP Jungle"
+description = "Connects Claude Code and VS Code/Copilot to a self-hosted MCP Jungle gateway (URL prompted at runtime — no IP hardcoded)."
+script = "AI/mcpjungle-setup.sh"
+task_list = "I"
+
 [[data]]
 name = "Base Packages"
 

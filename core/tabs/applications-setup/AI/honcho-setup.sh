@@ -588,4 +588,4 @@ main() {
     printf "\n"
 }
 
-main "$@"
+case "$0" in *honcho-setup.sh) main "$@" ;; esac
