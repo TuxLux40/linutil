@@ -25,13 +25,13 @@ setupClaudeCode() {
             return 0
         fi
         if [ -n "$JUNGLE_TOKEN" ]; then
-            if claude mcp add mcpjungle --transport http --url "$JUNGLE_URL" \
+            if claude mcp add mcpjungle --scope user --transport http "$JUNGLE_URL" \
                     --header "Authorization: Bearer $JUNGLE_TOKEN" 2>/dev/null; then
                 printf "%b\n" "${GREEN}Claude Code: mcpjungle registered via CLI.${RC}"
                 return 0
             fi
         else
-            if claude mcp add mcpjungle --transport http --url "$JUNGLE_URL" 2>/dev/null; then
+            if claude mcp add mcpjungle --scope user --transport http "$JUNGLE_URL" 2>/dev/null; then
                 printf "%b\n" "${GREEN}Claude Code: mcpjungle registered via CLI.${RC}"
                 return 0
             fi
