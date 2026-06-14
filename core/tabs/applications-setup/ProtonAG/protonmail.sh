@@ -68,9 +68,13 @@ install_deb_rpm() {
 
 install_arch() {
     if [ -n "$AUR_HELPER" ]; then
-        printf "%b\n" "${YELLOW}Installing ${APP_NAME} from AUR (proton-mail-desktop-bin)...${RC}"
-        "$AUR_HELPER" -S --needed --noconfirm proton-mail-desktop-bin
-        return 0
+        printf "%b\n" "${YELLOW}Installing ${APP_NAME} from AUR (proton-mail-bin)...${RC}"
+        if "$AUR_HELPER" -S --needed --noconfirm proton-mail-bin; then
+            if command_exists proton-mail || command_exists protonmail; then
+                return 0
+            fi
+            printf "%b\n" "${RED}AUR helper reported success but ${APP_NAME} binary not found.${RC}"
+        fi
     fi
     return 1
 }

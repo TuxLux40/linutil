@@ -556,18 +556,6 @@ script = "setup-flatpak.sh"
 task_list = "I"
 
 [[data]]
-name = "Flatpak Backup"
-description = "Generates a Flatpak restore script from current remotes and installed apps."
-script = "flatpak-backup.sh"
-task_list = "FM"
-
-[[data]]
-name = "Flatpak Restore"
-description = "Restores Flatpak remotes and apps from a backup script."
-script = "flatpak-restore.sh"
-task_list = "FM"
-
-[[data]]
 name = "Ghostty"
 description = "Ghostty is a terminal emulator that has embedded web technologies, allowing for a highly customizable and visually appealing terminal experience."
 script = "ghostty-setup.sh"

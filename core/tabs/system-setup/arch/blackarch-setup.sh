@@ -4,7 +4,7 @@
 
 set -eu
 
-. "$(dirname "$(realpath "$0")")/../../../../common-script.sh"
+. "$(dirname "$(realpath "$0")")/../../common-script.sh"
 
 checkArchEnv() {
     if ! command -v pacman >/dev/null 2>&1; then
