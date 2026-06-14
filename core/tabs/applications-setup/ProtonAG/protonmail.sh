@@ -70,10 +70,10 @@ install_arch() {
     if [ -n "$AUR_HELPER" ]; then
         printf "%b\n" "${YELLOW}Installing ${APP_NAME} from AUR (proton-mail-bin)...${RC}"
         if "$AUR_HELPER" -S --needed --noconfirm proton-mail-bin; then
-            if command_exists proton-mail || command_exists protonmail; then
+            if pacman -Qq proton-mail-bin > /dev/null 2>&1; then
                 return 0
             fi
-            printf "%b\n" "${RED}AUR helper reported success but ${APP_NAME} binary not found.${RC}"
+            printf "%b\n" "${RED}AUR helper reported success but proton-mail-bin not found in pacman database.${RC}"
         fi
     fi
     return 1
