@@ -15,6 +15,12 @@ description = "Installs Claude Code Router with optional Ollama integration."
 script = "AI/claude-code-router.sh"
 task_list = "I"
 
+[[data.entries]]
+name = "Honcho"
+description = "Installs Honcho AI memory (honcho-cli, config wizard, optional Claude Code plugin/skills/MCP server and agent hooks)."
+script = "AI/honcho-setup.sh"
+task_list = "I"
+
 [[data]]
 name = "Base Packages"
 
