@@ -80,6 +80,18 @@ ensureJq() {
 # Install honcho-cli
 # ---------------------------------------------------------------------------
 
+# honcho-cli ships without 'click' — inject it into the tool's venv.
+# Upstream bug; safe to re-run (pip is idempotent).
+fixHonchoCliDeps() {
+    HONCHO_PYTHON="$HOME/.local/share/uv/tools/honcho-cli/bin/python"
+    if [ -x "$HONCHO_PYTHON" ]; then
+        if ! "$HONCHO_PYTHON" -c "import click" 2>/dev/null; then
+            printf "%b\n" "${CYAN}Patching missing 'click' dep in honcho-cli venv...${RC}"
+            uv pip install click --python "$HONCHO_PYTHON"
+        fi
+    fi
+}
+
 installHonchoCli() {
     printf "%b\n" "${CYAN}Checking Honcho CLI...${RC}"
     if command_exists honcho; then
@@ -90,6 +102,7 @@ installHonchoCli() {
             y | Y)
                 printf "%b\n" "${CYAN}Updating honcho-cli...${RC}"
                 uv tool upgrade honcho-cli 2>/dev/null || uv tool install --upgrade honcho-cli
+                fixHonchoCliDeps
                 printf "%b\n" "${GREEN}honcho-cli updated.${RC}"
                 ;;
             *) printf "%b\n" "${CYAN}Skipping update.${RC}" ;;
@@ -107,6 +120,7 @@ installHonchoCli() {
                 exit 1
             fi
         fi
+        fixHonchoCliDeps
         printf "%b\n" "${GREEN}honcho-cli installed.${RC}"
     fi
 }
