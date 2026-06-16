@@ -71,7 +71,8 @@ configureClamAV() {
       "MaxFiles 10000" \
       "MaxFileSize 25M" \
       "MaxScanSize 100M" \
-      "ConcurrentDatabaseReload no"; do
+      "ConcurrentDatabaseReload no" \
+      "OnAccessScanning no"; do
       key="${setting%% *}"
       "$ESCALATION_TOOL" sed -i "/^#*[[:space:]]*${key}[[:space:]]/d" "$CLAMD_CONF"
       printf '%s\n' "$setting" | "$ESCALATION_TOOL" tee -a "$CLAMD_CONF" >/dev/null
@@ -85,18 +86,27 @@ enableServices() {
       return
    fi
 
-   # Only enable the signature updater — NOT clamav-daemon, which loads the full
-   # DB into RAM (~1-2 GB) and stays resident. Enable it manually if you need
-   # on-access scanning: sudo systemctl enable --now clamav-daemon
-   printf "%b\n" "${YELLOW}Enabling ClamAV signature update service...${RC}"
+   printf "%b\n" "${YELLOW}Enabling ClamAV services...${RC}"
+
+   # Enable signature updater (freshclam)
    for svc in clamav-freshclam.service freshclam.service; do
       if systemctl list-unit-files 2>/dev/null | grep -q "^$svc"; then
          "$ESCALATION_TOOL" systemctl enable --now "$svc"
          printf "%b\n" "${GREEN}Enabled $svc.${RC}"
-         return
+         break
       fi
    done
-   printf "%b\n" "${YELLOW}No freshclam systemd unit found to enable.${RC}"
+
+   # Enable the socket daemon — it loads the DB once and serves on-demand scan
+   # requests efficiently. On-access scanning (clamonacc) is disabled via clamd.conf
+   # so the daemon is idle and uses no CPU until a scan is requested.
+   for svc in clamav-daemon.service clamd.service; do
+      if systemctl list-unit-files 2>/dev/null | grep -q "^$svc"; then
+         "$ESCALATION_TOOL" systemctl enable --now "$svc"
+         printf "%b\n" "${GREEN}Enabled $svc.${RC}"
+         break
+      fi
+   done
 }
 
 installClamUI() {
@@ -136,5 +146,5 @@ installClamUI
 showStatus
 
 printf "%b\n" "${GREEN}Setup complete.${RC}"
-printf "%b\n" "${YELLOW}On-demand scanning is ready. In ClamUI choose the 'System ClamAV' backend.${RC}"
-printf "%b\n" "${YELLOW}To enable the background daemon (uses ~1-2 GB RAM): sudo systemctl enable --now clamav-daemon${RC}"
+printf "%b\n" "${YELLOW}In ClamUI choose the 'System ClamAV' backend and use socket /run/clamav/clamd.ctl.${RC}"
+printf "%b\n" "${YELLOW}The daemon is idle between scans. On-access scanning (clamonacc) is disabled — that was the CPU hog.${RC}"
