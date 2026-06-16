@@ -62,3 +62,25 @@ else
     printf "Error: Failed to enable GPG signing\n"
     exit 1
 fi
+
+# ── gpg-agent SSH support ──────────────────────────────────────────────────
+# Wires the existing GPG [A] authentication subkey into gpg-agent's SSH
+# interface so git@github.com remotes work. No new keys are created.
+
+GNUPGHOME="${GNUPGHOME:-$HOME/.gnupg}"
+
+if ! grep -q "enable-ssh-support" "$GNUPGHOME/gpg-agent.conf" 2>/dev/null; then
+    printf "enable-ssh-support\n" >> "$GNUPGHOME/gpg-agent.conf"
+fi
+
+AUTH_KEYGRIP="$(gpg --with-keygrip --list-secret-keys CE3E8BC6DF4C181B8F7737FB7D3720B9826A757B 2>/dev/null | \
+    awk '/\[A\]/{found=1} found && /Keygrip/{print $3; exit}')"
+
+if [ -n "$AUTH_KEYGRIP" ] && ! grep -q "$AUTH_KEYGRIP" "$GNUPGHOME/sshcontrol" 2>/dev/null; then
+    printf "%s\n" "$AUTH_KEYGRIP" >> "$GNUPGHOME/sshcontrol"
+fi
+
+gpgconf --kill gpg-agent 2>/dev/null || true
+gpgconf --launch gpg-agent 2>/dev/null || true
+
+printf "GPG agent configured for SSH authentication\n"
