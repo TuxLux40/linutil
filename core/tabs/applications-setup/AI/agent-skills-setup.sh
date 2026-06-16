@@ -66,6 +66,13 @@ printf "%b\n" "${YELLOW}Installing agent skills globally (Claude Code, Copilot, 
 
 # ── skills.sh / public HTTPS repos ────────────────────────────────────────────
 
+# Oliver's own skills
+add_skill "TuxLux40/steam-debugger"    "*"
+add_skill "TuxLux40/kde-theming-skill" "*"
+
+# Honcho memory platform skills
+add_skill "plastic-labs/honcho" "*"
+
 # Anthropic example skills
 add_skill "anthropics/skills" "frontend-design"
 add_skill "anthropics/skills" "skill-creator"
