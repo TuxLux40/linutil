@@ -119,12 +119,6 @@ https://github.com/ChrisTitusTech/neovim
 - **Atuin**: Installs Atuin and imports shell history.
 - **Bash Prompt**: The .bashrc file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. This command configures the key sections and functionalities defined in the .bashrc file from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash
 - **Docker**: Docker is an open platform that uses OS-level virtualization to deliver software in packages called containers.
-- **DWM-Titus**: DWM is a dynamic window manager for X.
-It manages windows in tiled, monocle and floating layouts.
-All of the layouts can be applied dynamically, optimising the environment for the application in use and the task performed.
-This command installs and configures DWM and a desktop manager.
-The list of patches applied can be found in CTT's DWM repository
-https://github.com/ChrisTitusTech/dwm-titus
 - **Fastfetch**: Fastfetch is a neofetch-like tool for fetching system information and displaying it prettily. It is written mainly in C, with performance and customizability in mind. This command installs fastfetch and configures from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash
 - **Flatpak / Flathub**: Flatpak is a universal application sandbox for Linux that uses isolated packages from Flathub to prevent conflicts and system alterations, while alleviating dependency concerns. This command installs Flatpak and adds the Flathub repository
 - **Flatpak Backup**: Generates a Flatpak restore script from current remotes and installed apps.
@@ -171,10 +165,6 @@ https://github.com/ChrisTitusTech/dwm-titus
 - **Flycast**: A Dreamcase emulator. NO Games are included
 - **Kronos**: A Sega Saturn emulator. NO Games are included
 
-### Multi-System Emulators
-
-- **RetroArch Game Emulator**: Frontend for emulators, game engines and media players. NO Games or Bios' are included
-
 ### Xbox Emulators
 
 - **XEMU**: An Original Xbox emulator. NO Games or Bios' are included
@@ -187,16 +177,26 @@ https://github.com/ChrisTitusTech/dwm-titus
 https://github.com/AdnanHodzic/auto-cpufreq
 - **Auto Mount Drive**: This utility is designed to help with automating the process of mounting a drive on to your system.
 - **Bottles**: Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications.
-- **Gaming Dependencies**: This script is designed to handle the installation of gaming dependencies across different Linux distributions.
+- **Gaming Dependencies**: Installs gaming runtime dependencies across distributions. Steam and Lutris are managed separately from Game Launchers.
+- **ProtonPlus**: Manage ProtonPlus installation with native packages first and Flatpak fallback.
+- **ProtonUp-Qt**: Manage ProtonUp-Qt installation with native packages first and Flatpak fallback.
 - **General GPU Drivers**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
 - **Nvidia Drivers & Hardware Acceleration**: Opens the Arch-specific NVIDIA installer (kept under System Setup / Arch).
 - **Waydroid**: Waydroid is an emulator that allows you to run Android apps and games on Linux.
+
+### Game Launchers
+
+- **Steam**: Manage Steam launcher installation with Install, Uninstall, or Abort actions.
+- **Lutris**: Manage Lutris launcher installation with Install, Uninstall, or Abort actions.
+- **RetroArch**: Manage RetroArch launcher installation with Install, Uninstall, or Abort actions.
+- **Heroic**: Manage Heroic launcher installation with Install, Uninstall, or Abort actions.
 - **Arc Raiders Titus Mods**: Applies optimized game configuration files from ChrisTitusTech/arc-raiders. Sets Engine.ini to read-only to prevent the game from overwriting the settings, disables motion blur, and enables VRR optimizations.
 - **Deckify**: Installs Deckify for Steam Deck customization.
 - **Decky Plugin Loader (Install)**: Installs Decky Plugin Loader.
 - **Decky Plugin Loader (Remove)**: Removes Decky Plugin Loader.
 - **Diablo II Resurrected Loot Filter**: Installs a loot filter for Diablo II Resurrected from ChrisTitusTech/d2r-loot-filter. Highlights high runes and other valuable items. Works on Battle.net and single player. After install, add launch option: -mod lootfilter -txt
 - **Fallout 76 INI and Mods**: Installs a custom Fallout76Custom.ini and mods from ChrisTitusTech/fallout76-configs via Steam. Improves performance and stability with quality of life tweaks.
+- **Starfield Titus INI and Mods**: Installs custom Starfield mods from ChrisTitusTech/starfield-config via steam.
 - **Sunshine**: Installs Sunshine game streaming host.
 
 ## Security
@@ -227,9 +227,16 @@ https://github.com/AdnanHodzic/auto-cpufreq
 
 - **Arch Server Setup**: This command installs a minimal arch server setup under 5 minutes.
 - **BlackArch Setup**: Installs BlackArch repositories and tools.
+- **DWM-Titus**: DWM is a dynamic window manager for X.
+It manages windows in tiled, monocle and floating layouts.
+All of the layouts can be applied dynamically, optimising the environment for the application in use and the task performed.
+This command installs and configures DWM and a desktop manager.
+The list of patches applied can be found in CTT's DWM repository
+https://github.com/ChrisTitusTech/dwm-titus
 - **Hyprland JaKooLit**: Install JaKooLit's Hyprland configuration
 - **Install Chaotic-AUR Repository**: Chaotic-AUR provides prebuilt binaries for popular AUR packages, saving compilation time. To know more visit: https://aur.chaotic.cx/
 - **Linux Neptune for SteamDeck**: Valve's fork of Linux Kernel for the SteamDeck
+- **Install CachyOS Repository and Kernel**: To deliver a performance-optimized distribution, CachyOS recompiles Arch Linux packages specifically for the x86-64-v3, x86-64-v4, and Zen4+ architectures.
 - **Nvidia Drivers & Hardware Acceleration**: This script installs and configures nvidia drivers with Hardware Acceleration.
 - **Omarchy Rice by DHH**: Simplified Hyprland configuration by DHH the ruby on rails dude.
 - **Paru AUR Helper**: Paru is your standard pacman wrapping AUR helper with lots of features and minimal interaction. To know more about AUR helpers visit: https://wiki.archlinux.org/title/AUR_helpers
@@ -269,6 +276,7 @@ https://github.com/AdnanHodzic/auto-cpufreq
 - **Dotfiles Setup**: Symlinks selected dotfiles packages from this repository into your home directory.
 - **Full System Cleanup**: This script is designed to remove unnecessary packages, clean old cache files, remove temporary files, and to empty the trash.
 - **Full System Update**: This command updates your system to the latest packages available for your distro
+- **Full System Update (Topgrade)**: This command uses topgrade to update your system packages, configs, and more from various sources
 - **Gaming Dependencies**: This script is designed to handle the installation of gaming dependencies across different Linux distributions
 - **Git Config**: Configures global Git username, email, and GPG signing.
 - **Global Theme**: This script is designed to handle the installation and configuration of global theming
@@ -308,6 +316,7 @@ https://github.com/AdnanHodzic/auto-cpufreq
 - **Locale Setup (US)**: Configures system locale with US English settings.
 - **Numlock on Startup**: This utility is designed to enable Num Lock at boot, rather than within desktop environments like KDE or GNOME
 - **Ollama**: This utility is designed to manage ollama in your system
+- **Ranalama**: This utility is designed to manage ramalama in your system
 - **Service Manager**: This utility is designed to manage services in your system
 - **SFTP Setup**: Configures SSHFS for mounting remote directories via SSH/SFTP with automatic mount setup.
 - **Utility Functions**: Shared helper functions for utility scripts.
