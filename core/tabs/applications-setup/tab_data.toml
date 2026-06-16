@@ -4,6 +4,12 @@ name = "Applications Setup"
 name = "AI"
 
 [[data.entries]]
+name = "Agent Skills"
+description = "Installs a curated set of agent skills globally via npx skills, targeting Claude Code, GitHub Copilot, and Zed. Includes skills from Anthropic, Vercel, Supabase, Notion, Cloudflare, and others. SSH-gated repos are skipped gracefully if no SSH agent is available."
+script = "AI/agent-skills-setup.sh"
+task_list = "I"
+
+[[data.entries]]
 name = "Claude Code Router"
 description = "Installs Claude Code Router with optional Ollama integration."
 script = "AI/claude-code-router.sh"
