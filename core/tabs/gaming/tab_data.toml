@@ -172,7 +172,7 @@ multi_select = false
 [[data.entries]]
 name = "Bottles"
 description = "Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications."
-script = "../applications-setup/bottles-setup.sh"
+script = "../applications-setup/virtualization/bottles-setup.sh"
 task_list = "FI"
 
 [[data.entries]]
@@ -209,7 +209,7 @@ task_list = "I"
 [[data.entries]]
 name = "Waydroid"
 description = "Waydroid is an emulator that allows you to run Android apps and games on Linux."
-script = "../applications-setup/waydroid-setup.sh"
+script = "../applications-setup/virtualization/waydroid-setup.sh"
 task_list = "I SS"
 [[data.entries.preconditions]]
 matches = true

@@ -24,12 +24,12 @@ installramalama() {
                     read -r CHOICE
 
                     case "$CHOICE" in
-                        1)  sh ../applications-setup/docker-setup.sh
+                        1)  sh ../applications-setup/virtualization/docker-setup.sh
                             ;;
-                        2)  sh ../applications-setup/podman-setup.sh
+                        2)  sh ../applications-setup/virtualization/podman-setup.sh
                             ;;
-                        3)  sh ../applications-setup/docker-setup.sh
-                            sh ../applications-setup/podman-setup.sh
+                        3)  sh ../applications-setup/virtualization/docker-setup.sh
+                            sh ../applications-setup/virtualization/podman-setup.sh
                             ;;
                         4)  exit 1
                             ;;

@@ -93,6 +93,16 @@ installExtraDevTools() {
     ensureTool pipx pipx
     ensureTool node nodejs
     ensureTool npm npm
+    if ! command_exists pnpm; then
+        if command_exists npm; then
+            npm install -g pnpm
+            printf "%b\n" "${GREEN}pnpm installed.${RC}"
+        else
+            printf "%b\n" "${YELLOW}pnpm skipped — npm not available.${RC}"
+        fi
+    else
+        printf "%b\n" "${CYAN}pnpm is already installed.${RC}"
+    fi
     ensureTool java default-jdk openjdk-21-jdk openjdk-17-jdk java-21-openjdk java-17-openjdk java-21-openjdk-devel java-17-openjdk-devel
 
     # Rust tooling (install rustup if available, otherwise fallback to rust/cargo packages)
@@ -127,6 +137,32 @@ installExtraDevTools() {
 
     # Venv support package names vary heavily by distro.
     tryInstallAny python3-venv python3-virtualenv py3-virtualenv >/dev/null 2>&1 || true
+
+    # uv shell completions and common tools
+    if command_exists uv; then
+        printf "%b\n" "${YELLOW}Setting up uv shell completions...${RC}"
+        if [ -f "$HOME/.bashrc" ]; then
+            grep -q 'uv generate-shell-completion bash' "$HOME/.bashrc" 2>/dev/null || \
+                printf '\neval "$(uv generate-shell-completion bash)"\n' >> "$HOME/.bashrc"
+        fi
+        if [ -f "$HOME/.zshrc" ]; then
+            grep -q 'uv generate-shell-completion zsh' "$HOME/.zshrc" 2>/dev/null || \
+                printf '\neval "$(uv generate-shell-completion zsh)"\n' >> "$HOME/.zshrc"
+        fi
+        FISH_CONF="$HOME/.config/fish/conf.d"
+        if [ -d "$FISH_CONF" ]; then
+            printf 'uv generate-shell-completion fish | source\n' > "$FISH_CONF/uv.fish"
+        fi
+        printf "%b\n" "${YELLOW}Installing common uv tools (ruff, mypy, black)...${RC}"
+        for uvtool in ruff mypy black; do
+            if ! command_exists "$uvtool"; then
+                uv tool install "$uvtool" && printf "%b\n" "${GREEN}Installed: $uvtool${RC}" || \
+                    printf "%b\n" "${YELLOW}Could not install $uvtool via uv tool.${RC}"
+            else
+                printf "%b\n" "${CYAN}$uvtool already installed.${RC}"
+            fi
+        done
+    fi
 }
 
 installDepend() {

@@ -50,24 +50,53 @@ updateSignatures() {
    fi
 }
 
+configureClamAV() {
+   CLAMD_CONF=""
+   for f in /etc/clamav/clamd.conf /etc/clamd.d/scan.conf /etc/clamd.conf; do
+      if [ -f "$f" ]; then
+         CLAMD_CONF="$f"
+         break
+      fi
+   done
+
+   if [ -z "$CLAMD_CONF" ]; then
+      printf "%b\n" "${YELLOW}clamd.conf not found — skipping resource limit configuration.${RC}"
+      return
+   fi
+
+   printf "%b\n" "${YELLOW}Applying resource limits to $CLAMD_CONF...${RC}"
+   for setting in \
+      "MaxThreads 2" \
+      "MaxRecursion 10" \
+      "MaxFiles 10000" \
+      "MaxFileSize 25M" \
+      "MaxScanSize 100M" \
+      "ConcurrentDatabaseReload no"; do
+      key="${setting%% *}"
+      "$ESCALATION_TOOL" sed -i "/^#*[[:space:]]*${key}[[:space:]]/d" "$CLAMD_CONF"
+      printf '%s\n' "$setting" | "$ESCALATION_TOOL" tee -a "$CLAMD_CONF" >/dev/null
+   done
+   printf "%b\n" "${GREEN}Resource limits applied.${RC}"
+}
+
 enableServices() {
    if ! command_exists systemctl; then
       printf "%b\n" "${YELLOW}systemctl not found, skipping service enablement${RC}"
       return
    fi
 
-   printf "%b\n" "${YELLOW}Enabling available ClamAV services...${RC}"
-   enabled=false
-   for svc in clamav-daemon.socket clamav-daemon.service clamav-freshclam.service freshclam.service; do
-      if systemctl list-unit-files "$svc" >/dev/null 2>&1; then
+   # Only enable the signature updater — NOT clamav-daemon, which loads the full
+   # DB into RAM (~1-2 GB) and stays resident. Enable it manually if you need
+   # on-access scanning: sudo systemctl enable --now clamav-daemon
+   printf "%b\n" "${YELLOW}Enabling ClamAV signature update service...${RC}"
+   for svc in clamav-freshclam.service freshclam.service; do
+      if systemctl list-unit-files 2>/dev/null | grep -q "^$svc"; then
          "$ESCALATION_TOOL" systemctl enable --now "$svc"
-         enabled=true
+         printf "%b\n" "${GREEN}Enabled $svc.${RC}"
+         return
       fi
    done
-
-   if [ "$enabled" = false ]; then
-      printf "%b\n" "${YELLOW}No ClamAV systemd units found to enable${RC}"
-   fi
+   printf "%b\n" "${YELLOW}No freshclam systemd unit found to enable.${RC}"
 }
 
 installClamUI() {
@@ -97,13 +126,15 @@ showStatus() {
    done
 }
 
-printf "%b\n" "${GREEN}Setup complete.${RC}"
-printf "%b\n" "${YELLOW}In ClamUI, select the 'System ClamAV' backend and use socket /run/clamav/clamd.ctl if available.${RC}"
-
 checkEnv
 
 installClamAV
 updateSignatures
+configureClamAV
 enableServices
 installClamUI
 showStatus
+
+printf "%b\n" "${GREEN}Setup complete.${RC}"
+printf "%b\n" "${YELLOW}On-demand scanning is ready. In ClamUI choose the 'System ClamAV' backend.${RC}"
+printf "%b\n" "${YELLOW}To enable the background daemon (uses ~1-2 GB RAM): sudo systemctl enable --now clamav-daemon${RC}"

@@ -215,6 +215,21 @@ script = "fixes/undervolt.sh"
 task_list = "I FM SS"
 
 [[data]]
+name = "Hardware"
+
+[[data.entries]]
+name = "TRCC Linux (Thermalright LCD Control Center)"
+description = "Native Linux port of the Thermalright LCD Control Center. Controls LCD themes, video, overlays, and RGB LEDs on supported Thermalright coolers. Clones TuxLux40/thermalright-trcc-linux and runs its installer."
+script = "hardware/trcc-setup.sh"
+task_list = "I SS"
+
+[[data.entries]]
+name = "Razer Leviathan V2 X Volume Fix"
+description = "Fixes the Razer Leviathan V2 X soundbar being extremely quiet on Linux. Raises the hidden internal ALSA sub-level from ~29% to ~66% and persists it via alsactl. Requires the soundbar to be plugged in via USB-C."
+script = "hardware/razer-leviathan-fix.sh"
+task_list = "PFM"
+
+[[data]]
 name = "Ubuntu"
 
 [[data.preconditions]]
@@ -237,6 +252,12 @@ values = ['VERSION_ID="24.04"']
 name = "Build Prerequisites"
 description = "This script is designed to handle the installation of various software dependencies across different Linux distributions"
 script = "compile-setup.sh"
+task_list = "I"
+
+[[data]]
+name = "Package Managers Setup"
+description = "Installs all package managers: yay and paru (Arch only), Flatpak + Flathub, and Homebrew. Skips any already installed."
+script = "setup-package-managers.sh"
 task_list = "I"
 
 [[data]]

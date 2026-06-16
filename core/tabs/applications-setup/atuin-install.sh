@@ -1,14 +1,23 @@
-#! /bin/sh
-# Sourced from the official Atuin installation script: https://github.com/atuinsh/atuin/blob/main/install.sh
+#!/bin/sh -e
 
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+. ../common-script.sh
 
-sleep 1
+installAtuin() {
+    printf "%b\n" "${YELLOW}Installing Atuin...${RC}"
+    curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
-printf '\n%bImporting history to Atuin...%b\n' "${GREEN}" "${NC}"
-atuin import auto
-printf '%bAtuin installation and history import complete.%b\n' "${GREEN}" "${NC}"
+    printf "%b\n" "${YELLOW}Importing shell history from all detected shells...${RC}"
+    atuin import auto
 
-printf '%bYou may need to restart your terminal or source your shell configuration to start using Atuin.%b\n' "${YELLOW}" "${NC}"
+    # Fish shell integration — bash/zsh are handled automatically by the Atuin installer
+    FISH_CONF="$HOME/.config/fish/conf.d"
+    if [ -d "$FISH_CONF" ] && ! grep -qr 'atuin init fish' "$FISH_CONF" 2>/dev/null; then
+        printf 'atuin init fish | source\n' > "$FISH_CONF/atuin.fish"
+        printf "%b\n" "${GREEN}Fish shell integration installed.${RC}"
+    fi
 
-sleep 1
+    printf "%b\n" "${GREEN}Atuin installed. Restart your terminal or re-source your shell config to activate.${RC}"
+}
+
+checkEnv
+installAtuin

@@ -1,8 +1,7 @@
 #!/bin/sh -e
 
 # CLI Tools Installation Script
-# Installs useful command-line utilities for post-system-setup
-# Focuses on productivity, security, and development tools
+# Installs basic command-line utilities for post-system-setup
 
 . ../../common-script.sh
 
@@ -10,13 +9,13 @@ checkEnv
 
 printf "%b\n" "${CYAN}Installing CLI Tools...${RC}"
 
-BASE_PACKAGES="atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git glances gotop gpg-tui gping gzip hashcat htop iftop iotop john jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop pcscd php-imagick ranger ripgrep samba sshfs starship stow tar termscp termshark trash-cli ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
+BASE_PACKAGES="atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git github-cli glances gotop gpg-tui gping gzip hashcat htop iftop iotop jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop pcscd php-imagick ripgrep samba sshfs starship stow tar termscp termshark trash-cli ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
 
 # Map packages using a common base plus small per-distro exception lists
 map_packages() {
     case "$PACKAGER" in
         pacman)
-            echo "$BASE_PACKAGES fd oryx pamu2f github-cli bind nfs-utils gdu gtop lazymake ducker glow cronboard sshm gocheat multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
+            echo "$BASE_PACKAGES fd oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
             ;;
         apt-get|nala)
             echo "$BASE_PACKAGES fd-find libpam-u2f gh bind9-dnsutils nfs-common"

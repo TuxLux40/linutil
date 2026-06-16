@@ -46,6 +46,69 @@ checkFlatpak() {
     fi
 }
 
+checkBuildTools() {
+    printf "%b\n" "${YELLOW}Installing build tools...${RC}"
+    case "$PACKAGER" in
+        pacman)
+            "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm base-devel linux-headers
+            ;;
+        apt-get|nala)
+            "$ESCALATION_TOOL" "$PACKAGER" install -y build-essential "linux-headers-$(uname -r)"
+            ;;
+        dnf)
+            "$ESCALATION_TOOL" "$PACKAGER" group install -y "Development Tools"
+            "$ESCALATION_TOOL" "$PACKAGER" install -y "kernel-devel-$(uname -r)" || \
+                "$ESCALATION_TOOL" "$PACKAGER" install -y kernel-devel
+            ;;
+        zypper)
+            "$ESCALATION_TOOL" "$PACKAGER" install -y -t pattern devel_basis kernel-devel
+            ;;
+        apk)
+            "$ESCALATION_TOOL" "$PACKAGER" add build-base linux-headers
+            ;;
+        *)
+            printf "%b\n" "${YELLOW}Install gcc, make, and kernel headers manually for your distro.${RC}"
+            ;;
+    esac
+}
+
+checkPython() {
+    if command_exists python3; then
+        printf "%b\n" "${CYAN}Python 3 is already installed: $(python3 --version)${RC}"
+        return 0
+    fi
+    printf "%b\n" "${YELLOW}Python 3 not found. Installing...${RC}"
+    case "$PACKAGER" in
+        pacman)       "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm python ;;
+        apt-get|nala) "$ESCALATION_TOOL" "$PACKAGER" install -y python3 ;;
+        dnf)          "$ESCALATION_TOOL" "$PACKAGER" install -y python3 ;;
+        zypper)       "$ESCALATION_TOOL" "$PACKAGER" install -y python3 ;;
+        apk)          "$ESCALATION_TOOL" "$PACKAGER" add python3 ;;
+        xbps-install) "$ESCALATION_TOOL" "$PACKAGER" -Sy python3 ;;
+        eopkg)        "$ESCALATION_TOOL" "$PACKAGER" install -y python3 ;;
+        *)
+            printf "%b\n" "${RED}Cannot install Python 3 automatically. Install it manually.${RC}"
+            exit 1
+            ;;
+    esac
+}
+
+checkRust() {
+    if command_exists cargo; then
+        printf "%b\n" "${CYAN}Rust/Cargo already installed: $(cargo --version)${RC}"
+        return 0
+    fi
+    printf "%b\n" "${YELLOW}Cargo not found. Installing Rust via rustup...${RC}"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    # shellcheck source=/dev/null
+    . "$HOME/.cargo/env"
+    if ! command_exists cargo; then
+        printf "%b\n" "${RED}Rust installation failed.${RC}"
+        exit 1
+    fi
+    printf "%b\n" "${GREEN}Rust installed: $(cargo --version)${RC}"
+}
+
 checkArch() {
     case "$(uname -m)" in
         x86_64 | amd64) ARCH="x86_64" ;;

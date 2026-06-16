@@ -27,6 +27,24 @@ description = "Connects Claude Code and VS Code/Copilot to a self-hosted MCP Jun
 script = "AI/mcpjungle-setup.sh"
 task_list = "I"
 
+[[data.entries]]
+name = "Claude CLI"
+description = "Installs or updates the Claude Code CLI (Anthropic's AI coding assistant). Run 'claude' to authenticate on first launch."
+script = "AI/claude-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "GitHub Copilot CLI"
+description = "Installs the GitHub Copilot CLI extension for gh. Requires GitHub CLI (gh) to be installed and authenticated."
+script = "AI/copilot-setup.sh"
+task_list = "I"
+
+[[data.entries]]
+name = "Grok CLI"
+description = "Installs or updates the Grok CLI from xAI. Run 'grok' to authenticate on first launch."
+script = "AI/grok-build.sh"
+task_list = "I"
+
 [[data]]
 name = "Base Packages"
 
@@ -542,12 +560,6 @@ name = "Bash Prompt"
 description = "The .bashrc file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. This command configures the key sections and functionalities defined in the .bashrc file from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash"
 script = "mybash-setup.sh"
 task_list = "I FM"
-
-[[data]]
-name = "Docker"
-description = "Docker is an open platform that uses OS-level virtualization to deliver software in packages called containers."
-script = "docker-setup.sh"
-task_list = "I SS"
 
 [[data]]
 name = "Fastfetch"
