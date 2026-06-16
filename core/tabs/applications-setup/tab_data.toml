@@ -4,12 +4,6 @@ name = "Applications Setup"
 name = "AI"
 
 [[data.entries]]
-name = "AnythingLLM"
-description = "Bare-metal installer for AnythingLLM."
-script = "AI/anything-llm.sh"
-task_list = "I"
-
-[[data.entries]]
 name = "Claude Code Router"
 description = "Installs Claude Code Router with optional Ollama integration."
 script = "AI/claude-code-router.sh"
