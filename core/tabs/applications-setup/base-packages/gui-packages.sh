@@ -11,7 +11,7 @@ printf "%b\n" "${CYAN}Installing GUI Applications...${RC}"
 
 # Base GUI packages available across distributions
 # Add new packages here as needed, but only when having the same name across distros
-BASE_PACKAGES="libreoffice-fresh calibre vlc filezilla kleopatra okular podman-desktop akonadi-console zanshin merkuro"
+BASE_PACKAGES="libreoffice-fresh calibre vlc filezilla kleopatra okular podman-desktop akonadi-console zanshin merkuro kde-network-meta kde-office-meta kde-system-meta kde-utilities-meta"
 
 # Packages preferred to install from Flathub (to avoid dependency conflicts)
 FLATPAK_PREFERRED="clamui cohesion gearlever"

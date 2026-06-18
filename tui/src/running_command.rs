@@ -11,8 +11,9 @@ use ratatui::{
     widgets::Block,
 };
 use std::{
-    fs::File,
+    fs::{create_dir_all, File},
     io::{Read, Result, Write},
+    path::PathBuf,
     sync::{
         atomic::{AtomicBool, Ordering},
         Arc, Mutex,
@@ -346,8 +347,27 @@ impl RunningCommand {
         }
     }
 
+    /// Directory for saved logs. Prefers a persistent XDG state dir
+    /// ($XDG_STATE_HOME/linutil, else ~/.local/state/linutil) so logs survive
+    /// reboots; falls back to the system temp dir (historically tmpfs, wiped on
+    /// reboot) if that can't be resolved or created.
+    fn log_dir() -> PathBuf {
+        let base = std::env::var_os("XDG_STATE_HOME")
+            .map(PathBuf::from)
+            .filter(|p| p.is_absolute())
+            .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".local/state")));
+
+        if let Some(dir) = base.map(|b| b.join("linutil")) {
+            if create_dir_all(&dir).is_ok() {
+                return dir;
+            }
+        }
+
+        std::env::temp_dir()
+    }
+
     fn save_log(&self) -> Result<String> {
-        let mut log_path = std::env::temp_dir();
+        let mut log_path = Self::log_dir();
         let date_format = format_description!("[year]-[month]-[day]-[hour]-[minute]-[second]");
         log_path.push(format!(
             "linutil_log_{}.log",

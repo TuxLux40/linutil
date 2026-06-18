@@ -2,12 +2,28 @@
 
 . ../../common-script.sh
 
-# Installs agent skills globally via `npx skills add`, targeting all supported
-# agents (Claude Code, GitHub Copilot, Zed). SSH-authenticated repos (notion,
-# cloudflare, some others) require your SSH agent to be running and authorised
-# on GitHub — the script will skip and report those if auth fails.
+# Installs curated agent skills via `npx skills`, targeting all supported agents
+# (Claude Code, Copilot, Zed, ...). Each skill is installed globally when the
+# repo allows it, and automatically retried at project scope when global is
+# rejected — so repos that can't be installed globally still land.
+#
+# Auth:
+#   - GitHub API: reuses your `gh` token (if logged in) to avoid the 60-req/hour
+#     unauthenticated rate limit that otherwise makes repo fetches fail.
+#   - SSH-only repos (prefixed "ssh:"): use your SSH/gpg agent socket; skipped
+#     with a notice if no agent is available.
 
+GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || true)}"
+[ -n "$GITHUB_TOKEN" ] && export GITHUB_TOKEN
 SSH_SOCK="${SSH_AUTH_SOCK:-$(gpgconf --list-dirs agent-ssh-socket 2>/dev/null || true)}"
+
+INSTALLED=0
+FAILED=0
+SKIPPED=0
+FAILED_LIST=""
+
+# Always restore the cursor, even if interrupted mid-spinner.
+trap 'printf "\033[?25h"' EXIT INT TERM
 
 ensureNpx() {
     if command_exists npx; then
@@ -25,44 +41,76 @@ ensureNpx() {
     esac
 }
 
-# Install one or all skills from a GitHub repo.
-# Usage: add_skill <org/repo> [skill-name|*]
-# Repos that require SSH: prefix org/repo with "ssh:" e.g. "ssh:notion/agent-skills"
-add_skill() {
-    local src="$1"
-    local skill="${2:-*}"
-    local url
+# spin <message> <command...> — run a command silently with an inline spinner.
+# Captures combined stdout+stderr in SPIN_OUT; returns the command's exit status.
+spin() {
+    _msg="$1"; shift
+    _log="$(mktemp 2>/dev/null || printf '/tmp/skills.%s' "$$")"
+    "$@" >"$_log" 2>&1 &
+    _pid=$!
+    printf '\033[?25l'
+    _i=0
+    while kill -0 "$_pid" 2>/dev/null; do
+        printf '\r  %b%s%b %s ' "$CYAN" \
+            "$(printf '%s' '|/-\' | cut -c $((_i % 4 + 1)))" "$RC" "$_msg"
+        _i=$((_i + 1))
+        sleep 0.1 2>/dev/null || true
+    done
+    if wait "$_pid"; then _st=0; else _st=$?; fi
+    printf '\033[?25h'
+    SPIN_OUT="$(cat "$_log" 2>/dev/null)"
+    rm -f "$_log"
+    return "$_st"
+}
 
-    case "$src" in
+# add_skill <org/repo|ssh:org/repo> [skill|*]
+# Tries a global install first; if the repo rejects global, retries at project
+# scope. Emits exactly one ✓/✗ line per skill.
+add_skill() {
+    _src="$1"; _skill="${2:-*}"
+    case "$_src" in
         ssh:*)
-            url="git@github.com:${src#ssh:}.git"
+            _url="git@github.com:${_src#ssh:}.git"
             if [ -z "$SSH_SOCK" ]; then
-                printf "%b\n" "${YELLOW}Skipping $src — no SSH agent socket found.${RC}"
-                return 0
-            fi
-            ;;
-        *)
-            url="$src"
-            ;;
+                printf '  %b-%b %s  %b(no SSH agent — skipped)%b\n' \
+                    "$YELLOW" "$RC" "$_src" "$YELLOW" "$RC"
+                SKIPPED=$((SKIPPED + 1)); return 0
+            fi ;;
+        *) _url="$_src" ;;
     esac
 
-    printf "%b\n" "${CYAN}Installing from $src${skill:+ (skill: $skill)}...${RC}"
-
-    if [ "$skill" = "*" ]; then
-        SSH_AUTH_SOCK="$SSH_SOCK" npx --yes skills add "$url" --all -g 2>&1 | \
-            grep -v "^$" | grep -v "agent-" || true
+    if [ "$_skill" = "*" ]; then
+        _label="$_src"
+        set -- skills add "$_url" --all
     else
-        SSH_AUTH_SOCK="$SSH_SOCK" npx --yes skills add "$url" \
-            --skill "$skill" -g -a '*' -y 2>&1 | \
-            grep -v "^$" | grep -v "agent-" || true
+        _label="$_src ($_skill)"
+        set -- skills add "$_url" --skill "$_skill" -a '*' -y
     fi
+
+    if spin "$_label  [global]" env SSH_AUTH_SOCK="$SSH_SOCK" npx --yes "$@" -g; then
+        printf '\r\033[K  %b✓%b %s  %b[global]%b\n'  "$GREEN" "$RC" "$_label" "$CYAN" "$RC"
+        INSTALLED=$((INSTALLED + 1)); return 0
+    fi
+    if spin "$_label  [project]" env SSH_AUTH_SOCK="$SSH_SOCK" npx --yes "$@"; then
+        printf '\r\033[K  %b✓%b %s  %b[project]%b\n' "$GREEN" "$RC" "$_label" "$YELLOW" "$RC"
+        INSTALLED=$((INSTALLED + 1)); return 0
+    fi
+
+    printf '\r\033[K  %b✗%b %s\n' "$RED" "$RC" "$_label"
+    _why="$(printf '%s' "$SPIN_OUT" | grep -iE 'error|fail|denied|not found|rate limit' | tail -1)"
+    [ -n "$_why" ] && printf '      %b%s%b\n' "$YELLOW" "$_why" "$RC"
+    FAILED=$((FAILED + 1)); FAILED_LIST="$FAILED_LIST $_src"
+    return 0
 }
 
 checkEnv
 checkEscalationTool
 ensureNpx
 
-printf "%b\n" "${YELLOW}Installing agent skills globally (Claude Code, Copilot, Zed)...${RC}"
+printf "%b\n" "${YELLOW}Installing agent skills (global where supported, else project scope)...${RC}"
+[ -z "$GITHUB_TOKEN" ] && \
+    printf "%b\n" "${YELLOW}No gh token — GitHub fetches may hit rate limits. Run 'gh auth login'.${RC}"
+printf "\n"
 
 # ── skills.sh / public HTTPS repos ────────────────────────────────────────────
 
@@ -134,7 +182,9 @@ add_skill "ssh:cloudflare/agent-skills" "cloudflare"
 add_skill "ssh:cloudflare/agent-skills" "web-perf"
 add_skill "ssh:cloudflare/agent-skills" "wrangler"
 
-printf "%b\n" "${GREEN}Agent skills installation complete.${RC}"
-printf "%b\n" "${CYAN}Skills are live in Claude Code and GitHub Copilot. Restart your editor to pick them up.${RC}"
-printf "%b\n" "${YELLOW}Note: Grok CLI does not yet have a skills directory supported by 'npx skills'.${RC}"
-printf "%b\n" "${YELLOW}Note: SSH-skipped skills can be installed manually: SSH_AUTH_SOCK=\$(gpgconf --list-dirs agent-ssh-socket) npx skills add <repo> --all -g${RC}"
+printf "\n"
+printf "%b\n" "${GREEN}Done: ${INSTALLED} installed, ${FAILED} failed, ${SKIPPED} skipped.${RC}"
+[ -n "$FAILED_LIST" ] && printf "%b\n" "${YELLOW}Failed:${FAILED_LIST}${RC}"
+printf "%b\n" "${CYAN}Restart your editor (Claude Code, Copilot, Zed) to pick up new skills.${RC}"
+[ "$SKIPPED" -gt 0 ] && \
+    printf "%b\n" "${YELLOW}SSH-skipped skills: start your SSH/gpg agent, then re-run.${RC}"

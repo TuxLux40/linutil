@@ -103,6 +103,24 @@ installExtraDevTools() {
     else
         printf "%b\n" "${CYAN}pnpm is already installed.${RC}"
     fi
+
+    # Bun (JS runtime/toolkit) — rarely in distro repos; fall back to official installer.
+    # Requires unzip, which installDepend already provides via BASE_DEPENDENCIES.
+    if ! command_exists bun; then
+        if ! tryInstallAny bun bun-bin; then
+            printf "%b\n" "${YELLOW}bun not in repos, installing via upstream installer...${RC}"
+            curl -fsSL https://bun.sh/install | bash
+            export PATH="$HOME/.bun/bin:$PATH"
+        fi
+        if command_exists bun || [ -x "$HOME/.bun/bin/bun" ]; then
+            printf "%b\n" "${GREEN}bun installed.${RC}"
+        else
+            printf "%b\n" "${YELLOW}bun install failed — install manually: https://bun.sh${RC}"
+        fi
+    else
+        printf "%b\n" "${CYAN}bun is already installed.${RC}"
+    fi
+
     ensureTool java default-jdk openjdk-21-jdk openjdk-17-jdk java-21-openjdk java-17-openjdk java-21-openjdk-devel java-17-openjdk-devel
 
     # Rust tooling (install rustup if available, otherwise fallback to rust/cargo packages)
