@@ -3,7 +3,7 @@
 . ../common-script.sh
 
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/TuxLux40/dotfiles.git}"
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/Projects/dotfiles}"
 
 install_git() {
     case "$PACKAGER" in

@@ -153,34 +153,34 @@ add_skill "othmanadi/planning-with-files" "*"
 # agent is available and can be re-run once SSH is set up.
 
 # Accessibility
-add_skill "ssh:addyosmani/accessibility"    "*"
+add_skill "addyosmani/accessibility"    "*"
 
 # A/B testing
-add_skill "ssh:coreyhaines31/ab-testing"    "*"
+add_skill "coreyhaines31/ab-testing"    "*"
 
 # File organiser
-add_skill "ssh:composiohq/file-organizer"   "*"
+add_skill "composiohq/file-organizer"   "*"
 
 # Agent tools meta-skills
-add_skill "ssh:qu-skills/agent-tools"       "*"
+add_skill "qu-skills/agent-tools"       "*"
 
 # Notion — specific skills Oliver researched
-add_skill "ssh:notion/agent-skills" "create-database-row"
-add_skill "ssh:notion/agent-skills" "database-query"
-add_skill "ssh:notion/agent-skills" "find"
-add_skill "ssh:notion/agent-skills" "knowledge-capture"
-add_skill "ssh:notion/agent-skills" "notion-cli"
-add_skill "ssh:notion/agent-skills" "notion-research-documentation"
-add_skill "ssh:notion/agent-skills" "spec-to-implementation"
-add_skill "ssh:notion/agent-skills" "tasks-setup"
+add_skill "notion/agent-skills" "create-database-row"
+add_skill "notion/agent-skills" "database-query"
+add_skill "notion/agent-skills" "find"
+add_skill "notion/agent-skills" "knowledge-capture"
+add_skill "notion/agent-skills" "notion-cli"
+add_skill "notion/agent-skills" "notion-research-documentation"
+add_skill "notion/agent-skills" "spec-to-implementation"
+add_skill "notion/agent-skills" "tasks-setup"
 
 # Cloudflare — specific skills Oliver researched
-add_skill "ssh:cloudflare/agent-skills" "agents-sdk"
-add_skill "ssh:cloudflare/agent-skills" "building-ai-agent-on-cloudflare"
-add_skill "ssh:cloudflare/agent-skills" "building-mcp-server-on-cloudflare"
-add_skill "ssh:cloudflare/agent-skills" "cloudflare"
-add_skill "ssh:cloudflare/agent-skills" "web-perf"
-add_skill "ssh:cloudflare/agent-skills" "wrangler"
+add_skill "cloudflare/agent-skills" "agents-sdk"
+add_skill "cloudflare/agent-skills" "building-ai-agent-on-cloudflare"
+add_skill "cloudflare/agent-skills" "building-mcp-server-on-cloudflare"
+add_skill "cloudflare/agent-skills" "cloudflare"
+add_skill "cloudflare/agent-skills" "web-perf"
+add_skill "cloudflare/agent-skills" "wrangler"
 
 printf "\n"
 printf "%b\n" "${GREEN}Done: ${INSTALLED} installed, ${FAILED} failed, ${SKIPPED} skipped.${RC}"
