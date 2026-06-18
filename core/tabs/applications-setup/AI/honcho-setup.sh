@@ -43,6 +43,19 @@ ensureBun() {
         printf "%b\n" "${GREEN}bun is already installed: $(bun --version)${RC}"
         return 0
     fi
+    # bun's installer requires unzip — install it first if missing.
+    if ! command_exists unzip; then
+        printf "%b\n" "${CYAN}Installing unzip (required by the bun installer)...${RC}"
+        case "$PACKAGER" in
+            pacman) "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm unzip ;;
+            apt-get | nala) "$ESCALATION_TOOL" "$PACKAGER" install -y unzip ;;
+            dnf | yum) "$ESCALATION_TOOL" "$PACKAGER" install -y unzip ;;
+            zypper) "$ESCALATION_TOOL" "$PACKAGER" install -y unzip ;;
+            apk) "$ESCALATION_TOOL" "$PACKAGER" add unzip ;;
+            xbps-install) "$ESCALATION_TOOL" "$PACKAGER" -Sy unzip ;;
+            *) printf "%b\n" "${YELLOW}Could not auto-install unzip — bun install may fail.${RC}" ;;
+        esac
+    fi
     printf "%b\n" "${CYAN}Installing bun (required for Claude Code hooks)...${RC}"
     curl -fsSL https://bun.sh/install | bash
     export PATH="$HOME/.bun/bin:$PATH"
@@ -132,11 +145,11 @@ installHonchoCli() {
 promptSecret() {
     # Read a value without echoing to terminal
     prompt="$1"
-    printf "%b" "$prompt"
+    printf "%b" "$prompt" >&2
     stty -echo 2>/dev/null || true
     read -r secret_val
     stty echo 2>/dev/null || true
-    printf "\n"
+    printf "\n" >&2
     echo "$secret_val"
 }
 
@@ -157,32 +170,25 @@ configureHoncho() {
     read -r base_url
     base_url="${base_url:-$HONCHO_DEFAULT_URL}"
 
-    # Workspace
-    printf "%b" "${YELLOW}Workspace name [main]: ${RC}"
-    read -r workspace
-    workspace="${workspace:-main}"
-
     # Peer name
     printf "%b" "${YELLOW}Your peer name [${USER:-oliver}]: ${RC}"
     read -r peer_name
     peer_name="${peer_name:-${USER:-oliver}}"
 
     # Write ~/.honcho/config.json
+    # workspace is always "main" — the plugin reads this from the top level,
+    # not from hosts.claude_code, so it must be here or it defaults to "claude_code".
     mkdir -p "$HONCHO_CONFIG_DIR"
     cat > "$HONCHO_CONFIG_FILE" <<EOF
 {
   "apiKey": "${api_key}",
   "peerName": "${peer_name}",
+  "aiPeer": "claude",
+  "workspace": "main",
   "environmentUrl": "${base_url}",
-  "hosts": {
-    "claude_code": {
-      "workspace": "${workspace}",
-      "aiPeer": "claude",
-      "enabled": true,
-      "logging": true,
-      "saveMessages": true
-    }
-  }
+  "enabled": true,
+  "logging": true,
+  "saveMessages": true
 }
 EOF
     chmod 600 "$HONCHO_CONFIG_FILE"
@@ -491,7 +497,7 @@ setupGrokPeer() {
 
     GR_WORKSPACE="main"
     if command_exists jq && [ -f "$HONCHO_CONFIG_FILE" ]; then
-        GR_WORKSPACE=$(jq -r '.hosts.claude_code.workspace // "main"' "$HONCHO_CONFIG_FILE" 2>/dev/null)
+        GR_WORKSPACE=$(jq -r '.workspace // "main"' "$HONCHO_CONFIG_FILE" 2>/dev/null)
     fi
 
     if ! command_exists honcho; then
@@ -567,6 +573,9 @@ main() {
     if command_exists claude || [ -d "$HOME/.claude" ]; then
         printf "\n"
         printf "%b\n" "${CYAN}Claude Code detected. Setting up integrations...${RC}"
+        # bun powers the honcho plugin's hooks. Install it up front so the hooks work
+        # even if the plugin is installed manually (outside this script's prompts).
+        ensureBun
         installClaudePlugin
         installClaudeSkills
         installMCPServer
@@ -578,6 +587,7 @@ main() {
         read -r force_claude
         case "$force_claude" in
             y | Y)
+                ensureBun
                 installClaudePlugin
                 installClaudeSkills
                 installMCPServer
