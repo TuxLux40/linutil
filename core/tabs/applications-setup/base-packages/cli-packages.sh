@@ -9,28 +9,28 @@ checkEnv
 
 printf "%b\n" "${CYAN}Installing CLI Tools...${RC}"
 
-BASE_PACKAGES="atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git github-cli glances gotop gpg-tui gping gzip hashcat htop iftop iotop jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nmtui nvtop pcscd php-imagick ripgrep samba sshfs starship stow tar termscp termshark trash-cli ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
+BASE_PACKAGES="atop bat bluetui bmon btop bzip2 ctop curl diskonaut dnsmasq exa fzf git github-cli glances gotop gpg-tui gping gzip hashcat htop iftop iotop jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nvtop pcscd php-imagick ripgrep samba sshfs starship stow tar termscp termshark trash-cli ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
 
 # Map packages using a common base plus small per-distro exception lists
 map_packages() {
     case "$PACKAGER" in
         pacman)
-            echo "$BASE_PACKAGES fd oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
+            echo "$BASE_PACKAGES networkmanager fd oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
             ;;
         apt-get|nala)
-            echo "$BASE_PACKAGES fd-find libpam-u2f gh bind9-dnsutils nfs-common"
+            echo "$BASE_PACKAGES network-manager fd-find libpam-u2f gh bind9-dnsutils nfs-common"
             ;;
         dnf)
-            echo "$BASE_PACKAGES fd-find gh bind-utils nfs-utils"
+            echo "$BASE_PACKAGES NetworkManager fd-find gh bind-utils nfs-utils"
             ;;
         zypper)
-            echo "$BASE_PACKAGES fd gh bind-utils nfs-client"
+            echo "$BASE_PACKAGES NetworkManager fd gh bind-utils nfs-client"
             ;;
         apk)
-            echo "$BASE_PACKAGES fd gh bind-tools nfs-utils"
+            echo "$BASE_PACKAGES networkmanager fd gh bind-tools nfs-utils"
             ;;
         xbps-install)
-            echo "$BASE_PACKAGES fd gh bind-utils nfs-utils"
+            echo "$BASE_PACKAGES NetworkManager fd gh bind-utils nfs-utils"
             ;;
     esac
 }
@@ -44,16 +44,39 @@ fi
 
 printf "%b\n" "${CYAN}Installing: $PACKAGES_TO_INSTALL${RC}"
 
+# Idempotent Chaotic AUR setup — only runs the full install if the repo is absent
+ensure_chaotic_aur() {
+    grep -q "\[chaotic-aur\]" /etc/pacman.conf && return 0
+    printf "%b\n" "${YELLOW}Setting up Chaotic AUR repository...${RC}"
+    "$ESCALATION_TOOL" pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+    "$ESCALATION_TOOL" pacman-key --lsign-key 3056513887B78AEB
+    "$ESCALATION_TOOL" pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+    "$ESCALATION_TOOL" pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+    printf "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | "$ESCALATION_TOOL" tee -a /etc/pacman.conf
+    "$ESCALATION_TOOL" pacman -Sy --noconfirm
+    printf "%b\n" "${GREEN}Chaotic AUR set up successfully${RC}"
+}
+
 # Install packages based on package manager
 case "$PACKAGER" in
     pacman)
+        CHAOTIC_AUR_READY=false
         printf "%b\n" "${YELLOW}Installing from official repositories...${RC}"
         for pkg in $PACKAGES_TO_INSTALL; do
             "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm "$pkg" 2>/dev/null || {
-                printf "%b\n" "${YELLOW}[!] Skipping $pkg (not found in official repos)${RC}"
+                printf "%b\n" "${YELLOW}[!] $pkg not in official repos, trying AUR...${RC}"
+                aur_ok=false
                 if [ -n "$AUR_HELPER" ]; then
-                    "$AUR_HELPER" -S --needed --noconfirm "$pkg" 2>/dev/null || {
-                        printf "%b\n" "${YELLOW}[!] Skipping $pkg (not found in AUR either)${RC}"
+                    "$AUR_HELPER" -S --needed --noconfirm "$pkg" 2>/dev/null && aur_ok=true
+                fi
+                if [ "$aur_ok" = false ]; then
+                    printf "%b\n" "${YELLOW}[!] $pkg not in AUR, trying Chaotic AUR...${RC}"
+                    if [ "$CHAOTIC_AUR_READY" = false ]; then
+                        ensure_chaotic_aur
+                        CHAOTIC_AUR_READY=true
+                    fi
+                    "$ESCALATION_TOOL" "$PACKAGER" -S --needed --noconfirm "$pkg" 2>/dev/null || {
+                        printf "%b\n" "${YELLOW}[!] Skipping $pkg (not found in official repos, AUR, or Chaotic AUR)${RC}"
                     }
                 fi
             }
