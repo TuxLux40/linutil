@@ -28,6 +28,12 @@ script = "AI/mcpjungle-setup.sh"
 task_list = "I"
 
 [[data.entries]]
+name = "Mistral Vibe"
+description = "Installs or updates Mistral Vibe CLI (Mistral AI's AI coding assistant). Run 'vibe' to authenticate on first launch."
+script = "AI/mistral-vibe-setup.sh"
+task_list = "I"
+
+[[data.entries]]
 name = "Claude CLI"
 description = "Installs or updates the Claude Code CLI (Anthropic's AI coding assistant). Run 'claude' to authenticate on first launch."
 script = "AI/claude-setup.sh"
