@@ -214,6 +214,12 @@ description = "Reduces CPU/GPU voltage to lower heat and improve sustained perfo
 script = "fixes/undervolt.sh"
 task_list = "I FM SS"
 
+[[data.entries]]
+name = "NVMe APST Disable"
+description = "Fixes slow app launches and high iowait caused by NVMe drives entering deep power states (APST) between IO bursts. Adds nvme_core.default_ps_max_latency_us=0 to the kernel cmdline and also removes the 'splash' Plymouth flag. Supports Limine, GRUB, and systemd-boot."
+script = "fixes/nvme-apst-disable.sh"
+task_list = "PFM"
+
 [[data]]
 name = "Hardware"
 
