@@ -2,8 +2,8 @@ name = "Security"
 
 [[data]]
 name = "Desktop Hardening"
-description = "Applies a GrapheneOS-inspired desktop hardening baseline by orchestrating the existing security scripts and new passive hardening modules. Prefers passive, desktop-safe defaults and GUI-manageable tooling where practical."
-script = "desktop-hardening.sh"
+description = "Runs the full security-hardening.sh baseline: kernel sysctl, core-dump hardening, PAM password policy, auditd rules, AIDE integrity monitoring, ClamAV, desktop firewall defaults, SSH hardening, login banners, and AppArmor. Skips AppArmor when native SELinux is active. Pass individual module names on the CLI to run a subset, or --all to include USBGuard, YubiKey PAM, Sunshine, and Tailscale."
+script = "security-hardening.sh"
 task_list = "I K FM SS"
 
 [[data]]
