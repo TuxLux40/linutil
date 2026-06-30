@@ -45,6 +45,13 @@ if ! command -v aarch64-linux-gnu-gcc >/dev/null 2>&1; then
     exit 1
 fi
 
+if ! command -v cmake >/dev/null 2>&1; then
+    echo "ERROR: cmake not found." >&2
+    echo "  Arch/CachyOS: sudo pacman -S cmake extra-cmake-modules" >&2
+    echo "  Debian/Ubuntu: sudo apt install cmake extra-cmake-modules" >&2
+    exit 1
+fi
+
 # Rust target
 if ! rustup target list --installed | grep -q "^$TARGET$"; then
     echo "Installing rustup target $TARGET..."
