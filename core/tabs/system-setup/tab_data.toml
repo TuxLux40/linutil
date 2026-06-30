@@ -220,6 +220,12 @@ description = "Fixes slow app launches and high iowait caused by NVMe drives ent
 script = "fixes/nvme-apst-disable.sh"
 task_list = "PFM"
 
+[[data.entries]]
+name = "OOM Killer Tuning"
+description = "Configures systemd-oomd with CachyOS-inspired thresholds (SwapUsedLimit=80%, MemPressure=40%, Duration=20s) to proactively kill memory-hungry processes before the system becomes unresponsive. Enables oomd monitoring on the user slice and optionally installs earlyoom as a supplemental or standalone OOM killer for systems without systemd-oomd."
+script = "fixes/oomd-killer-tuning.sh"
+task_list = "I SS PFM"
+
 [[data]]
 name = "Hardware"
 
