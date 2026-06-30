@@ -47,8 +47,15 @@ fi
 
 if ! command -v cmake >/dev/null 2>&1; then
     echo "ERROR: cmake not found." >&2
-    echo "  Arch/CachyOS: sudo pacman -S cmake extra-cmake-modules" >&2
-    echo "  Debian/Ubuntu: sudo apt install cmake extra-cmake-modules" >&2
+    echo "  Arch/CachyOS: sudo pacman -S cmake extra-cmake-modules ninja" >&2
+    echo "  Debian/Ubuntu: sudo apt install cmake extra-cmake-modules ninja-build" >&2
+    exit 1
+fi
+
+if ! command -v ninja >/dev/null 2>&1; then
+    echo "ERROR: ninja not found." >&2
+    echo "  Arch/CachyOS: sudo pacman -S ninja" >&2
+    echo "  Debian/Ubuntu: sudo apt install ninja-build" >&2
     exit 1
 fi
 

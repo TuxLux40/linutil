@@ -16,22 +16,22 @@ map_packages() {
     case "$PACKAGER" in
         pacman)
             # pcscd daemon is provided by the pcsc-lite package on Arch
-            echo "$BASE_PACKAGES networkmanager pcsc-lite fd oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
+            echo "$BASE_PACKAGES networkmanager pcsc-lite fd ninja oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
             ;;
         apt-get|nala)
-            echo "$BASE_PACKAGES network-manager pcscd fd-find libpam-u2f gh bind9-dnsutils nfs-common"
+            echo "$BASE_PACKAGES network-manager pcscd fd-find ninja-build libpam-u2f gh bind9-dnsutils nfs-common"
             ;;
         dnf)
-            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd-find gh bind-utils nfs-utils"
+            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd-find ninja-build gh bind-utils nfs-utils"
             ;;
         zypper)
-            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd gh bind-utils nfs-client"
+            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd ninja gh bind-utils nfs-client"
             ;;
         apk)
-            echo "$BASE_PACKAGES networkmanager pcsc-lite fd gh bind-tools nfs-utils"
+            echo "$BASE_PACKAGES networkmanager pcsc-lite fd ninja gh bind-tools nfs-utils"
             ;;
         xbps-install)
-            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd gh bind-utils nfs-utils"
+            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd ninja gh bind-utils nfs-utils"
             ;;
     esac
 }
