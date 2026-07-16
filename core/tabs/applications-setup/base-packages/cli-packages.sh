@@ -9,23 +9,23 @@ checkEnv
 
 printf "%b\n" "${CYAN}Installing CLI Tools...${RC}"
 
-BASE_PACKAGES="atop bat bluetui bmon btop bzip2 cmake ctop curl diskonaut dnsmasq exa extra-cmake-modules fzf git github-cli glances gotop gpg-tui gping gzip hashcat htop iftop iotop jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nvtop php-imagick ripgrep samba sshfs starship stow tar termscp termshark trash-cli ufw ugrep unrar unzip wavemon wget wireguard-tools xz yazi yq yubikey-personalization zoxide zip"
+BASE_PACKAGES="atop bat bluetui bmon btop bzip2 cmake ctop curl diskonaut dnsmasq exa extra-cmake-modules fzf git github-cli glances gotop gpg-tui gping gzip hashcat htop iftop iotop jq just khal kmon lazysql-bin lazydocker lynis micro mtr ncdu netscanner nethogs nmap nvtop php-imagick ripgrep samba sshfs starship stow tar termscp termshark trash-cli ufw ugrep unrar unzip wavemon wget wireguard-tools wl-clipboard xz yazi yq yubikey-personalization zoxide zip"
 
 # Map packages using a common base plus small per-distro exception lists
 map_packages() {
     case "$PACKAGER" in
         pacman)
             # pcscd daemon is provided by the pcsc-lite package on Arch
-            echo "$BASE_PACKAGES networkmanager pcsc-lite fd ninja oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui"
+            echo "$BASE_PACKAGES networkmanager pcsc-lite fd ninja oryx pamu2f bind nfs-utils gdu gtop lazymake lazyjournal cronboard sshm multranslate searxngr nemu caligula rainfrog systemd-manager-tui x11-ssh-askpass"
             ;;
         apt-get|nala)
-            echo "$BASE_PACKAGES network-manager pcscd fd-find ninja-build libpam-u2f gh bind9-dnsutils nfs-common"
+            echo "$BASE_PACKAGES network-manager pcscd fd-find ninja-build libpam-u2f gh bind9-dnsutils nfs-common ssh-askpass"
             ;;
         dnf)
-            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd-find ninja-build gh bind-utils nfs-utils"
+            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd-find ninja-build gh bind-utils nfs-utils openssh-askpass"
             ;;
         zypper)
-            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd ninja gh bind-utils nfs-client"
+            echo "$BASE_PACKAGES NetworkManager pcsc-lite fd ninja gh bind-utils nfs-client openssh-askpass"
             ;;
         apk)
             echo "$BASE_PACKAGES networkmanager pcsc-lite fd ninja gh bind-tools nfs-utils"
