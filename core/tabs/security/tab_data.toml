@@ -101,6 +101,6 @@ values = ["firewall-cmd"]
 
 [[data]]
 name = "YubiKey PAM"
-description = "Configures YubiKey PAM authentication."
+description = "Installs pam-u2f, enrolls your YubiKey to ~/.config/Yubico/u2f_keys, and enables touch-auth for both sudo and polkit GUI privilege dialogs. Creates /etc/pam.d/polkit-1 when the distro only ships the vendor stack under /usr/lib/pam.d (Arch/CachyOS). Password remains a fallback. Idempotent re-run keeps an existing mapping unless you choose to re-enroll."
 script = "yk-pam.sh"
 task_list = "I"

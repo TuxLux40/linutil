@@ -218,7 +218,7 @@ https://github.com/AdnanHodzic/auto-cpufreq
 - **FirewallD Firewall Baselines (CTT)**: Configure FirewallD with CTT's recommended baseline rules for improved system security. For more information visit: https://christitus.com/linux-security-mistakes
 - **Sunshine Port Forward**: Configures port forwarding for Sunshine game streaming.
 - **UFW Firewall Baselines (CTT)**: Developed to ease iptables firewall configuration, UFW provides a user friendly way to create an IPv4 or IPv6 host-based firewall. This command installs UFW and configures UFW based on CTT's recommended rules. For more information visit: https://christitus.com/linux-security-mistakes
-- **YubiKey PAM**: Configures YubiKey PAM authentication.
+- **YubiKey PAM**: Enrolls a YubiKey for pam-u2f and enables touch-auth for sudo and polkit (GUI privilege dialogs).
 
 ## System Setup
 

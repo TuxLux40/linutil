@@ -995,12 +995,83 @@ run_usbguard() {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# MODULE: yubikey — YubiKey PAM for sudo/polkit
+# MODULE: yubikey — YubiKey PAM for sudo + polkit (GUI privilege dialogs)
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# Ensure /etc/pam.d/polkit-1 exists. Vendor stacks often live only under
+# /usr/lib/pam.d/polkit-1 (Arch/CachyOS/Fedora); without an /etc override the old
+# "[ -f /etc/pam.d/polkit-1 ] && sed" path silently skipped polkit forever.
+yubikey_ensure_polkit_pam() {
+    if [ -f /etc/pam.d/polkit-1 ]; then
+        return 0
+    fi
+    printf "%b\n" "${YELLOW}[yubikey] Creating /etc/pam.d/polkit-1 override (vendor file is under /usr/lib/pam.d).${RC}"
+    if [ -f /usr/lib/pam.d/polkit-1 ]; then
+        run_root cp /usr/lib/pam.d/polkit-1 /etc/pam.d/polkit-1
+        return 0
+    fi
+    # Minimal portable stack matching common vendor defaults.
+    if [ "$DRY_RUN" = "1" ]; then
+        printf "%b\n" "${CYAN}[DRY RUN] Would write default /etc/pam.d/polkit-1${RC}"
+        return 0
+    fi
+    run_root tee /etc/pam.d/polkit-1 >/dev/null <<'EOF'
+#%PAM-1.0
+
+auth       include      system-auth
+account    include      system-auth
+password   include      system-auth
+session    include      system-auth
+EOF
+}
+
+# Insert pam_u2f as sufficient auth at the top of a PAM stack (idempotent).
+# $1 = path under /etc/pam.d ; $2 = absolute path to u2f_keys
+yubikey_ensure_pam_u2f_line() {
+    pam_file=$1
+    authfile=$2
+    # Keep spacing loose so re-runs match vendor-edited or prior linutil lines.
+    if [ -f "$pam_file" ] && grep -qE 'pam_u2f\.so' "$pam_file" 2>/dev/null; then
+        printf "%b\n" "${GREEN}[yubikey] pam_u2f already present in $pam_file — skipping${RC}"
+        return 0
+    fi
+    line="auth sufficient pam_u2f.so authfile=${authfile} cue [prompt=Touch your YubiKey]"
+    printf "%b\n" "${YELLOW}[yubikey] Adding pam_u2f to $pam_file${RC}"
+    if [ "$DRY_RUN" = "1" ]; then
+        printf "%b\n" "${CYAN}[DRY RUN] Would insert: $line${RC}"
+        return 0
+    fi
+    if [ ! -f "$pam_file" ]; then
+        printf "%b\n" "${RED}[yubikey] Missing $pam_file — cannot patch${RC}"
+        return 1
+    fi
+    # Backup once per run; overwrite prior linutil backup only.
+    run_root cp "$pam_file" "${pam_file}.linutil.bak"
+    # Insert after the #%PAM-1.0 header when present, else prepend.
+    # Use a temp file rewrite so paths with spaces/brackets need no sed escaping.
+    tmp=$(mktemp)
+    if grep -qE '^#%PAM-' "$pam_file" 2>/dev/null; then
+        awk -v line="$line" '
+            BEGIN { done=0 }
+            {
+                print
+                if (!done && $0 ~ /^#%PAM-/) { print line; done=1 }
+            }
+            END { if (!done) print line }
+        ' "$pam_file" > "$tmp"
+    else
+        printf '%s\n' "$line" > "$tmp"
+        cat "$pam_file" >> "$tmp"
+    fi
+    run_root cp "$tmp" "$pam_file"
+    rm -f "$tmp"
+}
+
 run_yubikey() {
-    printf "%b\n" "${CYAN}[yubikey] Configuring YubiKey PAM...${RC}"
-    printf "%b\n" "${YELLOW}This installs pam-u2f, generates U2F keys, and patches /etc/pam.d/sudo.${RC}"
+    printf "%b\n" "${CYAN}[yubikey] Configuring YubiKey PAM for sudo and polkit...${RC}"
+    printf "%b\n" "${YELLOW}Installs pam-u2f, enrolls key to ~/.config/Yubico/u2f_keys,${RC}"
+    printf "%b\n" "${YELLOW}patches /etc/pam.d/sudo and /etc/pam.d/polkit-1 (creates override if needed).${RC}"
+    printf "%b\n" "${YELLOW}KDE/GNOME privilege dialogs use polkit — without that patch the GUI still asks password only.${RC}"
     printf "%b\n" "${RED}Keep a separate root shell open for recovery!${RC}"
     printf "%b" "Proceed? (y/N): "
     read -r resp; case "$resp" in [Yy]*) ;; *) printf "%b\n" "${YELLOW}Aborted.${RC}"; return 1 ;; esac
@@ -1024,17 +1095,58 @@ run_yubikey() {
             || printf "%b\n" "${YELLOW}pcscd may not have started cleanly${RC}"
     fi
 
-    YK_HOME=$(eval echo "~${USER}")
+    # Prefer the real login user when invoked via sudo/doas.
+    YK_USER=${SUDO_USER:-$USER}
+    YK_HOME=$(eval echo "~${YK_USER}")
     YK_CFG_DIR="$YK_HOME/.config/Yubico"
     YK_CFG_FILE="$YK_CFG_DIR/u2f_keys"
+
+    if [ "$DRY_RUN" = "1" ]; then
+        printf "%b\n" "${CYAN}[DRY RUN] Would ensure $YK_CFG_FILE and patch sudo + polkit${RC}"
+        yubikey_ensure_polkit_pam
+        yubikey_ensure_pam_u2f_line /etc/pam.d/sudo "$YK_CFG_FILE"
+        yubikey_ensure_pam_u2f_line /etc/pam.d/polkit-1 "$YK_CFG_FILE"
+        return 0
+    fi
+
     mkdir -p "$YK_CFG_DIR"
-    pamu2fcfg > "$YK_CFG_FILE"
+    chmod 700 "$YK_CFG_DIR"
+    if [ -s "$YK_CFG_FILE" ]; then
+        printf "%b\n" "${GREEN}[yubikey] Existing $YK_CFG_FILE kept (not re-enrolling).${RC}"
+        printf "%b" "Re-enroll / overwrite U2F mapping? (y/N): "
+        read -r reenroll
+        case "$reenroll" in
+            [Yy]*)
+                printf "%b\n" "${YELLOW}Touch the YubiKey when it blinks...${RC}"
+                pamu2fcfg > "$YK_CFG_FILE"
+                ;;
+        esac
+    else
+        printf "%b\n" "${YELLOW}Touch the YubiKey when it blinks to enroll...${RC}"
+        pamu2fcfg > "$YK_CFG_FILE"
+    fi
+    chmod 600 "$YK_CFG_FILE"
+    # Optional second (backup) key — one quiet attempt; skip if none present.
+    printf "%b" "Enroll a second/backup YubiKey now? (y/N): "
+    read -r backup_key
+    case "$backup_key" in
+        [Yy]*)
+            printf "%b\n" "${YELLOW}Insert backup key, then touch when it blinks...${RC}"
+            pamu2fcfg -n >> "$YK_CFG_FILE" || printf "%b\n" "${YELLOW}Backup enroll skipped/failed — primary key still OK.${RC}"
+            chmod 600 "$YK_CFG_FILE"
+            ;;
+    esac
 
-    run_root sed -i "2i auth sufficient pam_u2f.so authfile=$YK_CFG_FILE cue [prompt=Touch your YubiKey]" /etc/pam.d/sudo
-    [ -f /etc/pam.d/polkit-1 ] && \
-        run_root sed -i "2i auth sufficient pam_u2f.so authfile=$YK_CFG_FILE cue [prompt=Touch your YubiKey]" /etc/pam.d/polkit-1
+    yubikey_ensure_polkit_pam
+    yubikey_ensure_pam_u2f_line /etc/pam.d/sudo "$YK_CFG_FILE"
+    yubikey_ensure_pam_u2f_line /etc/pam.d/polkit-1 "$YK_CFG_FILE"
 
-    printf "%b\n" "${GREEN}[yubikey] Done. Revert by removing the added lines from /etc/pam.d/sudo.${RC}"
+    printf "%b\n" "${GREEN}[yubikey] Done.${RC}"
+    printf "%b\n" "${GREEN}  sudo:   touch YubiKey (or password fallback)${RC}"
+    printf "%b\n" "${GREEN}  polkit: same for KDE/GNOME privilege dialogs${RC}"
+    printf "%b\n" "${YELLOW}Revert: restore *.linutil.bak under /etc/pam.d/ or remove pam_u2f lines.${RC}"
+    printf "%b\n" "${YELLOW}Test sudo: sudo -K && sudo -v${RC}"
+    printf "%b\n" "${YELLOW}Test polkit: systemctl status polkit  (or any admin action that pops auth)${RC}"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
