@@ -86,10 +86,33 @@ task_list = "I MP"
 multi_select = false
 
 [[data.entries]]
+name = "Pacman Config"
+description = "Enables Color, ILoveCandy, ParallelDownloads, VerbosePkgLists, multilib in pacman.conf and sets MAKEFLAGS in makepkg.conf."
+script = "arch/pacman-config.sh"
+task_list = "PFM"
+
+[[data.entries]]
 name = "Paru AUR Helper"
 description = "Paru is your standard pacman wrapping AUR helper with lots of features and minimal interaction. To know more about AUR helpers visit: https://wiki.archlinux.org/title/AUR_helpers"
 script = "arch/paru-setup.sh"
 task_list = "I"
+
+[[data.entries]]
+name = "Snapper Snapshots"
+description = "Sets up Snapper with hourly Btrfs snapshots, snap-pac hooks, and GRUB boot menu entries."
+script = "arch/snapshot-setup.sh"
+task_list = "I PFM SS"
+
+[[data.entries.preconditions]]
+matches = true
+data = "command_exists"
+values = ["btrfs"]
+
+[[data.entries]]
+name = "System Maintenance"
+description = "Enables paccache.timer, removes orphan packages, and cleans system journals."
+script = "arch/system-maintenance.sh"
+task_list = "PFM RP"
 
 [[data.entries]]
 name = "Virtualization"
@@ -343,6 +366,12 @@ task_list = "I"
 multi_select = false
 
 [[data]]
+name = "PipeWire Audio"
+description = "Installs PipeWire with WirePlumber session manager for audio (replaces PulseAudio)."
+script = "pipewire-setup.sh"
+task_list = "I"
+
+[[data]]
 name = "Remove Snaps"
 description = "This script is designed to remove snap"
 script = "remove-snaps.sh"
@@ -353,3 +382,9 @@ name = "TTY Fonts"
 description = "This Script will set the default TTY font to Terminus size 32 Bold"
 script = "terminus-tty.sh"
 task_list = "I PFM"
+
+[[data]]
+name = "Zram Swap"
+description = "Configures compressed RAM swap via zram-generator with zstd algorithm."
+script = "zram-setup.sh"
+task_list = "PFM"

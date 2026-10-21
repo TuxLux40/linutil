@@ -549,6 +549,12 @@ description = "Zen Browser is a privacy-focused web browser designed for enhance
 script = "browsers/zen-browser.sh"
 task_list = "I"
 
+[[data.entries]]
+name = "Helium Browser"
+description = "Helium Browser is a free, privacy-focused and open-source chromium-based browser designed for enhanced security and a seamless browsing experience."
+script = "browsers/helium-browser.sh"
+task_list = "I"
+
 [[data]]
 name = "Alacritty"
 description = "Alacritty is a modern terminal emulator that comes with sensible defaults, but allows for extensive configuration. By integrating with other applications, rather than reimplementing their functionality, it manages to provide a flexible set of features with high performance. The supported platforms currently consist of BSD, Linux, macOS and Windows. This command installs and configures alacritty terminal emulator."
@@ -577,6 +583,12 @@ task_list = "I SS"
 name = "Bash Prompt"
 description = "The .bashrc file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. This command configures the key sections and functionalities defined in the .bashrc file from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash"
 script = "mybash-setup.sh"
+task_list = "I FM"
+
+[[data]]
+name = "Dank Shell"
+description = "DankMaterialShell is a complete desktop shell for niri, Hyprland, MangoWC, Sway, labwc, Scroll, Miracle WM, and other Wayland compositors. It replaces waybar, swaylock, swayidle, mako, fuzzel, polkit, and everything else you'd normally stitch together to make a desktop"
+script = "dank-shell.sh"
 task_list = "I FM"
 
 [[data]]
@@ -644,6 +656,12 @@ data = "command_exists"
 values = ["linutil"]
 
 [[data]]
+name = "Noctalia Shell"
+description = "Noctalia is a native Wayland desktop shell for people who want a polished, configurable Linux desktop without stitching together a separate bar, launcher, notification daemon, lock screen, wallpaper tool, and settings UI."
+script = "noctalia-shell.sh"
+task_list = "I FM"
+
+[[data]]
 name = "OpenRGB Setup"
 description = "Installs OpenRGB, udev rules, i2c modules, and optional autostart entries."
 script = "openrgb-setup.sh"
@@ -654,6 +672,17 @@ name = "Rofi"
 description = "Rofi is a window switcher, run dialog, ssh-launcher and dmenu replacement that started as a clone of simpleswitcher, written by Sean Pringle and later expanded by Dave Davenport. This command installs and configures rofi with configuration from CTT's DWM repo. https://github.com/ChrisTitusTech/dwm-titus"
 script = "rofi-setup.sh"
 task_list = "I FM"
+
+[[data]]
+name = "Shelly"
+description = "Shelly is a modern, visual, and intuitive interface for your Arch Linux system. Not just a wrapper, but a native ground-up experience."
+script = "shelly-setup.sh"
+task_list = "I SS"
+
+[[data.preconditions]]
+matches = true
+data = "command_exists"
+values = ["pacman"]
 
 [[data]]
 name = "ZSH Prompt"

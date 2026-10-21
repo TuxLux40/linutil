@@ -6,8 +6,14 @@
 
 ### AI
 
-- **AnythingLLM**: Bare-metal installer for AnythingLLM.
+- **Agent Skills**: Installs a curated set of agent skills globally via npx skills, targeting Claude Code, GitHub Copilot, and Zed. Includes skills from Anthropic, Vercel, Supabase, Notion, Cloudflare, and others. SSH-gated repos are skipped gracefully if no SSH agent is available.
 - **Claude Code Router**: Installs Claude Code Router with optional Ollama integration.
+- **Honcho**: Installs Honcho AI memory (honcho-cli, config wizard, optional Claude Code plugin/skills/MCP server and agent hooks).
+- **MCP Jungle**: Connects Claude Code and VS Code/Copilot to a self-hosted MCP Jungle gateway (URL prompted at runtime — no IP hardcoded).
+- **Mistral Vibe**: Installs or updates Mistral Vibe CLI (Mistral AI's AI coding assistant). Run 'vibe' to authenticate on first launch.
+- **Claude CLI**: Installs or updates the Claude Code CLI (Anthropic's AI coding assistant). Run 'claude' to authenticate on first launch.
+- **GitHub Copilot CLI**: Installs the GitHub Copilot CLI extension for gh. Requires GitHub CLI (gh) to be installed and authenticated.
+- **Grok CLI**: Installs or updates the Grok CLI from xAI. Run 'grok' to authenticate on first launch.
 
 ### Base Packages
 
@@ -103,6 +109,7 @@ https://github.com/ChrisTitusTech/neovim
 ### Web Browsers
 
 - **Brave**: Brave is a free and open-source web browser developed by Brave Software, Inc. based on the Chromium web browser.
+- **Brave Origin**: Brave Origin is a minimalist version of Brave that strips out optional features like VPN, crypto wallet, Rewards, and Leo AI, keeping only core privacy protections and ad blocking.
 - **Chromium**: Chromium is an open-source web browser project started by Google, to provide the source code for the proprietary Google Chrome browser.
 - **Google Chrome**: Google Chrome is a fast, secure, and free web browser, built for the modern web.
 - **LibreWolf**: LibreWolf is a fork of Firefox, focused on privacy, security, and freedom.
@@ -114,15 +121,15 @@ https://github.com/ChrisTitusTech/neovim
 - **Vivaldi**: Vivaldi is a freeware, cross-platform web browser developed by Vivaldi Technologies.
 - **waterfox**: Waterfox is the privacy-focused web browser engineered to give you speed, control, and peace of mind on the internet.
 - **Zen Browser**: Zen Browser is a privacy-focused web browser designed for enhanced security and a seamless browsing experience.
+- **Helium Browser**: Helium Browser is a free, privacy-focused and open-source chromium-based browser designed for enhanced security and a seamless browsing experience.
 - **Alacritty**: Alacritty is a modern terminal emulator that comes with sensible defaults, but allows for extensive configuration. By integrating with other applications, rather than reimplementing their functionality, it manages to provide a flexible set of features with high performance. The supported platforms currently consist of BSD, Linux, macOS and Windows. This command installs and configures alacritty terminal emulator.
 - **Android Debloater**: Universal Android Debloater (UAD) is a tool designed to help users remove bloatware and unnecessary pre-installed applications from Android devices, enhancing performance and user experience.
 - **Atuin**: Installs Atuin and imports shell history.
+- **AusweisApp2**: Installs the official German eID client (AusweisApp2) and opens UFW for the local eID UDP port when UFW is present.
 - **Bash Prompt**: The .bashrc file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. This command configures the key sections and functionalities defined in the .bashrc file from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash
-- **Docker**: Docker is an open platform that uses OS-level virtualization to deliver software in packages called containers.
+- **Dank Shell**: DankMaterialShell is a complete desktop shell for niri, Hyprland, MangoWC, Sway, labwc, Scroll, Miracle WM, and other Wayland compositors. It replaces waybar, swaylock, swayidle, mako, fuzzel, polkit, and everything else you'd normally stitch together to make a desktop
 - **Fastfetch**: Fastfetch is a neofetch-like tool for fetching system information and displaying it prettily. It is written mainly in C, with performance and customizability in mind. This command installs fastfetch and configures from CTT's mybash repository. https://github.com/ChrisTitusTech/mybash
 - **Flatpak / Flathub**: Flatpak is a universal application sandbox for Linux that uses isolated packages from Flathub to prevent conflicts and system alterations, while alleviating dependency concerns. This command installs Flatpak and adds the Flathub repository
-- **Flatpak Backup**: Generates a Flatpak restore script from current remotes and installed apps.
-- **Flatpak Restore**: Restores Flatpak remotes and apps from a backup script.
 - **Ghostty**: Ghostty is a terminal emulator that has embedded web technologies, allowing for a highly customizable and visually appealing terminal experience.
 - **Grub Customizer**: Graphical interface to configure GRUB bootloader settings and appearance.
 - **Grub Theme**: Installs ChrisTitusTech's Top 5 Bootloader Themes script to allow for easy customization of GRUB.
@@ -130,8 +137,10 @@ https://github.com/ChrisTitusTech/neovim
 - **Kitty**: kitty is a free and open-source GPU-accelerated terminal emulator for Linux, macOS, and some BSD distributions, focused on performance and features. kitty is written in a mix of C and Python programming languages. This command installs and configures kitty.
 - **Linutil Installer**: Installs a distro-specific Linutil package locally.
 - **Linutil Updater**: Updates your local Linutil crate installation.
+- **Noctalia Shell**: Noctalia is a native Wayland desktop shell for people who want a polished, configurable Linux desktop without stitching together a separate bar, launcher, notification daemon, lock screen, wallpaper tool, and settings UI.
 - **OpenRGB Setup**: Installs OpenRGB, udev rules, i2c modules, and optional autostart entries.
 - **Rofi**: Rofi is a window switcher, run dialog, ssh-launcher and dmenu replacement that started as a clone of simpleswitcher, written by Sean Pringle and later expanded by Dave Davenport. This command installs and configures rofi with configuration from CTT's DWM repo. https://github.com/ChrisTitusTech/dwm-titus
+- **Shelly**: Shelly is a modern, visual, and intuitive interface for your Arch Linux system. Not just a wrapper, but a native ground-up experience.
 - **ZSH Prompt**: The Z shell is a Unix shell that can be used as an interactive login shell and as a command interpreter for shell scripting. Zsh is an extended Bourne shell with many improvements, including some features of Bash, ksh, and tcsh. This command installs ZSH prompt and provides basic configuration.
 
 ## Gaming
@@ -148,7 +157,6 @@ https://github.com/ChrisTitusTech/neovim
 
 - **bsnes**: Super Nintendo Emulator. NO Games are included
 - **Dolphin Emulator**: GameCube and Wii Emulator. NO Games are included
-- **EmuDeck**: EmuDeck installer for Steam Deck and handhelds. NO Games are included
 - **Gopher 64**: N64 Emulator. NO Games are included
 - **MelonDS**: Nintendo DS and DSi Emulator. NO Games are included
 - **Mesen2**: Nintendo emulator. NO Games are included
@@ -166,8 +174,12 @@ https://github.com/ChrisTitusTech/neovim
 ### Sega Emulators
 
 - **Blastem**: A Genesis emulator. NO Games are included
-- **Flycast**: A Dreamcase emulator. NO Games are included
+- **Flycast**: A Dreamcast emulator. NO Games are included
 - **Kronos**: A Sega Saturn emulator. NO Games are included
+
+### Multi-System Emulators
+
+- **EmuDeck**: EmuDeck installer for Steam Deck and handhelds. NO Games are included
 
 ### Xbox Emulators
 
@@ -175,42 +187,44 @@ https://github.com/ChrisTitusTech/neovim
 - **Xenia**: An Experimental Xbox 360 emulator. NO Games or Bios' are included
 - **Yabause**: A Sega Saturn emulator
 
+### Game Launchers
+
+- **Heroic**: Manage Heroic launcher installation with Install, Uninstall, or Abort actions.
+- **Lutris**: Manage Lutris launcher installation with Install, Uninstall, or Abort actions.
+- **RetroArch**: Manage RetroArch launcher installation with Install, Uninstall, or Abort actions.
+- **Steam**: Manage Steam launcher installation with Install, Uninstall, or Abort actions.
+
 ### Tools and Setups
 
 - **Auto CPU Frequency**: Automatic CPU speed & power optimizer.
 https://github.com/AdnanHodzic/auto-cpufreq
-- **Auto Mount Drive**: This utility is designed to help with automating the process of mounting a drive on to your system.
 - **Bottles**: Bottles allows Windows software, like applications and games, to run on Linux. Bottles also provides tools to categorize, organize and optimize your applications.
 - **Gaming Dependencies**: Installs gaming runtime dependencies across distributions. Steam and Lutris are managed separately from Game Launchers.
-- **ProtonPlus**: Manage ProtonPlus installation with native packages first and Flatpak fallback.
-- **ProtonUp-Qt**: Manage ProtonUp-Qt installation with native packages first and Flatpak fallback.
 - **General GPU Drivers**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
 - **Nvidia Drivers & Hardware Acceleration**: Opens the Arch-specific NVIDIA installer (kept under System Setup / Arch).
+- **ProtonPlus**: Manage ProtonPlus installation with native packages first and Flatpak fallback.
+- **ProtonUp-Qt**: Manage ProtonUp-Qt installation with native packages first and Flatpak fallback.
 - **Waydroid**: Waydroid is an emulator that allows you to run Android apps and games on Linux.
 - **Wallpaper Engine (KDE)**: Installs the Wallpaper Engine plugin for KDE Plasma 6 and points it at the Steam library that holds Wallpaper Engine (app 431960, must be owned on Steam). Can enable it on all desktops. Arch-based distros only.
-
-### Game Launchers
-
-- **Steam**: Manage Steam launcher installation with Install, Uninstall, or Abort actions.
-- **Lutris**: Manage Lutris launcher installation with Install, Uninstall, or Abort actions.
-- **RetroArch**: Manage RetroArch launcher installation with Install, Uninstall, or Abort actions.
-- **Heroic**: Manage Heroic launcher installation with Install, Uninstall, or Abort actions.
 - **Arc Raiders Titus Mods**: Applies optimized game configuration files from ChrisTitusTech/arc-raiders. Sets Engine.ini to read-only to prevent the game from overwriting the settings, disables motion blur, and enables VRR optimizations.
+- **Binary Domain Fix**: Fixes Binary Domain (AppID 203750) on Linux/Proton. Installs XAudio2 via protontricks (sound fix), runs BinaryDomainConfiguration.exe to write a valid GPU GUID and restore max graphics, then patches localconfig.vdf with the correct launch options and disables Steam Input (gamepad fix). Steps 1–2 require Steam running; Step 3 requires Steam closed.
 - **Deckify**: Installs Deckify for Steam Deck customization.
 - **Decky Plugin Loader (Install)**: Installs Decky Plugin Loader.
 - **Decky Plugin Loader (Remove)**: Removes Decky Plugin Loader.
 - **Diablo II Resurrected Loot Filter**: Installs a loot filter for Diablo II Resurrected from ChrisTitusTech/d2r-loot-filter. Highlights high runes and other valuable items. Works on Battle.net and single player. After install, add launch option: -mod lootfilter -txt
+- **EverQuest Legends MIDI Fix**: Configures native Lutris to start a stable FluidSynth MIDI device, maps Wine to it, and loads the SC-55 SoundCanvas bank for EverQuest Legends music. Downloads a verified 177 MiB SoundFont and preserves the original Lutris and Wine registry configuration.
 - **Fallout 76 INI and Mods**: Installs a custom Fallout76Custom.ini and mods from ChrisTitusTech/fallout76-configs via Steam. Improves performance and stability with quality of life tweaks.
 - **Starfield Titus INI and Mods**: Installs custom Starfield mods from ChrisTitusTech/starfield-config via steam.
 - **Sunshine**: Installs Sunshine game streaming host.
 
 ## Security
 
-- **Desktop Hardening**: Applies a GrapheneOS-inspired desktop hardening baseline by orchestrating the existing security scripts and new passive hardening modules. Prefers passive, desktop-safe defaults and GUI-manageable tooling where practical.
+- **Desktop Hardening**: Runs the full security-hardening.sh baseline: kernel sysctl, core-dump hardening, PAM password policy, auditd rules, AIDE integrity monitoring, ClamAV, desktop firewall defaults, SSH hardening, login banners, and AppArmor. Skips AppArmor when native SELinux is active. Pass individual module names on the CLI to run a subset, or --all to include USBGuard, YubiKey PAM, Sunshine, and Tailscale.
 - **AppArmor Setup**: Enables AppArmor by adding it to the kernel lsm= list. Autodetects the bootloader (Limine, systemd-boot, GRUB, rEFInd), installs the apparmor package, the extended profile set (apparmor.d / apparmor-profiles), builds AppAnvil GUI from the TuxLux40/AppAnvil fork, backs up edited configs, and enables apparmor.service.
 - **Kernel Hardening**: Applies sysctl hardening for BPF, file protections, martian logging, and redirect handling, then blacklists uncommon network protocols. Skips settings that would interfere with Bluetooth, containers, virtualization, or Tailscale.
 - **Process Hardening**: Disables core dumps and optionally enables hidepid=2 for stronger /proc isolation. hidepid remains opt-in because it can affect monitoring tools.
 - **PAM Hardening**: Sets stronger password policy defaults with pwquality, yescrypt where appropriate, and stricter password aging and umask settings.
+- **AIDE Setup**: Installs AIDE (Advanced Intrusion Detection Environment), validates the configuration, initialises the baseline database, and enables the daily aidecheck.timer (or a cron fallback) for ongoing filesystem integrity monitoring. Resolves the FINT-4316 Lynis warning.
 - **Auditd Setup**: Installs auditd and deploys comprehensive baseline audit rules: file deletions, privilege escalation, sensitive file changes (passwd/shadow/sudoers), SSH configuration, kernel module operations, network monitoring, and system call auditing. Lynis-compatible.
 - **ClamAV**: Installs and configures ClamAV antivirus scanner for malware detection.
 - **SSH Hardening**: Hardens sshd_config with stricter forwarding, authentication, session, and logging defaults. Skipped automatically if sshd is not installed.
@@ -218,8 +232,10 @@ https://github.com/AdnanHodzic/auto-cpufreq
 - **Login Banner**: Writes an authorization warning banner to local and SSH login banners and configures sshd to display it when present.
 - **FirewallD Firewall Baselines (CTT)**: Configure FirewallD with CTT's recommended baseline rules for improved system security. For more information visit: https://christitus.com/linux-security-mistakes
 - **Sunshine Port Forward**: Configures port forwarding for Sunshine game streaming.
+- **Tailscale Exit-Node Forwarding Fix**: Patches nftables forward-chain rules so Tailscale exit-node and subnet-router traffic is not dropped by a default DROP forward policy. Backs up /etc/nftables.conf, applies an idempotent patch, validates syntax, and reloads rules.
+- **Lynis Security Audit**: Install Lynis when needed, run an elevated system security audit with live results, then optionally remove Lynis.
 - **UFW Firewall Baselines (CTT)**: Developed to ease iptables firewall configuration, UFW provides a user friendly way to create an IPv4 or IPv6 host-based firewall. This command installs UFW and configures UFW based on CTT's recommended rules. For more information visit: https://christitus.com/linux-security-mistakes
-- **YubiKey PAM**: Enrolls a YubiKey for pam-u2f and enables touch-auth for sudo and polkit (GUI privilege dialogs).
+- **YubiKey PAM**: Installs pam-u2f, enrolls your YubiKey to ~/.config/Yubico/u2f_keys, and enables touch-auth for both sudo and polkit GUI privilege dialogs. Creates /etc/pam.d/polkit-1 when the distro only ships the vendor stack under /usr/lib/pam.d (Arch/CachyOS). Password remains a fallback. Idempotent re-run keeps an existing mapping unless you choose to re-enroll.
 
 ## System Setup
 
@@ -244,7 +260,10 @@ https://github.com/ChrisTitusTech/dwm-titus
 - **Linux Neptune for SteamDeck**: Valve's fork of Linux Kernel for the SteamDeck
 - **Nvidia Drivers & Hardware Acceleration**: This script installs and configures nvidia drivers with Hardware Acceleration.
 - **Omarchy Rice by DHH**: Simplified Hyprland configuration by DHH the ruby on rails dude.
+- **Pacman Config**: Enables Color, ILoveCandy, ParallelDownloads, VerbosePkgLists, multilib in pacman.conf and sets MAKEFLAGS in makepkg.conf.
 - **Paru AUR Helper**: Paru is your standard pacman wrapping AUR helper with lots of features and minimal interaction. To know more about AUR helpers visit: https://wiki.archlinux.org/title/AUR_helpers
+- **Snapper Snapshots**: Sets up Snapper with hourly Btrfs snapshots, snap-pac hooks, and GRUB boot menu entries.
+- **System Maintenance**: Enables paccache.timer, removes orphan packages, and cleans system journals.
 - **Virtualization**: QEMU, Libvirt, Virt-Manager installation and configuration.
 - **Yay AUR Helper**: Yet Another Yogurt - An AUR Helper Written in Go. To know more about AUR helpers visit: https://wiki.archlinux.org/title/AUR_helpers
 
@@ -272,24 +291,34 @@ https://github.com/ChrisTitusTech/dwm-titus
 
 - **Raspberry Pi HDMI Fix**: Applies HDMI fixes for Raspberry Pi systems.
 - **Shader Cache Increase**: Increases shader cache settings for improved performance.
+- **Laptop Desktop Tuning**: Improves desktop app launch speed and KDE responsiveness on laptops. Installs VA-API hardware video decode drivers (Intel iHD / AMD Mesa), writes Wayland + hardware acceleration flags for Chromium-based browsers (Brave, Chrome, Chromium, Edge), enables preload for adaptive disk readahead, and (Arch/KDE only) installs plasma-foreground-booster and dmemcg-booster for cgroup-based foreground app CPU priority.
 - **Undervolt CPU & GPU**: Reduces CPU/GPU voltage to lower heat and improve sustained performance. Supports Intel (intel-undervolt), AMD mobile (ryzenadj), AMD desktop (pstate EPP), NVIDIA (power limit), and AMD GPU (CoreCtrl).
+- **NVMe APST Disable**: Fixes slow app launches and high iowait caused by NVMe drives entering deep power states (APST) between IO bursts. Adds nvme_core.default_ps_max_latency_us=0 to the kernel cmdline and also removes the 'splash' Plymouth flag. Supports Limine, GRUB, and systemd-boot.
+- **OOM Killer Tuning**: Configures systemd-oomd with CachyOS-inspired thresholds (SwapUsedLimit=80%, MemPressure=40%, Duration=20s) to proactively kill memory-hungry processes before the system becomes unresponsive. Enables oomd monitoring on the user slice and optionally installs earlyoom as a supplemental or standalone OOM killer for systems without systemd-oomd.
+
+### Hardware
+
+- **TRCC Linux (Thermalright LCD Control Center)**: Native Linux port of the Thermalright LCD Control Center. Controls LCD themes, video, overlays, and RGB LEDs on supported Thermalright coolers. Clones TuxLux40/thermalright-trcc-linux and runs its installer.
+- **Razer Leviathan V2 X Volume Fix**: Fixes the Razer Leviathan V2 X soundbar being extremely quiet on Linux. Raises the hidden internal ALSA sub-level from ~29% to ~66% and persists it via alsactl. Requires the soundbar to be plugged in via USB-C.
 
 ### Ubuntu
 
 - **Hyprland JaKooLit**: Install JaKooLit's Hyprland configuration
 - **Build Prerequisites**: This script is designed to handle the installation of various software dependencies across different Linux distributions
+- **Package Managers Setup**: Installs all package managers: yay and paru (Arch only), Flatpak + Flathub, and Homebrew. Skips any already installed.
 - **Dotfiles Setup**: Symlinks selected dotfiles packages from this repository into your home directory.
 - **Enable SSD TRIM**: Enable weekly SSD TRIM through systemd's fstrim.timer and run an initial trim. This is the recommended alternative to mounting with the continuous discard option. For more information visit: https://wiki.archlinux.org/title/Solid_state_drive#TRIM
 - **Full System Cleanup**: This script is designed to remove unnecessary packages, clean old cache files, remove temporary files, and to empty the trash.
 - **Full System Update**: This command updates your system to the latest packages available for your distro
 - **Full System Update (Topgrade)**: This command uses topgrade to update your system packages, configs, and more from various sources
-- **Gaming Dependencies**: This script is designed to handle the installation of gaming dependencies across different Linux distributions
 - **Git Config**: Configures global Git username, email, and GPG signing.
 - **Global Theme**: This script is designed to handle the installation and configuration of global theming
-- **GPU Driver**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
 - **NeoWin KDE Theme**: Installs the NeoWin Windows 11-inspired KDE Plasma theme with automatic dark/light switching, Willow Blur window decorations, WinSur cursors, and a Win11 sound pack.
+- **GPU Driver**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
+- **PipeWire Audio**: Installs PipeWire with WirePlumber session manager for audio (replaces PulseAudio).
 - **Remove Snaps**: This script is designed to remove snap
 - **TTY Fonts**: This Script will set the default TTY font to Terminus size 32 Bold
+- **Zram Swap**: Configures compressed RAM swap via zram-generator with zstd algorithm.
 
 ## Utilities
 
@@ -317,12 +346,14 @@ https://github.com/ChrisTitusTech/dwm-titus
 
 ### User Account Manager
 
+- **Auto Mount Drive**: This utility is designed to help with automating the process of mounting a drive on to your system.
 - **Bluetooth Manager**: This utility is designed to manage bluetooth in your system
+- **Locale Setup**: This allows the user to set their locale
 - **Locale Setup (DE)**: Configures system locale with English UI and German formats (time, date, currency) plus German keyboard layout.
 - **Locale Setup (US)**: Configures system locale with US English settings.
 - **Numlock on Startup**: This utility is designed to enable Num Lock at boot, rather than within desktop environments like KDE or GNOME
 - **Ollama**: This utility is designed to manage ollama in your system
-- **Ranalama**: This utility is designed to manage ramalama in your system
+- **Ramalama**: This utility is designed to manage ramalama in your system
 - **Service Manager**: This utility is designed to manage services in your system
 - **SFTP Setup**: Configures SSHFS for mounting remote directories via SSH/SFTP with automatic mount setup.
 - **Utility Functions**: Shared helper functions for utility scripts.
