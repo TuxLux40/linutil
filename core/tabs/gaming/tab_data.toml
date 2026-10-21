@@ -209,6 +209,17 @@ matches = true
 data = { environment = "XDG_SESSION_TYPE" }
 values = ["wayland", "Wayland"]
 
+[[data.entries]]
+name = "Wallpaper Engine (KDE)"
+description = "Installs the Wallpaper Engine plugin for KDE Plasma 6 and points it at the Steam library that holds Wallpaper Engine (app 431960, must be owned on Steam). Can enable it on all desktops. Arch-based distros only."
+script = "wallpaper-engine-kde.sh"
+task_list = "I FM"
+multi_select = false
+[[data.entries.preconditions]]
+matches = true
+data = "command_exists"
+values = ["pacman", "plasmashell"]
+
 [[data]]
 name = "Game Launchers"
 

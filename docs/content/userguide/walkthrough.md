@@ -187,6 +187,7 @@ https://github.com/AdnanHodzic/auto-cpufreq
 - **General GPU Drivers**: Auto-detects your GPU and installs a recommended driver stack for your distro, with NixOS guidance.
 - **Nvidia Drivers & Hardware Acceleration**: Opens the Arch-specific NVIDIA installer (kept under System Setup / Arch).
 - **Waydroid**: Waydroid is an emulator that allows you to run Android apps and games on Linux.
+- **Wallpaper Engine (KDE)**: Installs the Wallpaper Engine plugin for KDE Plasma 6 and points it at the Steam library that holds Wallpaper Engine (app 431960, must be owned on Steam). Can enable it on all desktops. Arch-based distros only.
 
 ### Game Launchers
 
